@@ -21,13 +21,13 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    @Value("${jwt.key}")
-    private String SECRET_KEY;
+//    @Value("${jwt.key}")
+    private String SECRET_KEY = "123AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     private final HttpServletRequest httpServletRequest;
     @Value("${jwt.expired-long}")
     public long expired;
 
-    private final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    private Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -75,6 +75,7 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parser()
+                .setSigningKey(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
