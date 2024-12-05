@@ -25,7 +25,11 @@ public class SecurityConfig {
             "/v2/api-docs",
             "/swagger-resources/**",
             "/swagger-ui.html",
-            "/hello"
+            "/error",
+            "/test",
+            "/hello",
+//            "/api/review"
+            "**"
     };
 
 
@@ -39,15 +43,16 @@ public class SecurityConfig {
                     for (String url : WHITE_LIST) {
                         auth.requestMatchers(url).permitAll();
                     }
-                    auth.anyRequest().authenticated();
+//                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .exceptionHandling(exception -> {
                     //todo: I want to do it here
-                    exception.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
-                    exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getMessage()));
+//                    exception.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
+//                    exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getMessage()));
                 })
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
