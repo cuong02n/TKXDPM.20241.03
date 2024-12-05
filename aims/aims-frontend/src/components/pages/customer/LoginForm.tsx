@@ -1,25 +1,42 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../../store/authSlice.ts"; // import login thunk
+import { AppDispatch } from "../../store/store.ts"; // import AppDispatch
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import các icon mắt
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Trạng thái để hiện/ẩn mật khẩu
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch<AppDispatch>(); // Chỉ định kiểu cho dispatch
+  const auth = useSelector((state: any) => state.auth);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
+    setError(""); // Reset error
 
-    // Mô phỏng xử lý đăng nhập
-    setTimeout(() => {
-      if (email === "user@example.com" && password === "password123") {
+    const loginData = { email, password };
+
+    // Dispatch login action
+    dispatch(login(loginData))
+      .unwrap() // Unwrap the action to get the result directly
+      .then(() => {
+        // Đăng nhập thành công
+        setIsLoading(false);
         alert("Đăng nhập thành công!");
-        setError("");
-      } else {
-        setError("Email hoặc mật khẩu không đúng.");
-      }
-      setIsLoading(false);
-    }, 1000);
+        navigate("/");
+      })
+      .catch((err: string) => {
+        // Xử lý lỗi
+        setIsLoading(false);
+        setError(err); // Set error message
+      });
   };
 
   return (
@@ -52,16 +69,29 @@ const LoginForm = () => {
             >
               Mật khẩu
             </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="**********"
-              required
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"} // Thay đổi type khi toggle
+                id="password"
+                name="password"
+                placeholder="**********"
+                required
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)} // Toggle mật khẩu
+                className="absolute inset-y-0 right-3 flex items-center"
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="text-gray-500" />
+                ) : (
+                  <FaEye className="text-gray-500" />
+                )}
+              </button>
+            </div>
           </div>
           {error && <p className="text-sm text-red-500">{error}</p>}
           <div className="flex justify-between items-center">
