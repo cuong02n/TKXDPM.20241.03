@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
     @Id
     private String email;
 
@@ -33,7 +33,6 @@ public class User implements UserDetails {
     public void activate() {
         this.active = true;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
