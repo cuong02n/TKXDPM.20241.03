@@ -3,6 +3,7 @@ package com.cuong02n.aimsbackend.config;
 import com.cuong02n.aimsbackend.service.JwtService;
 import com.cuong02n.aimsbackend.service.UserService;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -29,14 +30,18 @@ public class JwtFilter extends OncePerRequestFilter {
     final JwtService jwtService;
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws IOException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws IOException, ServletException {
         String authHeader = request.getHeader("Authorization");
-
+        if (authHeader == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         try {
             String jwt = authHeader.substring(7);
             String email = jwtService.extractUsername(jwt);
+            UserDetails userDetails = null;
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userService.loadUserByUsername(email);
+                userDetails = userService.loadUserByUsername(email);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -47,13 +52,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
             request.setAttribute("email", email);
-            request.setAttribute("username", email);
-            filterChain.doFilter(request, response);
+            request.setAttribute("user", userDetails);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write(e.getMessage());
+            return;
         }
+        filterChain.doFilter(request, response);
     }
 
     @Override
