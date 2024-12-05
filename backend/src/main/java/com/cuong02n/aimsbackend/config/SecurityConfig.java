@@ -25,7 +25,9 @@ public class SecurityConfig {
             "/v2/api-docs",
             "/swagger-resources/**",
             "/swagger-ui.html",
-            "/hello"
+            "/error",
+            "/test",
+//            "/api/review"
     };
 
 
@@ -46,8 +48,8 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(exception -> {
                     //todo: I want to do it here
-                    exception.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
-                    exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getMessage()));
+//                    exception.authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage()));
+//                    exception.accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, accessDeniedException.getMessage()));
                 })
 
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
