@@ -1,9 +1,6 @@
 package com.cuong02n.aimsbackend.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +26,10 @@ public class User extends BaseEntity implements UserDetails {
     private Role role;
 
     private boolean active;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private UserCart userCart;
 
     public void activate() {
         this.active = true;
