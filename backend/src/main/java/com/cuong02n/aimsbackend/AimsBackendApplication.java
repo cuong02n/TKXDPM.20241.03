@@ -16,11 +16,6 @@ public class AimsBackendApplication {
         return "Hello World";
     }
 
-    @GetMapping("/error")
-    public String error() {
-        return "Error";
-    }
-
     @PostMapping("/test")
     public String test(@RequestParam("files") MultipartFile[] files, @RequestParam("star")int star) {
         return Arrays.toString(Arrays.stream(files).map(MultipartFile::getContentType).toArray());
