@@ -27,7 +27,9 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/error",
             "/test",
+            "/hello",
 //            "/api/review"
+            "**"
     };
 
 
@@ -41,7 +43,8 @@ public class SecurityConfig {
                     for (String url : WHITE_LIST) {
                         auth.requestMatchers(url).permitAll();
                     }
-                    auth.anyRequest().authenticated();
+//                    auth.anyRequest().authenticated();
+                    auth.anyRequest().permitAll();
                 })
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

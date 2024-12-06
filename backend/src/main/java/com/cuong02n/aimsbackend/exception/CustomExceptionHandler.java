@@ -45,4 +45,12 @@ public class CustomExceptionHandler {
         log.error(ex.getMessage());
         return BaseResponse.error(ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AimsOtpException.class)
+    public BaseResponse handleOtpException(AimsOtpException ex) {
+        log.error(ex.getMessage());
+        return BaseResponse.error(ex.getMessage());
+    }
+
 }
