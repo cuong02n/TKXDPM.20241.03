@@ -4,7 +4,15 @@ import ProductCard from "./ProductCard.tsx";
 const ProductGrid = ({
   products,
 }: {
-  products: Array<{ id: number; name: string; price: number; image: string }>;
+  products: Array<{
+    id: number;
+    name: string;
+    price: number;
+    imageUrl: string;
+    store: number;
+    description: string;
+    category: string;
+  }>;
 }) => {
   return (
     <div className="grid grid-cols-3 gap-4">
