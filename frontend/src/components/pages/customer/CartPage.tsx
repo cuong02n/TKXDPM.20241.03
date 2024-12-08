@@ -8,7 +8,7 @@ const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
   const navigate = useNavigate();
   const handlePlaceOrder = () => {
-    navigate("/checkout");
+    navigate("/delivery-info");
   };
   return (
     <div className="container mx-auto py-10 min-h-screen">
