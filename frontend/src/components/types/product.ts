@@ -1,4 +1,4 @@
-import { ProductCategory } from "../constants/reduxAction"; // Import ProductCategory
+import { ProductCategory } from "../constants"; // Import ProductCategory
 
 export interface Product {
   id: string;
@@ -7,4 +7,5 @@ export interface Product {
   price: number;
   category: ProductCategory; // Loại sản phẩm có thể là "book", "cd", hoặc "dvd"
   imageUrl: string;
+  quantity: number;
 }
