@@ -1,27 +1,17 @@
-import { Image, MinusCircle, Plus, PlusCircle } from "lucide-react";
+import { Image, Plus } from "lucide-react";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { addToCart } from "../store/cartSlice.ts";
+import { Product } from "../types/product.ts";
+import { formatCurrency } from "../utils/format.ts";
+import QuantitySetter from "../common/product-cart/QuantitySetter.tsx";
+import { useCart } from "../hooks/useCart.ts";
 
-const ProductCard = ({
-  product,
-}: {
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    imageUrl: string;
-    store: number;
-    description: string;
-    category: string;
-  };
-}) => {
+const ProductCard = ({ product }: { product: Product }) => {
   const [number, setNumber] = React.useState<number>(1);
-  const dispatch = useDispatch();
-  const { id, store, ...productWithoutStore } = product;
+  const { addItemToCart } = useCart();
+  const { id, quantity, ...productWithoutStore } = product;
   const increase = () => {
-    if (number + 1 <= product.store) {
+    if (number + 1 <= product.quantity) {
       setNumber(number + 1);
     }
   };
@@ -31,9 +21,12 @@ const ProductCard = ({
     }
   };
   const handleAddtoCart = () => {
-    dispatch(
-      addToCart({ ...productWithoutStore, quantity: number, id: id.toString() })
-    );
+    addItemToCart({
+      ...productWithoutStore,
+      quantity: number,
+      id: id.toString(),
+    });
+    setNumber(1);
   };
   return (
     <div className="border p-4 rounded-2xl shadow hover:shadow-lg">
@@ -52,7 +45,7 @@ const ProductCard = ({
           </div>
           <div className="flex flex-col justify-between py-2 h-full">
             <h2 className="text-lg font-bold">{product.name}</h2>
-            <p className="text-gray-700">${product.price}</p>
+            <p className="text-gray-700">{formatCurrency(product.price)}</p>
             <Link
               to={`/products/${product.id}`}
               className="text-blue-600 hover:underline mt-2 inline-block"
@@ -64,21 +57,13 @@ const ProductCard = ({
         <div className="flex flex-col items-center justify-between h-32 py-2 pr-1 gap-1">
           <p>
             Available:{" "}
-            <span className="font-bold text-[#583cf1]">{product.store}</span>
+            <span className="font-bold text-[#583cf1]">{product.quantity}</span>
           </p>
-          <div className="flex justify-center items-center gap-1">
-            <MinusCircle
-              className="text-gray-600 hover:text-red-500 active:text-red-700 hover:scale-110 active:scale-95 ransition-all duration-200 cursor-pointer hover:drop-shadow-md active:drop-shadow-sm"
-              onClick={decrease}
-            />
-            <div className="border-solid border-zinc-400 border-2 rounded-lg text-center w-10">
-              {number}
-            </div>
-            <PlusCircle
-              className="text-gray-600 hover:text-teal-500 active:text-teal-700 hover:scale-110 active:scale-95 ransition-all duration-200 cursor-pointer hover:drop-shadow-md active:drop-shadow-sm"
-              onClick={increase}
-            />
-          </div>
+          <QuantitySetter
+            number={number}
+            increase={increase}
+            decrease={decrease}
+          />
           <button
             onClick={handleAddtoCart}
             aria-label="Add to Cart"
