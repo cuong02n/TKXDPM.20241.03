@@ -8,7 +8,7 @@ import { useCart } from "../hooks/useCart.ts";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const [number, setNumber] = React.useState<number>(1);
-  const { addItemToCart } = useCart();
+  const { addItemToCart, cartItems } = useCart();
   const { id, quantity, ...productWithoutStore } = product;
   const increase = () => {
     if (number + 1 <= product.quantity) {
@@ -21,6 +21,17 @@ const ProductCard = ({ product }: { product: Product }) => {
     }
   };
   const handleAddtoCart = () => {
+    const currInCart = cartItems.find((item) => item.id === id.toString());
+    if (currInCart && currInCart.quantity + number > product.quantity) {
+      setNumber(1);
+      alert(
+        "You can't add more than the available quantity.\nCurrently in cart: " +
+          currInCart.quantity +
+          "\nAvailable: " +
+          product.quantity
+      );
+      return;
+    }
     addItemToCart({
       ...productWithoutStore,
       quantity: number,
