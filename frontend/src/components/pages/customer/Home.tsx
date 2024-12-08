@@ -34,7 +34,7 @@ const sampleProducts: Product[] = [
 
 const Home = () => {
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 min-h-screen">
       <h1 className="text-3xl font-bold mb-5">Welcome to the Store</h1>
       <ProductGrid products={sampleProducts} />
     </div>
