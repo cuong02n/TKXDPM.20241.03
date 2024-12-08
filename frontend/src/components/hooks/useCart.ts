@@ -1,6 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
-import { addToCart, removeFromCart } from "../store/cartSlice";
+import {
+  addToCart,
+  removeFromCart,
+  updateCartItem,
+} from "../store/cartSlice.ts";
 
 export const useCart = () => {
   const dispatch = useDispatch();
@@ -14,9 +18,14 @@ export const useCart = () => {
     dispatch(removeFromCart(itemId));
   };
 
+  const updateItemInCart = (id: string, quantity: number) => {
+    dispatch(updateCartItem({ id, quantity }));
+  };
+
   return {
     cartItems,
     addItemToCart,
     removeItemFromCart,
+    updateItemInCart,
   };
 };

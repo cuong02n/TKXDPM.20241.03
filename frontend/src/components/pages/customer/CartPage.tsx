@@ -1,5 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import CartProduct from "../../cart/CartProduct.tsx";
+import CartCost from "../../cart/CartCost.tsx";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
@@ -10,13 +12,15 @@ const Cart = () => {
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <div>
-          {cartItems.map((item: any) => (
-            <div key={item.id} className="border p-4 mb-2">
-              <h2>{item.name}</h2>
-              <p>${item.price}</p>
-            </div>
-          ))}
+        <div className="flex">
+          <div className="w-1/2">
+            {cartItems.map((item: any) => (
+              <CartProduct key={item.id} product={item} />
+            ))}
+          </div>
+          <div className="flex-1 pl-24">
+            <CartCost />
+          </div>
         </div>
       )}
     </div>

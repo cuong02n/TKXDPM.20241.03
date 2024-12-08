@@ -1,31 +1,32 @@
 import React from "react";
 import ProductGrid from "../../product/ProductGrid.tsx";
+import { Product } from "../../types/product.ts";
 
-const sampleProducts = [
+const sampleProducts: Product[] = [
   {
-    id: 1,
+    id: "1",
     name: "CD 1",
-    price: 10,
+    price: 120000,
     imageUrl: "",
-    store: 10,
+    quantity: 10,
     description: "temp",
     category: "book",
   },
   {
-    id: 2,
+    id: "2",
     name: "DVD 1",
-    price: 15,
+    price: 45000,
     imageUrl: "",
-    store: 10,
+    quantity: 10,
     description: "temp",
     category: "book",
   },
   {
-    id: 3,
+    id: "3",
     name: "Book 1",
-    price: 20,
+    price: 98000,
     imageUrl: "",
-    store: 10,
+    quantity: 10,
     description: "temp",
     category: "book",
   },
