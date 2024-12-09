@@ -33,7 +33,7 @@ const DeliveryDateTimePicker = ({
   }, [time, day]);
 
   // Generate time slots (every 30 minutes)
-  const generateTimeSlots = () => {
+  const generateTimeSlots = React.useMemo(() => {
     const slots: string[] = [];
     for (let hour = 0; hour < 24; hour++) {
       for (let minute of [0, 30]) {
@@ -44,7 +44,7 @@ const DeliveryDateTimePicker = ({
       }
     }
     return slots;
-  };
+  }, []);
 
   // Get today's date in YYYY-MM-DD format for min attribute
   const getTodayString = () => {
@@ -78,7 +78,7 @@ const DeliveryDateTimePicker = ({
           label=""
           value={selected}
           onChange={handleChangeTime}
-          options={generateTimeSlots().map((timeSlot) => ({
+          options={generateTimeSlots.map((timeSlot) => ({
             label: timeSlot,
             value: timeSlot,
           }))}
