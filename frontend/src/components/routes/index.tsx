@@ -9,6 +9,7 @@ import Cart from "../pages/customer/CartPage.tsx";
 import Checkout from "../pages/customer/CheckoutPage.tsx";
 import Profile from "../pages/customer/Profile.tsx";
 import PaymentResult from "../pages/customer/PaymentResult.tsx";
+import DeliveryPage from "../pages/customer/DeliveryPage.tsx";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
       <Route path="/products" element={<Products />} />
       <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/delivery-info" element={<DeliveryPage />} />
       <Route path="/checkout" element={<Checkout />} />
     </Routes>
   );

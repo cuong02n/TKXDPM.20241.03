@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store/store";
-import { addOrder, removeOrder, updateOrderStatus } from "../store/orderSlice";
+import { RootState } from "../../store/store";
+import { addOrder, updateOrderStatus } from "../../store/orderSlice";
 
 const OrderPage = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const OrderPage = () => {
       totalAmount: 20,
       status: "pending",
     };
-    dispatch(addOrder(newOrder));
+    // dispatch(addOrder(newOrder));
   };
 
   const handleUpdateStatus = (orderId: string) => {

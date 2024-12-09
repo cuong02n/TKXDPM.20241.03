@@ -23,7 +23,7 @@ const CheckoutPage: React.FC = () => {
   };
 
   return (
-    <div className="checkout-page">
+    <div className="container mx-auto py-10 min-h-screen checkout-page">
       <h2>Checkout</h2>
       <div className="checkout-summary">
         <p>Total Amount: {totalAmount} USD</p>
