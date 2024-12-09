@@ -12,6 +12,7 @@ const products: Product[] = [
     price: 10,
     category: "book",
     imageUrl: "https://img.lovepik.com/element/40048/7442.png_860.png", // URL ảnh mẫu
+    quantity: 10,
   },
   {
     id: "2",
@@ -20,6 +21,7 @@ const products: Product[] = [
     price: 15,
     category: "cd",
     imageUrl: "https://img.lovepik.com/element/40048/7442.png_860.png",
+    quantity: 10,
   },
   {
     id: "3",
@@ -28,6 +30,7 @@ const products: Product[] = [
     price: 20,
     category: "dvd",
     imageUrl: "https://img.lovepik.com/element/40048/7442.png_860.png",
+    quantity: 10,
   },
 ];
 

@@ -1,11 +1,8 @@
 import React from "react";
 import ProductCard from "./ProductCard.tsx";
+import { Product } from "../types/product.ts";
 
-const ProductGrid = ({
-  products,
-}: {
-  products: Array<{ id: number; name: string; price: number; image: string }>;
-}) => {
+const ProductGrid = ({ products }: { products: Array<Product> }) => {
   return (
     <div className="grid grid-cols-3 gap-4">
       {products.map((product) => (

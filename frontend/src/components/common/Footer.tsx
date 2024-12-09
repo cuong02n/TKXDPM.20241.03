@@ -40,6 +40,9 @@ function Footer() {
           <div className="text-lg font-semibold">
             <p>Vũ Ngọc Anh 20215313</p>
           </div>
+          <div className="text-lg font-semibold">
+            <p>Nguyễn Trung Chiến 20215320</p>
+          </div>
         </div>
 
         {/* Liên hệ với chúng tôi */}
