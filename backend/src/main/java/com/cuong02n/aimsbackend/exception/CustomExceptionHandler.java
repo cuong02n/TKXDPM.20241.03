@@ -1,57 +1,44 @@
 package com.cuong02n.aimsbackend.exception;
 
-import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
-
-import java.util.Arrays;
+import com.cuong02n.aimsbackend.controller.AuthController;
+import com.cuong02n.aimsbackend.controller.ChatController;
+import com.cuong02n.aimsbackend.controller.OrderController;
+import com.cuong02n.aimsbackend.controller.ReviewController;
+import org.springframework.web.bind.annotation.*;
 
 //@RestControllerAdvice
-@RequiredArgsConstructor
+//@RestControllerAdvice(basePackages = "com.cuong02n.aimsbackend.controller")
+@ControllerAdvice(basePackageClasses = {AuthController.class, ChatController.class, OrderController.class, ReviewController.class})
 public class CustomExceptionHandler {
-    private static final Logger log = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public BaseResponse handleValidationException(MethodArgumentNotValidException ex) {
-        log.error(ex.getMessage());
-        return BaseResponse.error(Arrays.toString(Arrays.stream(ex.getDetailMessageArguments()).filter(e -> !((String) e).isEmpty()).toArray()));
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UserExistException.class)
-    public BaseResponse handleUserExistException(UserExistException ex) {
-        log.error(ex.getMessage());
-        return BaseResponse.error(ex.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(GeneralException.class)
-    public BaseResponse handleGeneralException(GeneralException ex) {
-        log.error(ex.getMessage());
-        return BaseResponse.error(ex.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public BaseResponse handleNoHandlerFoundException(NoHandlerFoundException ex) {
-        log.error(ex.getMessage());
-        return BaseResponse.error(ex.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(AimsOtpException.class)
-    public BaseResponse handleOtpException(AimsOtpException ex) {
-        log.error(ex.getMessage());
-        return BaseResponse.error(ex.getMessage());
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public BaseResponse handleValidationException(MethodArgumentNotValidException ex) {
+//        return BaseResponse.error(Arrays.toString(Arrays.stream(ex.getDetailMessageArguments()).filter(e -> !((String) e).isEmpty()).toArray()));
+//    }
+//
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(UserExistException.class)
+//    public BaseResponse handleUserExistException(UserExistException ex) {
+//        return BaseResponse.error(ex.getMessage());
+//    }
+//
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(GeneralException.class)
+//    public BaseResponse handleGeneralException(GeneralException ex) {
+//        return BaseResponse.error(ex.getMessage());
+//    }
+//
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(NoHandlerFoundException.class)
+//    public BaseResponse handleNoHandlerFoundException(NoHandlerFoundException ex) {
+//        return BaseResponse.error(ex.getMessage());
+//    }
+//
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(AimsOtpException.class)
+//    public BaseResponse handleOtpException(AimsOtpException ex) {
+//        return BaseResponse.error(ex.getMessage());
+//    }
 
 }
