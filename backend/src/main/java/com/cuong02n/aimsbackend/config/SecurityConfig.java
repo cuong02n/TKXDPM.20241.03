@@ -29,7 +29,7 @@ public class SecurityConfig {
             "/test",
             "/hello",
 //            "/api/review"
-            "**"
+//            "**"
     };
 
 
@@ -38,6 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         http
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
                     for (String url : WHITE_LIST) {
