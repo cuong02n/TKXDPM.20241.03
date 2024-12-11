@@ -10,6 +10,22 @@ export const getAllProductApi = async (id: string) => {
   }
 };
 
+/**
+ * 
+ * @param id 
+ * @returns {
+ * products: Product[];
+ * }
+ * type Product{
+ * id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: "book", "cd", hoặc "dvd"
+  imageUrl: string;
+  quantity: number;
+ * }
+ */
 export const getProductByIdApi = async (id: string) => {
   try {
     const response = await apiClient.get(`/api/product/getOne/${id}`);
