@@ -3,11 +3,12 @@ package com.cuong02n.aimsbackend.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class ProductCart extends BaseEntity {
     @EmbeddedId
     private ProductCartKey key;
@@ -27,6 +28,7 @@ public class ProductCart extends BaseEntity {
     @JoinColumn(name = "user_email")
     private UserCart userCart;
 
+    @Getter
     @Embeddable
     public static class ProductCartKey {
         @Column(name = "product_id")
