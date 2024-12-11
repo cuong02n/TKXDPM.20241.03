@@ -6,6 +6,8 @@ import com.cuong02n.aimsbackend.model.dto.request.LoginRequest;
 import com.cuong02n.aimsbackend.model.dto.request.RegisterRequest;
 import com.cuong02n.aimsbackend.model.dto.response.LoginResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
+import com.cuong02n.aimsbackend.model.entity.UserCart;
+import com.cuong02n.aimsbackend.repository.UserCartRepository;
 import com.cuong02n.aimsbackend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class UserService implements UserDetailsService {
     final JwtService jwtService;
     final HttpServletRequest httpServletRequest;
     final PasswordEncoder passwordEncoder;
+    final UserCartRepository userCartRepository;
 
     public boolean userExist(String email) {
         return userRepository.existsByEmail(email);
@@ -72,6 +77,15 @@ public class UserService implements UserDetailsService {
             throw new GeneralException("Wrong password");
         }
         return new LoginResponse(jwtService.generateToken(user), user.getRole(), (long) httpServletRequest.getAttribute("expired-jwt"));
+    }
+
+    public UserCart getUserCart(User user) {
+        if (user.getUserCart() != null) {
+            return user.getUserCart();
+        }
+        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
+        user.setUserCart(newUserCart);
+        return newUserCart;
     }
 
     @Override
