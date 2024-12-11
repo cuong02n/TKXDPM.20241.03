@@ -22,6 +22,11 @@ public class ProductController {
         return BaseResponse.ok(productService.getProduct(productId));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllProduct(){
+        return BaseResponse.ok(productService.getAllProducts());
+    }
+
     @GetMapping("/search")
     public ResponseEntity<?> searchProduct(){
         return BaseResponse.ok(null);
