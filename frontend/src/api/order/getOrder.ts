@@ -9,7 +9,7 @@ import apiClient from "../apiClient";
 export const getOrderApi = async (userId: string, cartId: string) => {
   try {
     const response = await apiClient.get(
-      `/api/order/create/?userId=${userId}&cartId=${cartId}`
+      `/api/order/get/?userId=${userId}&cartId=${cartId}`
     );
     return response.data;
   } catch (error) {
