@@ -63,6 +63,14 @@ public class ProductService {
         reviewRepository.save(review);
     }
 
+    public Product getProduct(String productId) {
+        return productRepository.findById(productId).orElseThrow();
+    }
+
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
     private void checkReviewExisted(User user, Product product) {
         if (reviewRepository.existsByUserAndProduct(user, product)) {
             throw new GeneralException("You reviewed this product before");
