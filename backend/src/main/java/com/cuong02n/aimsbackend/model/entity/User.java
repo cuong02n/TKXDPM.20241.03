@@ -1,13 +1,7 @@
 package com.cuong02n.aimsbackend.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class User extends BaseEntity implements UserDetails {
     @Id
+    @Getter
     private String email;
 
     private String name;
@@ -29,6 +24,12 @@ public class User extends BaseEntity implements UserDetails {
     private Role role;
 
     private boolean active;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @PrimaryKeyJoinColumn
+    @Getter
+    @Setter
+    private UserCart userCart;
 
     public void activate() {
         this.active = true;
