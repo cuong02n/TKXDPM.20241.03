@@ -27,4 +27,9 @@ public class OrderController {
         return BaseResponse.ok(orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds));
     }
 
+    @PostMapping("/place-rush-order")
+    public ResponseEntity<?> placeRushOrder(@RequestBody HashSet<String> productIds, @RequestBody int timeInMinute, @RequestBody String address) {
+        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address));
+    }
+
 }

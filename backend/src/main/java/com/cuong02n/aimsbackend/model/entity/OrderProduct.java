@@ -2,9 +2,15 @@ package com.cuong02n.aimsbackend.model.entity;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderProduct {
     @EmbeddedId
     private OrderProductKey key;
