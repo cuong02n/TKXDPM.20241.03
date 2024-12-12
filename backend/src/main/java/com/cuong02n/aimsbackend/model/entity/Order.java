@@ -26,4 +26,11 @@ public class Order extends BaseEntity {
     List<OrderProduct> orderProducts;
     boolean isRush = false;
     boolean isPaid = false;
+
+    private String address;
+
+    private String phone;
+
+    private String province;
+    private String shippingInstruction;
 }
