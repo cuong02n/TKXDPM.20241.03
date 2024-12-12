@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "../types/product";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { API_BASE_URL } from "../constants";
 
 interface ProductState {
   items: Product[];
@@ -26,6 +29,19 @@ const productSlice = createSlice({
     },
   },
 });
+
+
+export const getProductWithId = createAsyncThunk(
+  "product/:id",
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`https://fakestoreapi.com/products/${id}`);
+      return res.data;
+    } catch (_) {
+      return rejectWithValue(`could not get product with id ${id}`);
+    }
+  }
+);
 
 export const { setProducts, addProduct, removeProduct } = productSlice.actions;
 export default productSlice.reducer;
