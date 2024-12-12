@@ -33,4 +33,5 @@ public class Order extends BaseEntity {
 
     private String province;
     private String shippingInstruction;
+    private long amount;
 }
