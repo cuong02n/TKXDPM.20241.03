@@ -1,6 +1,30 @@
 package com.cuong02n.aimsbackend.model.entity;
 
 
-public class OrderProduct {
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Entity
+public class OrderProduct {
+    @EmbeddedId
+    private OrderProductKey key;
+
+    @ManyToOne
+    @MapsId("productId")
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @MapsId("orderId")
+    @JoinColumn(name = "order_id")
+    private Order order;
+    int quantity;
+    @Embeddable
+    @Data
+    private static class OrderProductKey {
+        @Column(name = "product_id")
+        private String productId;
+        @Column(name = "order_id")
+        private Long orderId;
+    }
 }
