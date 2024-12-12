@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
+  const orderItems = useSelector((state: any) => state.oneOrder.items);
+  const [rush, setRush] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const handlePlaceOrder = () => {
-    navigate("/delivery-info");
+    navigate("/delivery-info", { state: { rush } });
   };
   return (
     <div className="container mx-auto py-10 min-h-screen">
@@ -25,8 +27,23 @@ const Cart = () => {
           <div className="flex-1 pl-24 ">
             <CartCost />
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-8">
               <button
+                onClick={() => setRush(!rush)}
+                className={`
+                  px-4 py-2 mt-4 rounded-md transition-colors duration-300 font-bold
+                  ${
+                    rush
+                      ? "bg-yellow-400 text-black hover:bg-yellow-500 border-2 border-yellow-600 shadow-lg"
+                      : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                  }
+                `}
+              >
+                RUSH
+              </button>
+
+              <button
+                disabled={orderItems.length === 0}
                 onClick={handlePlaceOrder}
                 className="w-48 mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-gradient-to-r from-blue-900 to-blue-800 transition-colors duration-300 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
               >
