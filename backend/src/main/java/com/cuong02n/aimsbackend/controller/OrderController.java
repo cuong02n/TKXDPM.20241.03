@@ -32,4 +32,9 @@ public class OrderController {
         return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address));
     }
 
+    @PostMapping("/pay-order")
+    public ResponseEntity<?> payOrder() {
+        return null;
+    }
+
 }
