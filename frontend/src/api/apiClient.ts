@@ -1,7 +1,8 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const apiClient = axios.create({
-  baseURL: "http://116.96.98.153:8080",
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,23 +31,23 @@ apiClient.interceptors.response.use(
     switch (status) {
       case 401:
         // Handle unauthorized error
-        console.error("Unauthorized access - perhaps you need to log in?");
+        toast.error("Unauthorized access - perhaps you need to log in?");
         break;
       case 403:
         // Handle forbidden error
-        console.error(
+        toast.error(
           "Access forbidden - you do not have permission to access this resource."
         );
         break;
       case 404:
         // Handle not found error
-        console.error(
+        toast.error(
           "Resource not found - the requested resource does not exist."
         );
         break;
       default:
         // Handle other errors
-        console.error("An error occurred:", error.message);
+        toast.error(`${error.response?.data?.message}`);
         break;
     }
 
