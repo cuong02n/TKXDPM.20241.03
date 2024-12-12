@@ -3,7 +3,7 @@ import { Image } from "lucide-react";
 
 export const ProductDetailCard = ({ product }: { product: Product }) => {
   return (
-    <div className="max-w-5xl mx-auto p-0 bg-white rounded-lg shadow-md">
+    <div className="max-w-6xl mx-auto p-0 bg-white rounded-lg shadow-md">
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex-shrink-0">
           {product.imageUrl ? (
@@ -23,7 +23,7 @@ export const ProductDetailCard = ({ product }: { product: Product }) => {
           </h1>
           <p className="text-gray-600 mb-4">{product.description}</p>
           <div className="text-lg font-semibold text-gray-800 mb-4">
-            Price: ${product.price}
+            Price: {product.price} VND
           </div>
           <div className="text-sm text-gray-500 mb-4 capitalize">
             Category: {product.category}
