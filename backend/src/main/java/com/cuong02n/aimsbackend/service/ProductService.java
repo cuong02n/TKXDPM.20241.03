@@ -41,7 +41,7 @@ public class ProductService {
         checkStar(star);
         checkMedia(medias);
         checkProduct(productId);
-        String userEmail = (String) httpServletRequest.getAttribute("email");
+//        String userEmail = (String) httpServletRequest.getAttribute("email");
 
         Product product = productRepository.findById(productId).orElseThrow();
         User user = (User) httpServletRequest.getAttribute("user");
@@ -57,7 +57,12 @@ public class ProductService {
                         .product(productRepository.findById(productId).orElseThrow())
                         .star(star)
                         .content(content)
-                        .listMedia(medias.stream().map(mediaService::saveMedia).collect(Collectors.joining(" ")))
+                        .listMedia(
+                                medias
+                                        .stream()
+                                        .map(mediaService::saveMedia)
+                                        .collect(Collectors.joining(";"))
+                        )
                         .build();
 
         reviewRepository.save(review);

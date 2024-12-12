@@ -1,26 +1,16 @@
 package com.cuong02n.aimsbackend.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.*;
 
 @Entity
-@Builder
-public class Order {
-
+@Table(name = "`order`")
+public class Order extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long orderId;
-
-    Long amount;
-
-
-    public Order() {
-
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+    boolean isRush = false;
+    boolean isPaid = false;
 }
