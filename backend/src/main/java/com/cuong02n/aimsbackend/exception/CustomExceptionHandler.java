@@ -1,14 +1,8 @@
 package com.cuong02n.aimsbackend.exception;
 
-import com.cuong02n.aimsbackend.controller.AuthController;
-import com.cuong02n.aimsbackend.controller.ChatController;
-import com.cuong02n.aimsbackend.controller.OrderController;
-import com.cuong02n.aimsbackend.controller.ReviewController;
 import org.springframework.web.bind.annotation.*;
 
-//@RestControllerAdvice
-//@RestControllerAdvice(basePackages = "com.cuong02n.aimsbackend.controller")
-@ControllerAdvice(basePackageClasses = {AuthController.class, ChatController.class, OrderController.class, ReviewController.class})
+@RestControllerAdvice
 public class CustomExceptionHandler {
 
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
