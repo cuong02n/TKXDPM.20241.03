@@ -30,13 +30,12 @@ const productSlice = createSlice({
   },
 });
 
-
 export const getProductWithId = createAsyncThunk(
   "product/:id",
   async (id: number, { rejectWithValue }) => {
     try {
-      const res = await axios.get(`https://fakestoreapi.com/products/${id}`);
-      return res.data;
+      const res = await axios.get(`${API_BASE_URL}/product/${id}`);
+      return res.data.data;
     } catch (_) {
       return rejectWithValue(`could not get product with id ${id}`);
     }
