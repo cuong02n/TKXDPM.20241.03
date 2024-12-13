@@ -4,12 +4,10 @@ import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 
@@ -20,6 +18,12 @@ public class OrderController {
 
     private final OrderService orderService;
     private final HttpServletRequest httpServletRequest;
+
+
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getOrders(){
+        return BaseResponse.ok(orderService.getOrder((User) httpServletRequest.getAttribute("user")));
+    }
 
     @PostMapping("/place-order")
     public ResponseEntity<?> placeOrder(
