@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import CartProduct from "../../cart/CartProduct.tsx";
 import CartCost from "../../cart/CartCost.tsx";
 import { useNavigate } from "react-router-dom";
+import { formatCurrency } from "../../utils/format.ts";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
@@ -22,6 +23,9 @@ const Cart = () => {
       setRush(false);
     }
   }, [orderItems]);
+  const cartTotal = formatCurrency(
+    cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
+  );
   const handlePlaceOrder = () => {
     navigate("/delivery-info", { state: { rush } });
   };
@@ -40,10 +44,15 @@ const Cart = () => {
             {cartItems.map((item: any) => (
               <CartProduct key={item.id} product={item} />
             ))}
+            <div className="mt-3 flex justify-center">
+              <p>
+                All in cart:{" "}
+                <span className="font-bold text-zinc-500">{cartTotal}</span>
+              </p>
+            </div>
           </div>
           <div className="flex-1 pl-24 ">
             <CartCost />
-
             <div className="flex justify-end gap-8">
               <button
                 disabled={orderItems.length === 0}

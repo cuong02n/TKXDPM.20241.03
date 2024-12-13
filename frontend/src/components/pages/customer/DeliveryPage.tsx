@@ -1,6 +1,5 @@
 import React from "react";
 import DeliveryInfo from "../../delivery/DeliveryInfo.tsx";
-import { DeliveryInformation } from "../../types/deliveryInfo.ts";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDelivery } from "../../hooks/useDelivery.ts";
