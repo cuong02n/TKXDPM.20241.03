@@ -1,20 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-// Định nghĩa kiểu cho item trong giỏ hàng
-export interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number; // Thêm trường quantity
-  imageUrl: string;
-  description: string;
-  category: string;
-}
-
-// Định nghĩa kiểu cho state của giỏ hàng
-interface CartState {
-  items: CartItem[];
-}
+import { CartItem, CartState } from "../types/cart";
 
 const initialState: CartState = { items: [] };
 
@@ -46,6 +31,7 @@ const cartSlice = createSlice({
         item.quantity = quantity;
       }
     },
+    extraReducers: (builder) => {},
   },
 });
 

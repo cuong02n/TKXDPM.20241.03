@@ -5,6 +5,7 @@ import cartReducer from "../store/cartSlice.ts"; // Giả sử bạn có reducer
 import wishlistReducer from "../store/wishlistSlice.ts"; // Import wishlistReducer
 import productReducer from "../store/productSlice.ts";
 import orderReducer from "../store/orderSlice.ts";
+import oneOrderReducer from "../store/oneOrderSlice.ts";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     wishlist: wishlistReducer, // Kết nối wishlistSlice vào store
     product: productReducer,
     order: orderReducer,
+    oneOrder: oneOrderReducer,
   },
 });
 
