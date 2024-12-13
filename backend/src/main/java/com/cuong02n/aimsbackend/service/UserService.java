@@ -80,12 +80,13 @@ public class UserService implements UserDetailsService {
     }
 
     public UserCart getUserCart(User user) {
-        if (user.getUserCart() != null) {
-            return user.getUserCart();
-        }
-        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
-        user.setUserCart(newUserCart);
-        return newUserCart;
+//        if (user.getUserCart() != null) {
+//            return user.getUserCart();
+//        }
+//        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
+//        user.setUserCart(newUserCart);
+//        return newUserCart;
+        return null; // todo: uncomment
     }
 
     @Override
