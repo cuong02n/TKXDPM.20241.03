@@ -20,12 +20,10 @@ const InvoiceDelivery = ({ delivery }: { delivery: DeliveryInformation }) => {
         <p className="w-40">Address</p>
         <p>: {delivery.address}</p>
       </div>
-      {delivery.instructions && (
-        <div className="flex">
-          <p className="w-40">Delivery instructions</p>
-          <p>: {delivery.instructions}</p>
-        </div>
-      )}
+      <div className="flex">
+        <p className="w-40">Delivery instructions</p>
+        <p>: {delivery.instructions}</p>
+      </div>
       {delivery.time && (
         <div className="flex">
           <p className="w-40">Delivery time</p>

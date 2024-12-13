@@ -1,25 +1,33 @@
 import React from "react";
 import DeliveryInfo from "../../delivery/DeliveryInfo.tsx";
-import { DeliveryInformation } from "../../types/deliveryInfo.ts";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDelivery } from "../../hooks/useDelivery.ts";
+import { useOneOrder } from "../../hooks/useOneOrder.ts";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store.ts";
 
-const DeliveryPage = ({ hasRush = true }: { hasRush: boolean }) => {
+const DeliveryPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { rush } = location.state || { rush: false };
-  const [deliveryInfo, setDeliveryInfo] = React.useState<DeliveryInformation>({
-    name: "",
-    phone: "",
-    province: "",
-    address: "",
-    instructions: "",
-    time: "",
+  const [rush, setRush] = React.useState<boolean>(() => {
+    const isRush = localStorage.getItem("rush");
+    if (isRush) return JSON.parse(isRush);
   });
+  const checkInfoValid = React.useRef<() => boolean>(() => true);
+  const { updateDelivery } = useDelivery();
+  const { setDelivery } = useOneOrder();
+  const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
   const updateInfo = (field: string, value: any) => {
-    setDeliveryInfo({ ...deliveryInfo, [field]: value });
+    updateDelivery(field, value.toString().trim());
+    // setDeliveryInfo({ ...deliveryInfo, [field]: value });
   };
   const handlePlaceOrder = () => {
-    navigate("/checkout");
+    if (checkInfoValid.current()) {
+      setDelivery(deliveryInfo);
+      navigate("/checkout");
+    } else {
+      toast.error("Please fill in all required fields.");
+    }
   };
   return (
     <div className="container mx-auto py-10 min-h-screen">
@@ -28,6 +36,7 @@ const DeliveryPage = ({ hasRush = true }: { hasRush: boolean }) => {
         hasRush={rush}
         deliveryInfo={deliveryInfo}
         updateInfo={updateInfo}
+        checkInfo={checkInfoValid}
       />
       <div className="flex justify-end">
         <button
