@@ -16,13 +16,11 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @Getter
     private String email;
-
     private String name;
     private String password;
     @Getter
     @Enumerated(value = EnumType.STRING)
     private Role role;
-
     private boolean active;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -30,7 +28,6 @@ public class User extends BaseEntity implements UserDetails {
     @Getter
     @Setter
     private UserCart userCart;
-
     public void activate() {
         this.active = true;
     }
