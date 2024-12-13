@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import apiClient from "../../api/apiClient.ts";
 
 // Giao diện trạng thái xác thực
 interface AuthState {
@@ -45,7 +46,8 @@ export const register = createAsyncThunk(
   "auth/register",
   async (data: RegisterPayload, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/register`, data);
+      // const response = await axios.post(`${API_BASE_URL}/register`, data);
+      const response = await apiClient.post("/auth/register", data);
       return response.data; // Trả về dữ liệu nếu thành công
     } catch (error: any) {
       return rejectWithValue(
