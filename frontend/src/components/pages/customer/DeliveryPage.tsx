@@ -1,10 +1,12 @@
 import React from "react";
 import DeliveryInfo from "../../delivery/DeliveryInfo.tsx";
 import { DeliveryInformation } from "../../types/deliveryInfo.ts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const DeliveryPage = ({ hasRush = true }: { hasRush: boolean }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { rush } = location.state || { rush: false };
   const [deliveryInfo, setDeliveryInfo] = React.useState<DeliveryInformation>({
     name: "",
     phone: "",
@@ -23,7 +25,7 @@ const DeliveryPage = ({ hasRush = true }: { hasRush: boolean }) => {
     <div className="container mx-auto py-10 min-h-screen">
       <h1 className="text-2xl font-bold mb-5">Delivery information</h1>
       <DeliveryInfo
-        hasRush={hasRush}
+        hasRush={rush}
         deliveryInfo={deliveryInfo}
         updateInfo={updateInfo}
       />
