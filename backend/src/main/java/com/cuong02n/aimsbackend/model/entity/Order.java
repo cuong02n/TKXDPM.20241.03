@@ -1,14 +1,14 @@
 package com.cuong02n.aimsbackend.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name = "`order`")
 @Getter
+@Setter
 public class Order extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,6 @@ public class Order extends BaseEntity {
     @Setter
     @Getter
     List<OrderProduct> orderProducts;
-    boolean isRush = false;
     boolean isPaid = false;
 
     private String address;
@@ -33,5 +32,7 @@ public class Order extends BaseEntity {
 
     private String province;
     private String shippingInstruction;
-    private long amount;
+
+    boolean isRush = false;
+    int timeInMinute = 120;
 }

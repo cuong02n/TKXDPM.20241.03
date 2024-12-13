@@ -22,14 +22,28 @@ public class OrderController {
     private final HttpServletRequest httpServletRequest;
 
     @PostMapping("/place-order")
-    public ResponseEntity<?> placeOrder(@RequestBody HashSet<String> productIds) {
-
-        return BaseResponse.ok(orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds));
+    public ResponseEntity<?> placeOrder(
+            @RequestBody HashSet<String> productIds,
+            @RequestBody String address,
+            @RequestBody String phone,
+            @RequestBody String province,
+            @RequestBody String shippingInstruction
+            ) {
+        return BaseResponse.ok(
+                orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds,address,phone,province,shippingInstruction)
+        );
     }
 
     @PostMapping("/place-rush-order")
-    public ResponseEntity<?> placeRushOrder(@RequestBody HashSet<String> productIds, @RequestBody int timeInMinute, @RequestBody String address) {
-        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address));
+    public ResponseEntity<?> placeRushOrder(
+            @RequestBody HashSet<String> productIds,
+            @RequestBody String address,
+            @RequestBody String phone,
+            @RequestBody String province,
+            @RequestBody String shippingInstruction,
+            @RequestBody int timeInMinute // Rush order
+    ) {
+        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address,phone,province,shippingInstruction));
     }
 
     @PostMapping("/pay-order")
