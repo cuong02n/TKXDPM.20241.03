@@ -6,10 +6,7 @@ import com.cuong02n.aimsbackend.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 
@@ -21,6 +18,12 @@ public class OrderController {
     private final OrderService orderService;
     private final HttpServletRequest httpServletRequest;
 
+
+    @GetMapping("/my-orders")
+    public ResponseEntity<?> getOrders() {
+        return BaseResponse.ok(orderService.getOrder((User) httpServletRequest.getAttribute("user")));
+    }
+
     @PostMapping("/place-order")
     public ResponseEntity<?> placeOrder(
             @RequestBody HashSet<String> productIds,
@@ -28,9 +31,9 @@ public class OrderController {
             @RequestBody String phone,
             @RequestBody String province,
             @RequestBody String shippingInstruction
-            ) {
+    ) {
         return BaseResponse.ok(
-                orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds,address,phone,province,shippingInstruction)
+                orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds, address, phone, province, shippingInstruction)
         );
     }
 
@@ -43,7 +46,7 @@ public class OrderController {
             @RequestBody String shippingInstruction,
             @RequestBody int timeInMinute // Rush order
     ) {
-        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address,phone,province,shippingInstruction));
+        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address, phone, province, shippingInstruction));
     }
 
     @PostMapping("/pay-order")

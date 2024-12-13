@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 
-public class BaseResponse {
+public class BaseResponse{
     int error = 0;
     Object message;
     JsonElement data;

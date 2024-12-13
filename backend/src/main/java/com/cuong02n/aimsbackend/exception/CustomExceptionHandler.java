@@ -3,10 +3,13 @@ package com.cuong02n.aimsbackend.exception;
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
@@ -14,7 +17,7 @@ public class CustomExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public BaseResponse handleValidationException(MethodArgumentNotValidException ex) {
-        return BaseResponse.error(Arrays.toString(Arrays.stream(ex.getDetailMessageArguments()).filter(e -> !((String) e).isEmpty()).toArray()));
+        return BaseResponse.error(Arrays.toString(Arrays.stream(Objects.requireNonNull(ex.getDetailMessageArguments())).filter(e -> !((String) e).isEmpty()).toArray()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
