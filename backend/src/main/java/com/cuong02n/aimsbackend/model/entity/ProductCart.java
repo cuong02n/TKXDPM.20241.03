@@ -1,9 +1,7 @@
 package com.cuong02n.aimsbackend.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 
 @Entity
@@ -30,6 +28,8 @@ public class ProductCart extends BaseEntity {
 
     @Getter
     @Embeddable
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class ProductCartKey {
         @Column(name = "product_id")
         private String productId;

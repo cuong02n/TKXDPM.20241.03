@@ -7,7 +7,7 @@ import com.cuong02n.aimsbackend.model.dto.request.RegisterRequest;
 import com.cuong02n.aimsbackend.model.dto.response.LoginResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.model.entity.UserCart;
-import com.cuong02n.aimsbackend.repository.UserCartRepository;
+import com.cuong02n.aimsbackend.repository.ProductCartRepository;
 import com.cuong02n.aimsbackend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class UserService implements UserDetailsService {
     final JwtService jwtService;
     final HttpServletRequest httpServletRequest;
     final PasswordEncoder passwordEncoder;
-    final UserCartRepository userCartRepository;
+    final ProductCartRepository userCartRepository;
 
     public boolean userExist(String email) {
         return userRepository.existsByEmail(email);
@@ -80,13 +80,12 @@ public class UserService implements UserDetailsService {
     }
 
     public UserCart getUserCart(User user) {
-//        if (user.getUserCart() != null) {
-//            return user.getUserCart();
-//        }
-//        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
-//        user.setUserCart(newUserCart);
-//        return newUserCart;
-        return null; // todo: uncomment
+        if (user.getUserCart() != null) {
+            return user.getUserCart();
+        }
+        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
+        user.setUserCart(newUserCart);
+        return newUserCart;
     }
 
     @Override

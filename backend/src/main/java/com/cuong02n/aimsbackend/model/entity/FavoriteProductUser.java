@@ -3,9 +3,9 @@ package com.cuong02n.aimsbackend.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Getter
-@Setter
+@Data
 public class FavoriteProductUser extends BaseEntity {
     @EmbeddedId
     private WishListKey key;

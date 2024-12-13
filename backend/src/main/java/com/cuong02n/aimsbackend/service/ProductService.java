@@ -28,7 +28,7 @@ public class ProductService {
     @Value("${aims.review.max-media-count}")
     private int maxMediaCountReview;
     @Value("${aims.review.supported-media}")
-    public List<String> supportedMediaTypeReview;
+    private List<String> supportedMediaTypeReview;
 
     public ProductService(ReviewRepository reviewRepository, HttpServletRequest httpServletRequest, ProductRepository productRepository, MediaService mediaService, WishListRepository wishListRepository) {
         this.reviewRepository = reviewRepository;

@@ -4,7 +4,6 @@ import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +20,7 @@ public class OrderController {
 
 
     @GetMapping("/my-orders")
-    public ResponseEntity<?> getOrders(){
+    public ResponseEntity<?> getOrders() {
         return BaseResponse.ok(orderService.getOrder((User) httpServletRequest.getAttribute("user")));
     }
 
@@ -32,9 +31,9 @@ public class OrderController {
             @RequestBody String phone,
             @RequestBody String province,
             @RequestBody String shippingInstruction
-            ) {
+    ) {
         return BaseResponse.ok(
-                orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds,address,phone,province,shippingInstruction)
+                orderService.placeOrder((User) httpServletRequest.getAttribute("user"), productIds, address, phone, province, shippingInstruction)
         );
     }
 
@@ -47,7 +46,7 @@ public class OrderController {
             @RequestBody String shippingInstruction,
             @RequestBody int timeInMinute // Rush order
     ) {
-        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address,phone,province,shippingInstruction));
+        return BaseResponse.ok(orderService.placeRushOrder((User) httpServletRequest.getAttribute("user"), productIds, timeInMinute, address, phone, province, shippingInstruction));
     }
 
     @PostMapping("/pay-order")
