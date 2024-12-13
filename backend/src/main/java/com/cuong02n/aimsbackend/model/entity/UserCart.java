@@ -18,8 +18,8 @@ public class UserCart extends BaseEntity {
     private String userEmail;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
     @JoinColumn(name = "user_email")
+    @MapsId
     private User user;
 
     @OneToMany(mappedBy = "userCart")
