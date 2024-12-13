@@ -69,8 +69,13 @@ public class OrderService {
         order.setShippingInstruction(shippingInstruction);
         order.setRush(timeInMinute != 0);
         order.setTimeInMinute(timeInMinute);
+
         orderRepository.save(order);
         return order;
+    }
+
+    public List<Order> getOrder(User user) {
+        return orderRepository.findAllByUser(user);
     }
 
     private void checkOrderNotPaidExist(User user) {
