@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItem } from "../types/cart";
 import { OneOrder } from "../types/oneOrder";
+import { DeliveryInformation } from "../types/deliveryInfo";
 
 const initialState: OneOrder = {
   orderId: "",
@@ -13,6 +14,7 @@ const initialState: OneOrder = {
     phone: "",
     province: "",
     address: "",
+    instructions: "",
   },
   status: "pending",
 };
@@ -50,9 +52,20 @@ const oneOrderSlice = createSlice({
         item.quantity = quantity;
       }
     },
+    setDeliveryInfo: (
+      state,
+      action: PayloadAction<{ info: DeliveryInformation }>
+    ) => {
+      const { info } = action.payload;
+      state.deliveryInfo = info;
+    },
   },
 });
 
-export const { addOrderProduct, deleteOrderProduct, updateOrderProduct } =
-  oneOrderSlice.actions;
+export const {
+  addOrderProduct,
+  deleteOrderProduct,
+  updateOrderProduct,
+  setDeliveryInfo,
+} = oneOrderSlice.actions;
 export default oneOrderSlice.reducer;

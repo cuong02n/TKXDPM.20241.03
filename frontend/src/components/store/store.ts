@@ -6,6 +6,7 @@ import wishlistReducer from "../store/wishlistSlice.ts"; // Import wishlistReduc
 import productReducer from "../store/productSlice.ts";
 import orderReducer from "../store/orderSlice.ts";
 import oneOrderReducer from "../store/oneOrderSlice.ts";
+import deliveryInfoReducer from "../store/deliveryInfoSlice.ts";
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     product: productReducer,
     order: orderReducer,
     oneOrder: oneOrderReducer,
+    deliveryInfo: deliveryInfoReducer,
   },
 });
 

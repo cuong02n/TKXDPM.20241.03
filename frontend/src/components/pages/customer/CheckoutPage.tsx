@@ -15,6 +15,7 @@ const CheckoutPage: React.FC = () => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
 
   const invoice: Invoice = {
     deliveryInfo: {
@@ -64,7 +65,7 @@ const CheckoutPage: React.FC = () => {
       </div>
       <hr className="border-t-2 border-dashed border-zinc-500 my-4" />
       <div>
-        <InvoiceDelivery delivery={invoice.deliveryInfo} />
+        <InvoiceDelivery delivery={deliveryInfo} />
       </div>
       <div className="flex justify-end gap-8">
         <button

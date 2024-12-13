@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-const Select = ({ label, value, onChange, options }) => {
+const Select = ({ label, value, onChange, options, isValid = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +31,9 @@ const Select = ({ label, value, onChange, options }) => {
     <div className="relative" ref={selectRef}>
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <div
-        className="mt-1 px-3 py-2 border border-gray-300 rounded-md flex justify-between items-center cursor-pointer"
+        className={`mt-1 px-3 py-2 border rounded-md flex justify-between items-center cursor-pointer ${
+          isValid ? "border-gray-300" : "border-red-500"
+        }`}
         onClick={toggleOpen}
       >
         {value?.label || "Select an option"}

@@ -9,8 +9,25 @@ const Cart = () => {
   const orderItems = useSelector((state: any) => state.oneOrder.items);
   const [rush, setRush] = React.useState<boolean>(false);
   const navigate = useNavigate();
+  React.useEffect(() => {
+    const isRush = localStorage.getItem("rush");
+    if (isRush) setRush(JSON.parse(isRush));
+    else {
+      localStorage.setItem("rush", JSON.stringify(false));
+    }
+  }, []);
+  React.useEffect(() => {
+    if (orderItems.length === 0) {
+      localStorage.setItem("rush", JSON.stringify(false));
+      setRush(false);
+    }
+  }, [orderItems]);
   const handlePlaceOrder = () => {
     navigate("/delivery-info", { state: { rush } });
+  };
+  const handleSetRush = () => {
+    localStorage.setItem("rush", JSON.stringify(!rush));
+    setRush((prev) => !prev);
   };
   return (
     <div className="container mx-auto py-10 min-h-screen">
@@ -29,9 +46,10 @@ const Cart = () => {
 
             <div className="flex justify-end gap-8">
               <button
-                onClick={() => setRush(!rush)}
+                disabled={orderItems.length === 0}
+                onClick={handleSetRush}
                 className={`
-                  px-4 py-2 mt-4 rounded-md transition-colors duration-300 font-bold
+                  px-4 py-2 mt-4 rounded-md transition-colors duration-300 font-bold disabled:opacity-50 disabled:cursor-not-allowed
                   ${
                     rush
                       ? "bg-yellow-400 text-black hover:bg-yellow-500 border-2 border-yellow-600 shadow-lg"

@@ -3,9 +3,11 @@ import { RootState } from "../store/store";
 import {
   addOrderProduct,
   deleteOrderProduct,
+  setDeliveryInfo,
   updateOrderProduct,
 } from "../store/oneOrderSlice.ts";
 import { CartItem } from "../types/cart";
+import { DeliveryInformation } from "../types/deliveryInfo.ts";
 
 export const useOneOrder = () => {
   const dispatch = useDispatch();
@@ -20,11 +22,15 @@ export const useOneOrder = () => {
   const updateProductInOrder = (productId: string, quantity: number) => {
     dispatch(updateOrderProduct({ productId, quantity }));
   };
+  const setDelivery = (info: DeliveryInformation) => {
+    dispatch(setDeliveryInfo({ info }));
+  };
 
   return {
     orderProducts,
     addProductToOrder,
     deleteProductFromOrder,
     updateProductInOrder,
+    setDelivery,
   };
 };
