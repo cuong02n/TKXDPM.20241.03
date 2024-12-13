@@ -8,14 +8,43 @@ const DeliveryInfo = ({
   deliveryInfo,
   updateInfo,
   hasRush,
+  checkInfo,
 }: {
   deliveryInfo: DeliveryInformation;
   updateInfo: (field: string, value: string) => void;
   hasRush: boolean;
+  checkInfo: React.MutableRefObject<() => boolean>;
 }) => {
   const [selectedProvince, setSelectedProvince] = React.useState(
     deliveryInfo.province || null
   );
+
+  const [isValid, setIsValid] = React.useState({
+    name: true,
+    phone: true,
+    province: true,
+    address: true,
+  });
+
+  React.useEffect(() => {
+    checkInfo.current = checkInfoValid;
+  }, [deliveryInfo]);
+
+  const checkInfoValid = () => {
+    const { name, phone, province, address } = deliveryInfo;
+    const validName = name.trim().length > 0;
+    const validPhone = phone.trim().length > 0;
+    const validProvince = province.trim().length > 0;
+    const validAddress = address.trim().length > 0;
+
+    setIsValid({
+      name: validName,
+      phone: validPhone,
+      province: validProvince,
+      address: validAddress,
+    });
+    return validName && validPhone && validProvince && validAddress;
+  };
 
   const handleProvinceChange = (value) => {
     setSelectedProvince(value);
@@ -26,47 +55,66 @@ const DeliveryInfo = ({
     <div>
       <div className="mb-5">
         <label className="block text-base font-medium text-gray-700">
-          Name
+          Name <span className="text-rose-500">*</span>
         </label>
         <input
           type="text"
           value={deliveryInfo.name}
           onChange={(e) => updateInfo("name", e.target.value)}
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          className={`mt-1 p-2 w-full border ${
+            isValid.name ? "border-gray-300" : "border-red-500"
+          } rounded-md`}
         />
+        {!isValid.name && (
+          <p className="text-red-500 text-sm">Name is required.</p>
+        )}
       </div>
       <div className="mb-5">
         <label className="block text-base font-medium text-gray-700">
-          Phone
+          Phone <span className="text-rose-500">*</span>
         </label>
         <input
           type="text"
           value={deliveryInfo.phone}
           onChange={(e) => updateInfo("phone", e.target.value)}
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          className={`mt-1 p-2 w-full border ${
+            isValid.phone ? "border-gray-300" : "border-red-500"
+          } rounded-md`}
         />
+        {!isValid.phone && (
+          <p className="text-red-500 text-sm">Phone is required.</p>
+        )}
       </div>
       <div className="mb-5">
         <Select
           label="Province / City"
           value={selectedProvince}
           onChange={handleProvinceChange}
+          isValid={isValid.province}
           options={provinces.map((province) => ({
             label: province.name,
             value: province,
           }))}
         />
+        {!isValid.province && (
+          <p className="text-red-500 text-sm">Province is required.</p>
+        )}
       </div>
       <div className="mb-5">
         <label className="block text-base font-medium text-gray-700">
-          Address
+          Address <span className="text-rose-500">*</span>
         </label>
         <input
           type="text"
           value={deliveryInfo.address}
           onChange={(e) => updateInfo("address", e.target.value)}
-          className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          className={`mt-1 p-2 w-full border ${
+            isValid.address ? "border-gray-300" : "border-red-500"
+          } rounded-md`}
         />
+        {!isValid.address && (
+          <p className="text-red-500 text-sm">Address is required.</p>
+        )}
       </div>
       <div className="mb-5">
         <label className="block text-base font-medium text-gray-700">

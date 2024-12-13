@@ -3,6 +3,6 @@ export interface DeliveryInformation {
   phone: string;
   province: string;
   address: string;
-  instructions?: string;
+  instructions: string;
   time?: any;
 }
