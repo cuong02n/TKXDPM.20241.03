@@ -25,8 +25,12 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product")
     List<ProductCart> productCarts;
 
-    enum ProductCategory{
-        CD,DVD,BOOK;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(name = "media_url")
+    List<String> mediaUrls;
+
+    enum ProductCategory {
+        CD, DVD, BOOK;
     }
 
 }

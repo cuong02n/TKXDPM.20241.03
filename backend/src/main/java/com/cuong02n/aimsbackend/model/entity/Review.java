@@ -3,6 +3,8 @@ package com.cuong02n.aimsbackend.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
@@ -25,6 +27,8 @@ public class Review extends BaseEntity {
     /**
      * Separate by ' '
      */
-    private String listMedia;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Column(name = "media_url")
+    private List<String> mediaUrls;
 
 }
