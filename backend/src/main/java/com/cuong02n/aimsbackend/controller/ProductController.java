@@ -31,7 +31,4 @@ public class ProductController {
     public ResponseEntity<?> searchProduct(){
         return BaseResponse.ok(null);
     }
-
-
-
 }

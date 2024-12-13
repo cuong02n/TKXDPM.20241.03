@@ -11,18 +11,7 @@ import java.util.Arrays;
 @RestController
 public class AimsBackendApplication {
 
-    @GetMapping("/hello")
-    public String hello() {
-        return "Hello World";
-    }
-
-    @PostMapping("/test")
-    public String test(@RequestParam("files") MultipartFile[] files, @RequestParam("star")int star) {
-        return Arrays.toString(Arrays.stream(files).map(MultipartFile::getContentType).toArray());
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(AimsBackendApplication.class, args);
     }
-
 }
