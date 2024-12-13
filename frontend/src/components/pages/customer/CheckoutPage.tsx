@@ -1,22 +1,16 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { addOrder } from "../../store/orderSlice.ts";
 import { Invoice } from "../../types/invoice.ts";
 import InvoiceProduct from "../../invoice/InvoiceProduct.tsx";
 import InvoiceSummary from "../../invoice/InvoiceSummary.tsx";
 import InvoiceDelivery from "../../invoice/InvoiceDelivery.tsx";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutPage: React.FC = () => {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
   const order = useSelector((state: RootState) => state.oneOrder);
-  const totalAmount = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
   const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
-
+  const navigate = useNavigate();
   const invoice: Invoice = {
     deliveryInfo: {
       address: "123 ABC",
@@ -35,14 +29,15 @@ const CheckoutPage: React.FC = () => {
   const subtotal = invoice.order.totalAmount;
 
   const handlePlaceOrder = () => {
-    const userId = "user01"; // Bạn có thể lấy `userId` từ state hoặc context nếu cần
-    dispatch(
-      addOrder({
-        userId,
-        items: cartItems,
-        totalAmount,
-      })
-    );
+    // const userId = "user01"; // Bạn có thể lấy `userId` từ state hoặc context nếu cần
+    // dispatch(
+    //   addOrder({
+    //     userId,
+    //     items: cartItems,
+    //     totalAmount,
+    //   })
+    // );
+    navigate("/payment", { state: { total } });
   };
 
   return (
