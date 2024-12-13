@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -41,15 +40,12 @@ public class ProductService {
         checkStar(star);
         checkMedia(medias);
         checkProduct(productId);
-//        String userEmail = (String) httpServletRequest.getAttribute("email");
 
         Product product = productRepository.findById(productId).orElseThrow();
         User user = (User) httpServletRequest.getAttribute("user");
 
         checkReviewExisted(user, product);
 
-
-        // save review
         Review review =
                 Review
                         .builder()
@@ -57,11 +53,11 @@ public class ProductService {
                         .product(productRepository.findById(productId).orElseThrow())
                         .star(star)
                         .content(content)
-                        .listMedia(
+                        .mediaUrls(
                                 medias
                                         .stream()
                                         .map(mediaService::saveMedia)
-                                        .collect(Collectors.joining(";"))
+                                        .toList()
                         )
                         .build();
 

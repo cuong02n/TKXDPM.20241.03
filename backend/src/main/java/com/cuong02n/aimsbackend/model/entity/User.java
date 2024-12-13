@@ -26,7 +26,7 @@ public class User extends BaseEntity implements UserDetails {
     private boolean active;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @PrimaryKeyJoinColumn
+//    @PrimaryKeyJoinColumn
     @Getter
     @Setter
     private UserCart userCart;

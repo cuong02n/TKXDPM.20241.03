@@ -19,26 +19,30 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public Order placeOrder(User user, HashSet<String> productIds) {
+    public Order placeOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction) {
 
         checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
 
         checkOrderNotPaidExist(user);
 
-        return createNewOrder(user, productIds);
+        return createNewOrder(user, productIds, address, phone, province, shippingInstruction);
     }
 
-    public Order placeRushOrder(User user, HashSet<String> productIds,int minute, String address) {
-        // check the address
-
-        return null;
+    public Order placeRushOrder(User user, HashSet<String> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
+        checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
+        checkOrderNotPaidExist(user);
+        return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
     }
 
-    private Order createNewOrder(User user, HashSet<String> productIds) {
+    private Order createNewOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction) {
+        return createNewOrder(user, productIds, address, phone, province, shippingInstruction, 0);
+    }
+
+    private Order createNewOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
         List<ProductCart> cart = user.getUserCart().getProductCarts();
         Order order = new Order();
-        order.setUser(user);
 
+        order.setUser(user);
         List<OrderProduct> orderProducts = new ArrayList<>();
 
         for (ProductCart productCart : cart) {
@@ -46,14 +50,25 @@ public class OrderService {
                 orderProducts.add(
                         OrderProduct
                                 .builder()
-                                .order(order)
                                 .product(productCart.getProduct())
+                                .order(order)
                                 .quantity(productCart.getQuantity())
+                                .key(new OrderProduct.OrderProductKey(
+                                        productCart.getKey().getProductId(),
+                                        order.getOrderId())
+                                )
                                 .build()
                 );
             }
         }
         order.setOrderProducts(orderProducts);
+        order.setPaid(false);
+        order.setAddress(address);
+        order.setPhone(phone);
+        order.setProvince(province);
+        order.setShippingInstruction(shippingInstruction);
+        order.setRush(timeInMinute != 0);
+        order.setTimeInMinute(timeInMinute);
         orderRepository.save(order);
         return order;
     }

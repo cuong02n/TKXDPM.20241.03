@@ -27,7 +27,9 @@ public class OrderProduct {
     int quantity;
     @Embeddable
     @Data
-    private static class OrderProductKey {
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderProductKey {
         @Column(name = "product_id")
         private String productId;
         @Column(name = "order_id")

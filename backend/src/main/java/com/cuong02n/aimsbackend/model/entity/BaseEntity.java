@@ -6,14 +6,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
+@Getter
 @MappedSuperclass
-@Data
 public class BaseEntity {
     @CreationTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
