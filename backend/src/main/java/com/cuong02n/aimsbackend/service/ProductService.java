@@ -1,11 +1,13 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.model.entity.FavoriteProductUser;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.Review;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.repository.ProductRepository;
 import com.cuong02n.aimsbackend.repository.ReviewRepository;
+import com.cuong02n.aimsbackend.repository.WishListRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ public class ProductService {
     private final HttpServletRequest httpServletRequest;
     private final ProductRepository productRepository;
     private final MediaService mediaService;
+    private final WishListRepository wishListRepository;
     @Value("${aims.review.max-content-length}")
     private int maxContentReview;
     @Value("${aims.review.max-media-count}")
@@ -27,11 +30,12 @@ public class ProductService {
     @Value("${aims.review.supported-media}")
     public List<String> supportedMediaTypeReview;
 
-    public ProductService(ReviewRepository reviewRepository, HttpServletRequest httpServletRequest, ProductRepository productRepository, MediaService mediaService) {
+    public ProductService(ReviewRepository reviewRepository, HttpServletRequest httpServletRequest, ProductRepository productRepository, MediaService mediaService, WishListRepository wishListRepository) {
         this.reviewRepository = reviewRepository;
         this.httpServletRequest = httpServletRequest;
         this.productRepository = productRepository;
         this.mediaService = mediaService;
+        this.wishListRepository = wishListRepository;
     }
 
     public void review(List<MultipartFile> medias, String productId, String content, Integer star) {
@@ -107,5 +111,18 @@ public class ProductService {
         if (!productRepository.existsById(productId)) {
             throw new GeneralException("Product does not exist with id: %s".formatted(productId));
         }
+    }
+
+    public void addWishList(User user, String productId) {
+        if (wishListRepository.existsByUserAndKey_ProductId(user, productId)) {
+            throw new GeneralException("Product already exists in your wish list: %s".formatted(productId));
+        }
+        FavoriteProductUser favor = new FavoriteProductUser();
+        favor.setKey(new FavoriteProductUser.WishListKey(user.getEmail(), productId));
+        wishListRepository.save(favor);
+    }
+
+    public List<FavoriteProductUser> getWishList(User user) {
+        return wishListRepository.findAllByKey_UserEmail(user.getEmail());
     }
 }
