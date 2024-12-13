@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { formatCurrency } from "../utils/format.ts";
 
 const CartCost = () => {
-  const cartItems = useSelector((state: any) => state.cart.items);
+  const cartItems = useSelector((state: any) => state.oneOrder.items);
   const total = formatCurrency(
     cartItems.reduce((acc: number, item: any) => {
       return acc + item.price * item.quantity;
