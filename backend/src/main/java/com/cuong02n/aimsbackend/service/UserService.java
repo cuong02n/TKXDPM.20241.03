@@ -76,6 +76,9 @@ public class UserService implements UserDetailsService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new GeneralException("Wrong password");
         }
+        if(!user.isEnabled()){
+            throw new GeneralException("You account is not activated");
+        }
         return new LoginResponse(jwtService.generateToken(user), user.getRole(), (long) httpServletRequest.getAttribute("expired-jwt"));
     }
 

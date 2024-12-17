@@ -1,9 +1,11 @@
 package com.cuong02n.aimsbackend.model.entity;
 
+import com.cuong02n.aimsbackend.converter.ProductHashMapConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.HashMap;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -17,8 +19,9 @@ public class Product extends BaseEntity {
     private String description;
     private String quantity;
     private String price;
-
-    private String additionalData;
+    @Convert(converter = ProductHashMapConverter.class)
+    @Column(columnDefinition = "json")
+    private HashMap<String,String> additionalData;
 
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
