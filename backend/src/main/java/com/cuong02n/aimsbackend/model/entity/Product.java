@@ -11,7 +11,8 @@ import java.util.List;
 @Data
 public class Product extends BaseEntity {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String name;
     private String description;
     private String quantity;

@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping("/wish-list")
-    public ResponseEntity<?> addWishList(@RequestParam String productId) {
+    public ResponseEntity<?> addWishList(@RequestParam Long productId) {
         productService.addWishList((User) (httpServletRequest.getAttribute("user")), productId);
         return BaseResponse.ok(null);
     }

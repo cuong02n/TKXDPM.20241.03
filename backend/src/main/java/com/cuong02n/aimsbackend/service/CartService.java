@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class CartService {
     private final ProductCartRepository productCartRepository;
 
-    public void addToCart(User user, String productId, int quantity) {
+    public void addToCart(User user, long productId, int quantity) {
         //check exist
         checkProductExistInCart(user,productId);
 
@@ -23,9 +23,9 @@ public class CartService {
         productCartRepository.save(productCart);
     }
 
-    private void checkProductExistInCart(User user, String productId) {
+    private void checkProductExistInCart(User user, long productId) {
         if(productCartRepository.existsByKey_UserEmailAndKey_ProductId(user.getEmail(),productId)){
-            throw new GeneralException("This product: %s is already in the cart".formatted(productId));
+            throw new GeneralException("This product: %d is already in the cart".formatted(productId));
         }
     }
 }

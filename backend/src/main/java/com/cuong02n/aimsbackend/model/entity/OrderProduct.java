@@ -31,7 +31,7 @@ public class OrderProduct {
     @NoArgsConstructor
     public static class OrderProductKey {
         @Column(name = "product_id")
-        private String productId;
+        private long productId;
         @Column(name = "order_id")
         private Long orderId;
     }

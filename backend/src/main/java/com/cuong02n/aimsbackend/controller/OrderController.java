@@ -26,7 +26,7 @@ public class OrderController {
 
     @PostMapping("/place-order")
     public ResponseEntity<?> placeOrder(
-            @RequestBody HashSet<String> productIds,
+            @RequestBody HashSet<Long> productIds,
             @RequestBody String address,
             @RequestBody String phone,
             @RequestBody String province,
@@ -39,7 +39,7 @@ public class OrderController {
 
     @PostMapping("/place-rush-order")
     public ResponseEntity<?> placeRushOrder(
-            @RequestBody HashSet<String> productIds,
+            @RequestBody HashSet<Long> productIds,
             @RequestBody String address,
             @RequestBody String phone,
             @RequestBody String province,

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface WishListRepository extends JpaRepository<FavoriteProductUser, FavoriteProductUser.WishListKey> {
-    boolean existsByUserAndKey_ProductId(User user, String productId);
+    boolean existsByUserAndKey_ProductId(User user, long productId);
 
     List<FavoriteProductUser> findAllByKey_UserEmail(String email);
 }

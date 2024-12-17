@@ -113,7 +113,7 @@ public class ProductService {
         }
     }
 
-    public void addWishList(User user, String productId) {
+    public void addWishList(User user, long productId) {
         if (wishListRepository.existsByUserAndKey_ProductId(user, productId)) {
             throw new GeneralException("Product already exists in your wish list: %s".formatted(productId));
         }

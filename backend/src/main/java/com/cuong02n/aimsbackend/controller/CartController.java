@@ -23,7 +23,7 @@ public class CartController {
     }
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestBody String productId, @RequestBody int quantity) {
+    public ResponseEntity<?> addToCart(@RequestBody Long productId, @RequestBody int quantity) {
         cartService.addToCart((User) request.getAttribute("user"), productId, quantity);
         return ResponseEntity.ok().build();
     }

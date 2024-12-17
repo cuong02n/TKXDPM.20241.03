@@ -27,6 +27,6 @@ public class FavoriteProductUser extends BaseEntity {
         @Column(name = "user_email")
         String userEmail;
         @Column(name = "product_id")
-        String productId;
+        long productId;
     }
 }
