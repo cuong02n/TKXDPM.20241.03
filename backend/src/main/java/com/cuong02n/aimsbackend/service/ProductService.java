@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
 import com.cuong02n.aimsbackend.model.entity.FavoriteProductUser;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.Review;
@@ -9,6 +10,8 @@ import com.cuong02n.aimsbackend.repository.ProductRepository;
 import com.cuong02n.aimsbackend.repository.ReviewRepository;
 import com.cuong02n.aimsbackend.repository.WishListRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,12 +20,14 @@ import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     private final ReviewRepository reviewRepository;
     private final HttpServletRequest httpServletRequest;
     private final ProductRepository productRepository;
     private final MediaService mediaService;
     private final WishListRepository wishListRepository;
+    private final ModelMapper modelMapper;
     @Value("${aims.review.max-content-length}")
     private int maxContentReview;
     @Value("${aims.review.max-media-count}")
@@ -30,15 +35,7 @@ public class ProductService {
     @Value("${aims.review.supported-media}")
     private List<String> supportedMediaTypeReview;
 
-    public ProductService(ReviewRepository reviewRepository, HttpServletRequest httpServletRequest, ProductRepository productRepository, MediaService mediaService, WishListRepository wishListRepository) {
-        this.reviewRepository = reviewRepository;
-        this.httpServletRequest = httpServletRequest;
-        this.productRepository = productRepository;
-        this.mediaService = mediaService;
-        this.wishListRepository = wishListRepository;
-    }
-
-    public void review(List<MultipartFile> medias, String productId, String content, Integer star) {
+    public void review(List<MultipartFile> medias, long productId, String content, Integer star) {
 
         checkContent(content);
         checkStar(star);
@@ -68,12 +65,16 @@ public class ProductService {
         reviewRepository.save(review);
     }
 
-    public Product getProduct(String productId) {
+    public Product getProduct(long productId) {
         return productRepository.findById(productId).orElseThrow();
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<ProductDto> getAllProducts() {
+        return productRepository
+                .findAll()
+                .stream()
+                .map(p->modelMapper.map(p, ProductDto.class))
+                .toList();
     }
 
     private void checkReviewExisted(User user, Product product) {
@@ -107,7 +108,7 @@ public class ProductService {
         }
     }
 
-    private void checkProduct(String productId) {
+    private void checkProduct(long productId) {
         if (!productRepository.existsById(productId)) {
             throw new GeneralException("Product does not exist with id: %s".formatted(productId));
         }

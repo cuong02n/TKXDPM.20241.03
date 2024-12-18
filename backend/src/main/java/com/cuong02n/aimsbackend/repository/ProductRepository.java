@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, String> {
-    boolean existsById(@NotNull String productId);
+    boolean existsById(long productId);
 
     @NotNull
-    Optional<Product> findById(@NotNull String productId);
+    Optional<Product> findById(long productId);
 }
