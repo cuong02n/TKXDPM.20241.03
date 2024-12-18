@@ -19,7 +19,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
-    public Order placeOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction) {
+    public Order placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
         checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
 
@@ -28,17 +28,17 @@ public class OrderService {
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction);
     }
 
-    public Order placeRushOrder(User user, HashSet<String> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
+    public Order placeRushOrder(User user, HashSet<Long> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
         checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
         checkOrderNotPaidExist(user);
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
     }
 
-    private Order createNewOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction) {
+    private Order createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, 0);
     }
 
-    private Order createNewOrder(User user, HashSet<String> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
+    private Order createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
         List<ProductCart> cart = user.getUserCart().getProductCarts();
         Order order = new Order();
 
@@ -85,8 +85,8 @@ public class OrderService {
         }
     }
 
-    private void checkPlaceOrderRequestInCart(List<ProductCart> productCarts, HashSet<String> productIds) {
-        List<String> productIdInCart = productCarts.stream().map(c -> c.getKey().getProductId()).toList();
+    private void checkPlaceOrderRequestInCart(List<ProductCart> productCarts, HashSet<Long> productIds) {
+        List<Long> productIdInCart = productCarts.stream().map(c -> c.getKey().getProductId()).toList();
         if (!new HashSet<>(productIdInCart).containsAll(productIds)) {
             throw new GeneralException("Place Order request must be exist in cart: [" + productIdInCart + "] not contains [" + productIds + "]");
         }

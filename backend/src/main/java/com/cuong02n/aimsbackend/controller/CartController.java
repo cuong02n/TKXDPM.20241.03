@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/api/cart")
 @RequiredArgsConstructor
 public class CartController {
     final UserService userService;
@@ -23,7 +23,7 @@ public class CartController {
     }
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestBody String productId, @RequestBody int quantity) {
+    public ResponseEntity<?> addToCart(@RequestBody Long productId, @RequestBody int quantity) {
         cartService.addToCart((User) request.getAttribute("user"), productId, quantity);
         return ResponseEntity.ok().build();
     }

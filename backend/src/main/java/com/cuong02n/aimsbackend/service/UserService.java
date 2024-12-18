@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -72,9 +73,12 @@ public class UserService implements UserDetailsService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        User user = userRepository.findById(request.getEmail()).orElseThrow();
+        User user = userRepository.findById(request.getEmail()).orElseThrow(() -> new GeneralException("Wrong password"));
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new GeneralException("Wrong password");
+        }
+        if(!user.isEnabled()){
+            throw new GeneralException("You account is not activated");
         }
         return new LoginResponse(jwtService.generateToken(user), user.getRole(), (long) httpServletRequest.getAttribute("expired-jwt"));
     }

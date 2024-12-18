@@ -32,7 +32,7 @@ public class ProductCart extends BaseEntity {
     @NoArgsConstructor
     public static class ProductCartKey {
         @Column(name = "product_id")
-        private String productId;
+        private long productId;
         @Column(name = "user_email")
         private String userEmail;
     }

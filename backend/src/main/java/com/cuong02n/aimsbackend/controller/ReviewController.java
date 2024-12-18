@@ -22,7 +22,7 @@ public class ReviewController {
     @PostMapping("")
     public void review(
             @RequestParam(value = "media", required = false) List<MultipartFile> medias,
-            @RequestParam("productId") String productId,
+            @RequestParam("productId") long productId,
             @RequestParam("content") String content,
             @RequestParam("star") Integer star) {
         productService.review(medias, productId, content, star);

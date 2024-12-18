@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/api/product")
 public class ProductController {
 
     public final ProductService productService;
@@ -18,7 +18,7 @@ public class ProductController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> getProduct(@RequestParam String productId) {
+    public ResponseEntity<?> getProduct(@RequestParam long productId) {
         return BaseResponse.ok(productService.getProduct(productId));
     }
 
@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping("/wish-list")
-    public ResponseEntity<?> addWishList(@RequestParam String productId) {
+    public ResponseEntity<?> addWishList(@RequestParam Long productId) {
         productService.addWishList((User) (httpServletRequest.getAttribute("user")), productId);
         return BaseResponse.ok(null);
     }
