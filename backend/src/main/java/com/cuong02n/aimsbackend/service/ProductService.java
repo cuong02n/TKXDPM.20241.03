@@ -65,8 +65,8 @@ public class ProductService {
         reviewRepository.save(review);
     }
 
-    public Product getProduct(long productId) {
-        return productRepository.findById(productId).orElseThrow();
+    public ProductDto getProduct(long productId) {
+        return modelMapper.map(productRepository.findById(productId).orElseThrow(), ProductDto.class);
     }
 
     public List<ProductDto> getAllProducts() {

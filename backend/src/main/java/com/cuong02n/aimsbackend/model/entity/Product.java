@@ -11,6 +11,7 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Data
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +27,8 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
-    @OneToMany(mappedBy = "product")
-    List<ProductCart> productCarts;
+//    @OneToMany(mappedBy = "product")
+//    List<ProductCart> productCarts;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Column(name = "media_url")

@@ -14,6 +14,5 @@ public class ProductDto {
     private int price;
     private HashMap<String, String> additionalData;
     private Product.ProductCategory category;
-    List<String> mediaUrls;
-
+    private List<String> mediaUrls;
 }
