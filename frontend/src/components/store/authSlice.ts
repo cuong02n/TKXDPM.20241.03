@@ -47,7 +47,7 @@ export const register = createAsyncThunk(
   async (data: RegisterPayload, { rejectWithValue }) => {
     try {
       // const response = await axios.post(`${API_BASE_URL}/register`, data);
-      const response = await apiClient.post("/api/auth/register", data);
+      const response = await apiClient.post("/auth/register", data);
       return response.data; // Trả về dữ liệu nếu thành công
     } catch (error: any) {
       return rejectWithValue(
@@ -62,14 +62,10 @@ export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
   async (data: OtpPayload, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${API_BASE_URL}/verify-register`,
-        null,
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          params: data, // Sử dụng x-www-form-urlencoded
-        }
-      );
+      const response = await apiClient.post(`/auth/verify-register`, null, {
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        params: data, // Sử dụng x-www-form-urlencoded
+      });
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -85,7 +81,7 @@ export const login = createAsyncThunk(
   async (data: LoginPayload, { rejectWithValue }) => {
     try {
       // const response = await axios.post(`${API_BASE_URL}/login`, data);
-      const response = await apiClient.post("/api/auth/login", data);
+      const response = await apiClient.post("/auth/login", data);
       const { jwt, role, expired } = response.data.data;
 
       // Lưu token JWT vào localStorage cùng với role và expiration time

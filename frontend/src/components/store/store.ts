@@ -7,6 +7,7 @@ import productReducer from "../store/productSlice.ts";
 import orderReducer from "../store/orderSlice.ts";
 import oneOrderReducer from "../store/oneOrderSlice.ts";
 import deliveryInfoReducer from "../store/deliveryInfoSlice.ts";
+import { thunk } from "redux-thunk";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     oneOrder: oneOrderReducer,
     deliveryInfo: deliveryInfoReducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });
 
 // Định nghĩa RootState dựa trên store

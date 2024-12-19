@@ -1,17 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import { AppDispatch, RootState } from "../store/store";
 import {
   addToCart,
   removeFromCart,
   updateCartItem,
 } from "../store/cartSlice.ts";
+import { addCartItem } from "../store/thunk/cartThunk.ts";
 
 export const useCart = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
   const addItemToCart = (item: any) => {
     dispatch(addToCart(item));
+    dispatch(addCartItem({ productId: item.id, quantity: item.quantity }));
+    console.log("clicked item", item);
   };
 
   const removeItemFromCart = (itemId: string) => {

@@ -19,6 +19,7 @@
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
+    "redux-thunk": "^3.1.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -51,5 +52,5 @@
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15"
   },
-  "proxy": "http://116.96.98.153:8080"
+  "proxy": "http://localhost:8080"
 }

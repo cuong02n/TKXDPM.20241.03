@@ -1,7 +1,14 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 
+interface ApiResponse<T> {
+  error: number;
+  message: string;
+  data: T;
+}
+
 const apiClient = axios.create({
+  baseURL: "/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,13 +28,20 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse<ApiResponse<any>>) => {
+    if (response.data.error !== 0) {
+      toast.error(response.data.message);
+    }
     return response;
   },
   (error) => {
     const { status } = error.response;
 
     switch (status) {
+      case 400:
+        // Handle bad request error
+        toast.error("Bad request - please check your input data.");
+        break;
       case 401:
         // Handle unauthorized error
         toast.error("Unauthorized access - perhaps you need to log in?");
