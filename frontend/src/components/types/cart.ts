@@ -12,6 +12,9 @@ export interface CartItem {
 
 export interface CartState {
   items: CartItem[];
+<<<<<<< HEAD
   loading: boolean;
   error: string | null;
+=======
+>>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 }

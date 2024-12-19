@@ -16,11 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.function.Supplier;
-
-
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -88,8 +83,5 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findById(username).orElse(null);
-    }
-    public Optional<User> getById(String id) {
-        return userRepository.findById(id);
     }
 }

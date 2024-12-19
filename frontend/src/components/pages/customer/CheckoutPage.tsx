@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Invoice } from "../../types/invoice.ts";
@@ -69,6 +70,37 @@ const CheckoutPage: React.FC = () => {
         >
           <span className="text-xl drop-shadow-md">Pay Order</span>
         </button>
+=======
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import { addOrder } from "../../store/orderSlice.ts";
+
+const CheckoutPage: React.FC = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const totalAmount = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const handlePlaceOrder = () => {
+    const userId = "user01"; // Bạn có thể lấy `userId` từ state hoặc context nếu cần
+    dispatch(
+      addOrder({
+        userId,
+        items: cartItems,
+        totalAmount,
+      })
+    );
+  };
+
+  return (
+    <div className="checkout-page">
+      <h2>Checkout</h2>
+      <div className="checkout-summary">
+        <p>Total Amount: {totalAmount} USD</p>
+        <button onClick={handlePlaceOrder}>Place Order</button>
+>>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
       </div>
     </div>
   );

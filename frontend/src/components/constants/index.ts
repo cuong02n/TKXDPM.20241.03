@@ -8,4 +8,7 @@ export const ORDER_STATUSES = ["pending", "completed", "cancelled"] as const;
 export const PRODUCT_CATEGORIES = ["DVD", "book", "CD"];
 
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
+<<<<<<< HEAD
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
+=======
+>>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69

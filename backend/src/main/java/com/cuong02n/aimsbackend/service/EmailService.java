@@ -18,6 +18,7 @@ public class EmailService {
         mailSender.send(simpleMailMessage);
     }
 
+
     public void sendOrderEmail(String email, String orderId) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(email);
@@ -25,4 +26,5 @@ public class EmailService {
         simpleMailMessage.setText("Xin chào, bạn đã tạo thành công đơn hàng: mã đơn hàng: %s, hãy nhanh chóng thanh toán để đảm bảo còn đủ số lượng.".formatted(orderId));
         mailSender.send(simpleMailMessage);
     }
+
 }

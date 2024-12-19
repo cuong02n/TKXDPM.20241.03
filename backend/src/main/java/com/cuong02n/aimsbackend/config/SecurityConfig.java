@@ -28,8 +28,8 @@ public class SecurityConfig {
             "/error",
             "/test",
             "/hello",
-//            "/api/review"
-//            "**"
+           "/api/review",
+           "**"
     };
 
 
