@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import apiClient from "../../../api/apiClient";
+import apiClient from "../../../api/apiClient.ts";
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
@@ -21,12 +21,19 @@ interface UpdateCartItemProps {
 
 export const addCartItem = createAsyncThunk(
   "cart/addCartItem",
-  async ({ productId, quantity }: UpdateCartItemProps, { rejectWithValue }) => {
+  async (
+    { productId, quantity }: { productId: string; quantity: number },
+    { rejectWithValue }
+  ) => {
     try {
-      const response = await apiClient.post(`/cart/add/`, {
-        productId,
-        quantity,
+      const params = {
+        productId: Number(productId),
+        quantity: Number(quantity),
+      };
+      const response = await apiClient.post(`/cart/add-to-cart`, null, {
+        params,
       });
+      console.log("ADD TO CART ", response);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error adding to cart");
