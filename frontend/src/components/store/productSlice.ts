@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "../types/product";
 import { fetchProducts } from "./thunk/productThunk.ts";
+import { getProductWithId } from "./thunk/productThunk.ts";
 
 interface ProductState {
   items: Product[];
@@ -43,24 +44,21 @@ const productSlice = createSlice({
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      })
+      .addCase(getProductWithId.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getProductWithId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items.push(action.payload);
+      })
+      .addCase(getProductWithId.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-<<<<<<< HEAD
-=======
-export const getProductWithId = createAsyncThunk(
-  "product/:id",
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const res = await axios.get(`${API_BASE_URL}/product/${id}`);
-      return res.data.data;
-    } catch (_) {
-      return rejectWithValue(`could not get product with id ${id}`);
-    }
-  }
-);
-
->>>>>>> db2edc2 (Update loading page)
 export const { setProducts, addProduct, removeProduct } = productSlice.actions;
 export default productSlice.reducer;

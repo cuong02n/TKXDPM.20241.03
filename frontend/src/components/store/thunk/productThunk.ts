@@ -55,5 +55,23 @@ export const fetchProducts = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error fetching products");
     }
-  }
+  },
+);
+
+export const getProductWithId = createAsyncThunk(
+  "product/:id",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const res = await apiClient.get(`/product?productId=${id}`);
+      if (res.data.data && res.data.data.error === 0) {
+        let product: Product = {
+          imageUrl: res.data.data.mediaUrls[0],
+          ...res.data.data,
+        };
+        return product;
+      }
+    } catch (_) {
+      return rejectWithValue(`could not get product with id ${id}`);
+    }
+  },
 );
