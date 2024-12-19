@@ -18,10 +18,11 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final CartService cartService;
 
     public Order placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
-        checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
+        checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
 
         checkOrderNotPaidExist(user);
 
@@ -29,7 +30,7 @@ public class OrderService {
     }
 
     public Order placeRushOrder(User user, HashSet<Long> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
-        checkPlaceOrderRequestInCart(user.getUserCart().getProductCarts(), productIds);
+        checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
         checkOrderNotPaidExist(user);
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
     }
@@ -39,7 +40,7 @@ public class OrderService {
     }
 
     private Order createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
-        List<ProductCart> cart = user.getUserCart().getProductCarts();
+        List<ProductCart> cart = cartService.getUserCart(user);
         Order order = new Order();
 
         order.setUser(user);

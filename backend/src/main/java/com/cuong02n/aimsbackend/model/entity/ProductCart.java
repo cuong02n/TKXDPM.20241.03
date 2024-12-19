@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ProductCart extends BaseEntity {
     @EmbeddedId
     private ProductCartKey key;
@@ -24,12 +24,12 @@ public class ProductCart extends BaseEntity {
     @ManyToOne
     @MapsId("userEmail")
     @JoinColumn(name = "user_email")
-    private UserCart userCart;
+    private User user;
 
-    @Getter
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor
+    @Data
     public static class ProductCartKey {
         @Column(name = "product_id")
         private long productId;
