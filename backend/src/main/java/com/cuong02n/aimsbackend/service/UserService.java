@@ -6,7 +6,6 @@ import com.cuong02n.aimsbackend.model.dto.request.LoginRequest;
 import com.cuong02n.aimsbackend.model.dto.request.RegisterRequest;
 import com.cuong02n.aimsbackend.model.dto.response.LoginResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.model.entity.UserCart;
 import com.cuong02n.aimsbackend.repository.ProductCartRepository;
 import com.cuong02n.aimsbackend.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,9 +15,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +26,8 @@ public class UserService implements UserDetailsService {
     final JwtService jwtService;
     final HttpServletRequest httpServletRequest;
     final PasswordEncoder passwordEncoder;
-    final ProductCartRepository userCartRepository;
+    final ProductCartRepository productCartRepository;
+
 
     public boolean userExist(String email) {
         return userRepository.existsByEmail(email);
@@ -77,19 +74,10 @@ public class UserService implements UserDetailsService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new GeneralException("Wrong password");
         }
-        if(!user.isEnabled()){
+        if (!user.isEnabled()) {
             throw new GeneralException("You account is not activated");
         }
         return new LoginResponse(jwtService.generateToken(user), user.getRole(), (long) httpServletRequest.getAttribute("expired-jwt"));
-    }
-
-    public UserCart getUserCart(User user) {
-        if (user.getUserCart() != null) {
-            return user.getUserCart();
-        }
-        UserCart newUserCart = new UserCart(user.getEmail(), user, new ArrayList<>());
-        user.setUserCart(newUserCart);
-        return newUserCart;
     }
 
     @Override

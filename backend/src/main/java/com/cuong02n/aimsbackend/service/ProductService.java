@@ -27,7 +27,6 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final MediaService mediaService;
     private final WishListRepository wishListRepository;
-    private final ModelMapper modelMapper;
     @Value("${aims.review.max-content-length}")
     private int maxContentReview;
     @Value("${aims.review.max-media-count}")
@@ -65,16 +64,13 @@ public class ProductService {
         reviewRepository.save(review);
     }
 
-    public ProductDto getProduct(long productId) {
-        return modelMapper.map(productRepository.findById(productId).orElseThrow(), ProductDto.class);
+    public Product getProduct(long productId) {
+        return productRepository.findById(productId).orElseThrow();
     }
 
-    public List<ProductDto> getAllProducts() {
+    public List<Product> getAllProducts() {
         return productRepository
-                .findAll()
-                .stream()
-                .map(p->modelMapper.map(p, ProductDto.class))
-                .toList();
+                .findAll();
     }
 
     private void checkReviewExisted(User user, Product product) {

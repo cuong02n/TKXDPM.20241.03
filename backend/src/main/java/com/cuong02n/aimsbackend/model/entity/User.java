@@ -16,18 +16,15 @@ public class User extends BaseEntity implements UserDetails {
     @Id
     @Getter
     private String email;
+    @Getter
     private String name;
     private String password;
     @Getter
     @Enumerated(value = EnumType.STRING)
     private Role role;
+    @Getter
     private boolean active;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    @PrimaryKeyJoinColumn
-    @Getter
-    @Setter
-    private UserCart userCart;
     public void activate() {
         this.active = true;
     }
