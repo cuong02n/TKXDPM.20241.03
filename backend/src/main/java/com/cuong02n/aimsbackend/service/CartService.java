@@ -16,7 +16,6 @@ import java.util.List;
 public class CartService {
     private final ProductCartRepository productCartRepository;
     private final ProductRepository productRepository;
-    private final ModelMapper modelMapper;
     public List<ProductCart> getUserCart(User user){
         return productCartRepository.findAllByKey_UserEmail(user.getEmail());
     }

@@ -1,10 +1,14 @@
 package com.cuong02n.aimsbackend.controller;
 
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
+import com.cuong02n.aimsbackend.model.dto.response.FavoriteProductUserDto;
+import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
+import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,18 +17,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/product")
 public class ProductController {
 
-    public final ProductService productService;
+    private final ProductService productService;
     private final HttpServletRequest httpServletRequest;
-
+    private final ModelMapper modelMapper;
 
     @GetMapping("")
     public ResponseEntity<?> getProduct(@RequestParam long productId) {
-        return BaseResponse.ok(productService.getProduct(productId));
+        return BaseResponse.ok(
+                modelMapper.map(productService.getProduct(productId), ProductDto.class)
+        );
     }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllProduct() {
-        return BaseResponse.ok(productService.getAllProducts());
+        return BaseResponse.ok(
+                productService.getAllProducts()
+                        .stream().map(p->modelMapper.map(p, Product.class))
+                        .toList()
+        );
     }
 
     @GetMapping("/search")
@@ -34,7 +44,12 @@ public class ProductController {
 
     @GetMapping("/wish-list")
     public ResponseEntity<?> getWishList() {
-        return BaseResponse.ok(productService.getWishList((User) httpServletRequest.getAttribute("user")));
+        return BaseResponse.ok(
+                productService.getWishList((User) httpServletRequest.getAttribute("user"))
+                        .stream()
+                        .map(f->modelMapper.map(f, FavoriteProductUserDto.class))
+                        .toList()
+        );
     }
 
     @PostMapping("/wish-list")
