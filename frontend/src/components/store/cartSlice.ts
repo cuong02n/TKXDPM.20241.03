@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItem, CartState } from "../types/cart";
+import { addCartItem } from "./thunk/cartThunk.ts";
 
-const initialState: CartState = { items: [] };
+const initialState: CartState = { items: [], loading: false, error: null };
 
 const cartSlice = createSlice({
   name: "cart",
@@ -31,7 +32,20 @@ const cartSlice = createSlice({
         item.quantity = quantity;
       }
     },
-    extraReducers: (builder) => {},
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addCartItem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addCartItem.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(addCartItem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
