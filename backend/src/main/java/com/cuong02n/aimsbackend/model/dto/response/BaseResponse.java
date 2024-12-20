@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 
-public class BaseResponse{
+public class BaseResponse {
     int error = 0;
     Object message;
     JsonElement data;
@@ -22,11 +22,6 @@ public class BaseResponse{
         this.data = null;
     }
 
-    @Override
-    public String toString() {
-        return new Gson().toJson(this);
-    }
-
     private static <T> ResponseEntity<?> createResponseEntity(Object entity, int statusCode) {
         return ResponseEntity.status(statusCode).contentType(MediaType.APPLICATION_JSON).body(new BaseResponse(entity));
     }
@@ -35,7 +30,16 @@ public class BaseResponse{
         return createResponseEntity(entity, 200);
     }
 
+    public static ResponseEntity<?> okMessage(String message) {
+        return ok(message);
+    }
+
     public static BaseResponse error(Object message) {
         return new BaseResponse(1, message);
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }

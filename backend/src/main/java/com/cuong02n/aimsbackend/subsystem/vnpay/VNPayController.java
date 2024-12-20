@@ -1,46 +1,34 @@
-package com.cuong02n.aimsbackend.subsystem.VNPay;
+package com.cuong02n.aimsbackend.subsystem.vnpay;
 
-import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.ui.Model;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
-@CrossOrigin
 @RequestMapping("/api/vnpay")
 @RestController
+@RequiredArgsConstructor
 public class VNPayController {
-    @Autowired
-    private VNPayService vnPayService;
-    private final UserService userService;
-    public VNPayController(UserService userService) {
-        this.userService = userService;
-    }
+    private final VNPayService vnPayService;
+    private final HttpServletRequest request;
+
     @GetMapping("")
     public ModelAndView home() {
-        ModelAndView modelAndView = new ModelAndView("index");
-        return modelAndView;
+        return new ModelAndView("index");
     }
 
     @PostMapping("/submitOrder")
     public ResponseEntity<String> submitOrder(@RequestParam("amount") Long orderTotal,
                                               @RequestParam("orderInfo") String orderInfo,
-                                              HttpServletRequest request){
-       //  UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-      //   .getPrincipal();
-      //    User user= userService.getById(getUserId(userDetails))
-      //       .orElseThrow(()->new RuntimeException("user not found"));
+                                              HttpServletRequest request) {
+        //  UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+        //   .getPrincipal();
+        //    User user= userService.getById(getUserId(userDetails))
+        //       .orElseThrow(()->new RuntimeException("user not found"));
         //userService.createTransaction(user,orderTotal,Integer.parseInt(orderInfo));
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         //String vnpayUrl = vnPayService.createOrder(orderTotal, user.getId()+"_"+Integer.parseInt(orderInfo), baseUrl);
@@ -49,7 +37,7 @@ public class VNPayController {
     }
 
     @GetMapping("/vnpay-status")
-    public ModelAndView payStatus(HttpServletRequest request) {
+    public ModelAndView payStatus() {
         int paymentStatus = vnPayService.orderReturn(request);
 
         // Lấy các tham số từ request
@@ -82,5 +70,5 @@ public class VNPayController {
         }
 
         return user.get().getId() ; */
-    }
+
 }

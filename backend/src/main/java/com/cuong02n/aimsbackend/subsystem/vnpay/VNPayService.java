@@ -1,4 +1,4 @@
-package com.cuong02n.aimsbackend.subsystem.VNPay;
+package com.cuong02n.aimsbackend.subsystem.vnpay;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
