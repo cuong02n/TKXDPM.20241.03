@@ -50,27 +50,18 @@ export const ProductDetailCard = ({
             </div>
             <p className="text-gray-600 mb-4">{product.description}</p>
 
-            <div className="flex flex-col gap-2">
-              <DetailItem
-                label="Size"
-                value={product.additionalData.size}
-                italic={false}
-                colorStyle={null}
-              />
-              <DetailItem
-                label="Color"
-                value={product.additionalData.color}
-                colorStyle={{
-                  backgroundColor: product.additionalData.color,
-                  color: "#fff",
-                }}
-                italic={false}
-              />
+            <div className="flex flex-col gap-2 max-h-40 overflow-hidden">
+              {product.additionalData &&
+                Object.entries(product.additionalData).map(([key, value]) => (
+                  <DetailItem
+                    key={key}
+                    label={key.charAt(0).toUpperCase() + key.slice(1)}
+                    value={typeof value === "string" ? value : String(value)}
+                  />
+                ))}
               <DetailItem
                 label="Last Updated"
                 value={new Date(product.updatedTime).toLocaleString()}
-                italic
-                colorStyle={null}
               />
             </div>
           </div>
@@ -100,14 +91,9 @@ export const ProductDetailCard = ({
   );
 };
 
-const DetailItem = ({ label, value, colorStyle, italic }) => (
+const DetailItem = ({ label, value }) => (
   <p className="text-base text-gray-700">
     <span className="font-medium text-gray-800">{label}:</span>{" "}
-    <span
-      className={`px-2 py-1 rounded-md ${italic ? "italic" : ""}`}
-      style={colorStyle}
-    >
-      {value}
-    </span>
+    <span className={`px-2 py-1 rounded-md `}>{value}</span>
   </p>
 );

@@ -7,7 +7,7 @@ export interface DetailedProduct {
   price: number;
   available: number;
   mediaUrls: string[];
-  additionalData: { size: string; color: string };
+  additionalData: object | undefined;
   category: ProductCategory;
   createdTime: string;
   updatedTime: string;
