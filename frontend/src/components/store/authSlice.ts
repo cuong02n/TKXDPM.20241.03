@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-<<<<<<< HEAD
 import apiClient from "../../api/apiClient.ts";
-=======
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 
 // Giao diện trạng thái xác thực
 interface AuthState {
@@ -49,12 +46,8 @@ export const register = createAsyncThunk(
   "auth/register",
   async (data: RegisterPayload, { rejectWithValue }) => {
     try {
-<<<<<<< HEAD
       // const response = await axios.post(`${API_BASE_URL}/register`, data);
       const response = await apiClient.post("/auth/register", data);
-=======
-      const response = await axios.post(`${API_BASE_URL}/register`, data);
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
       return response.data; // Trả về dữ liệu nếu thành công
     } catch (error: any) {
       return rejectWithValue(
@@ -69,21 +62,10 @@ export const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
   async (data: OtpPayload, { rejectWithValue }) => {
     try {
-<<<<<<< HEAD
       const response = await apiClient.post(`/auth/verify-register`, null, {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         params: data, // Sử dụng x-www-form-urlencoded
       });
-=======
-      const response = await axios.post(
-        `${API_BASE_URL}/verify-register`,
-        null,
-        {
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          params: data, // Sử dụng x-www-form-urlencoded
-        }
-      );
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
@@ -98,12 +80,8 @@ export const login = createAsyncThunk(
   "auth/login",
   async (data: LoginPayload, { rejectWithValue }) => {
     try {
-<<<<<<< HEAD
       // const response = await axios.post(`${API_BASE_URL}/login`, data);
       const response = await apiClient.post("/auth/login", data);
-=======
-      const response = await axios.post(`${API_BASE_URL}/login`, data);
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
       const { jwt, role, expired } = response.data.data;
 
       // Lưu token JWT vào localStorage cùng với role và expiration time

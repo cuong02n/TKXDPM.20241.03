@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-<<<<<<< HEAD
 import CartProduct from "../../cart/CartProduct.tsx";
 import CartCost from "../../cart/CartCost.tsx";
 import { useNavigate } from "react-router-dom";
@@ -36,19 +35,10 @@ const Cart = () => {
   };
   return (
     <div className="container mx-auto py-10 min-h-screen">
-=======
-
-const Cart = () => {
-  const cartItems = useSelector((state: any) => state.cart.items);
-
-  return (
-    <div className="container mx-auto py-10">
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
       <h1 className="text-2xl font-bold mb-5">Your Cart</h1>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-<<<<<<< HEAD
         <div className="flex">
           <div className="w-1/2">
             {cartItems.map((item: any) => (
@@ -88,15 +78,6 @@ const Cart = () => {
               </button>
             </div>
           </div>
-=======
-        <div>
-          {cartItems.map((item: any) => (
-            <div key={item.id} className="border p-4 mb-2">
-              <h2>{item.name}</h2>
-              <p>${item.price}</p>
-            </div>
-          ))}
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
         </div>
       )}
     </div>

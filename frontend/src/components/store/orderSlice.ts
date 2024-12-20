@@ -1,9 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Order } from "../types/order";
-<<<<<<< HEAD
 import { CartItem } from "../types/cart";
-=======
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 
 interface OrderState {
   orders: Order[];
@@ -39,7 +36,6 @@ const orderSlice = createSlice({
         order.status = action.payload.status;
       }
     },
-<<<<<<< HEAD
     addOrderProduct: (
       state,
       action: PayloadAction<{ orderId: String; item: CartItem }>
@@ -75,10 +71,4 @@ export const {
   addOrderProduct,
   deleteOrderProduct,
 } = orderSlice.actions;
-=======
-  },
-});
-
-export const { addOrder, updateOrderStatus } = orderSlice.actions;
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 export default orderSlice.reducer;

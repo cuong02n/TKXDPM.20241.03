@@ -1,26 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "../types/product";
-<<<<<<< HEAD
 import { fetchProducts } from "./thunk/productThunk.ts";
 
 interface ProductState {
   items: Product[];
   loading: boolean;
   error: string | null;
-=======
-
-interface ProductState {
-  items: Product[];
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 }
 
 const initialState: ProductState = {
   items: [],
-<<<<<<< HEAD
   loading: false,
   error: null,
-=======
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 };
 
 const productSlice = createSlice({
@@ -39,7 +30,6 @@ const productSlice = createSlice({
       );
     },
   },
-<<<<<<< HEAD
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -55,8 +45,6 @@ const productSlice = createSlice({
         state.error = action.payload as string;
       });
   },
-=======
->>>>>>> 7b1f830e94e6bed2b34477e258ca194014d22c69
 });
 
 export const { setProducts, addProduct, removeProduct } = productSlice.actions;
