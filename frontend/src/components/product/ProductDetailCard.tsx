@@ -1,43 +1,43 @@
-import { Product } from "../types";
-import { Image } from "lucide-react";
+import React from "react";
+import { DetailedProduct } from "../types/productDetails";
+import { ImageCarousel } from "./ImageCarousel.tsx";
 
-export const ProductDetailCard = ({ product }: { product: Product }) => {
+export const ProductDetailCard = ({
+  product,
+}: {
+  product: DetailedProduct;
+}) => {
   return (
-    <div className="max-w-6xl mx-auto p-0 bg-white rounded-lg shadow-md">
-      <div className="flex flex-col md:flex-row gap-6">
-        <div className="flex-shrink-0">
-          {product.imageUrl ? (
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full md:w-80 h-auto rounded-md shadow-sm"
-            />
-          ) : (
-            <Image className="w-full md:w-80 h-auto rounded-md text-zinc-400 bg-slate-200" />
-          )}
-        </div>
-
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">
-            {product.name}
-          </h1>
-          <p className="text-gray-600 mb-4">{product.description}</p>
-          <div className="text-lg font-semibold text-gray-800 mb-4">
-            Price: {product.price} VND
-          </div>
-          <div className="text-sm text-gray-500 mb-4 capitalize">
-            Category: {product.category}
-          </div>
-          <div className="text-sm text-gray-500 mb-4">
-            Available Quantity: {product.quantity}
+    <div className="max-w-6xl h-96 mx-auto bg-white rounded-lg shadow-md">
+      <div className="flex flex-col md:flex-row w-full h-full gap-6">
+        <ImageCarousel urls={product.mediaUrls} />
+        <div className="flex-1 flex flex-col justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              {product.name}
+            </h1>
+            <p className="text-gray-600 mb-4">{product.description}</p>
+            <div className="text-lg font-semibold text-gray-800 mb-4">
+              Price: {product.price} VND
+            </div>
+            <div className="text-sm text-gray-500 mb-4 capitalize">
+              Category: {product.category}
+            </div>
           </div>
 
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
-            disabled={product.quantity === 0}
-          >
-            {product.quantity > 0 ? "Add to Cart" : "Out of Stock"}
-          </button>
+          <div className="mt-auto p-4 self-end">
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-500">
+                Available Quantity: {product.available}
+              </div>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                disabled={product.available === 0}
+              >
+                {product.available > 0 ? "Add to Cart" : "Out of Stock"}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

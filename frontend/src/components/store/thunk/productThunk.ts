@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient.ts";
 import { Product } from "../../types/product.ts";
+import { ProductDetail } from "../../types/productDetails";
 
 const sampleProducts: Product[] = [
   {
@@ -64,10 +65,7 @@ export const getProductWithId = createAsyncThunk(
     try {
       const res = await apiClient.get(`/product?productId=${id}`);
       if (res.data.data && res.data.error === 0) {
-        let product: Product = {
-          imageUrl: res.data.data.mediaUrls[0],
-          ...res.data.data,
-        };
+        let product: ProductDetail = res.data.data;
         return product;
       } else {
         return rejectWithValue(`could not get product with id ${id}`);

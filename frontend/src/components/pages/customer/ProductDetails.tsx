@@ -7,22 +7,23 @@ import { addProduct } from "../../store/productSlice.ts";
 import { AppDispatch, RootState } from "../../store/store";
 import { getProductWithId } from "../../store/thunk/productThunk.ts";
 import { Product } from "../../types";
+import { DetailedProduct } from "../../types/productDetails";
 
 const ProductDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { id } = useParams();
   const [isLoading, setIsLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);
-  const { id } = useParams();
-  const { items }: { items: Product[] } = useSelector(
-    (state: RootState) => state.product,
-  );
-  let cachedProduct = items.find((prod) => prod.id === Number.parseInt(id));
+  const [foundProduct, setFoundProduct] =
+    React.useState<DetailedProduct | null>(null);
+
   React.useEffect(() => {
-    if (!cachedProduct || !items) {
+    if (!foundProduct) {
       dispatch(getProductWithId(id))
         .unwrap()
         .then((data) => {
-          cachedProduct = data;
+          console.log(data);
+          setFoundProduct(data);
           setIsError(false);
           setIsLoading(false);
         })
@@ -34,14 +35,12 @@ const ProductDetail = () => {
       setIsLoading(false);
       setIsError(false);
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, foundProduct]);
 
   return !isLoading ? (
     !isError ? (
       <div className="container mx-auto py-10">
-        <ProductDetailCard
-          product={cachedProduct ? cachedProduct : items[items.length - 1]}
-        />
+        <ProductDetailCard product={foundProduct} />
       </div>
     ) : (
       <div className="flex flex-col items-center justify-center h-[360px]">
