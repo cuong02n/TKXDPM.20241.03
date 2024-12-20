@@ -37,10 +37,10 @@ public class VNPayController {
     public ResponseEntity<String> submitOrder(@RequestParam("amount") Long orderTotal,
                                               @RequestParam("orderInfo") String orderInfo,
                                               HttpServletRequest request){
-        // UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
-        // .getPrincipal();
-        //  User user= userService.getById(getUserId(userDetails))
-        //     .orElseThrow(()->new RuntimeException("user not found"));
+       //  UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+      //   .getPrincipal();
+      //    User user= userService.getById(getUserId(userDetails))
+      //       .orElseThrow(()->new RuntimeException("user not found"));
         //userService.createTransaction(user,orderTotal,Integer.parseInt(orderInfo));
         String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
         //String vnpayUrl = vnPayService.createOrder(orderTotal, user.getId()+"_"+Integer.parseInt(orderInfo), baseUrl);
@@ -73,7 +73,7 @@ public class VNPayController {
 
         return modelAndView;
     }
-    /* public String getUserId(UserDetails userDetails){
+   /* public String getUserId(UserDetails userDetails){
 
         String userName = userDetails.getUsername();
         Optional<User> user= userService.getByAccount(userName);
@@ -81,6 +81,6 @@ public class VNPayController {
             return null;
         }
 
-        return user.get().getId() ;
-    } */
+        return user.get().getId() ; */
+    }
 }
