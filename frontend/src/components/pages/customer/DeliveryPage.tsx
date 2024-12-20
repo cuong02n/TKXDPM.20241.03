@@ -15,15 +15,16 @@ const DeliveryPage = () => {
   });
   const checkInfoValid = React.useRef<() => boolean>(() => true);
   const { updateDelivery } = useDelivery();
-  const { setDelivery } = useOneOrder();
+  const { setDelivery, placeOrderNormal } = useOneOrder();
   const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
   const updateInfo = (field: string, value: any) => {
-    updateDelivery(field, value.toString().trim());
+    updateDelivery(field, value.toString());
     // setDeliveryInfo({ ...deliveryInfo, [field]: value });
   };
   const handlePlaceOrder = () => {
     if (checkInfoValid.current()) {
       setDelivery(deliveryInfo);
+      placeOrderNormal();
       navigate("/checkout");
     } else {
       toast.error("Please fill in all required fields.");

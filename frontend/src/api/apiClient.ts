@@ -29,9 +29,6 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response: AxiosResponse<ApiResponse<any>>) => {
-    if (response.data.error !== 0) {
-      toast.error(response.data.message);
-    }
     return response;
   },
   (error) => {
@@ -40,11 +37,22 @@ apiClient.interceptors.response.use(
     switch (status) {
       case 400:
         // Handle bad request error
-        toast.error("Bad request - please check your input data.");
+        toast.error(
+          `${
+            error.response?.data?.message ??
+            "Bad request - please check your input data."
+          }`
+        );
+        // toast.error("Bad request - please check your input data.");
         break;
       case 401:
         // Handle unauthorized error
-        toast.error("Unauthorized access - perhaps you need to log in?");
+        toast.error(
+          `${
+            error.response?.data?.message ??
+            "Unauthorized access - perhaps you need to log in?"
+          }`
+        );
         break;
       case 403:
         // Handle forbidden error

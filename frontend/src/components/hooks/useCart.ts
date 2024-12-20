@@ -5,14 +5,18 @@ import {
   removeFromCart,
   updateCartItem,
 } from "../store/cartSlice.ts";
-import { addCartItem } from "../store/thunk/cartThunk.ts";
+import { addCartItem, getCart } from "../store/thunk/cartThunk.ts";
 
 export const useCart = () => {
   const dispatch = useDispatch<AppDispatch>();
   const cartItems = useSelector((state: RootState) => state.cart.items);
 
+  const getCartItems = () => {
+    dispatch(getCart());
+  };
+
   const addItemToCart = (item: any) => {
-    dispatch(addToCart(item));
+    // dispatch(addToCart(item));
     dispatch(addCartItem({ productId: item.id, quantity: item.quantity }));
     console.log("clicked item", item);
   };
@@ -30,5 +34,6 @@ export const useCart = () => {
     addItemToCart,
     removeItemFromCart,
     updateItemInCart,
+    getCartItems,
   };
 };

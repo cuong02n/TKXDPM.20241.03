@@ -4,12 +4,17 @@ import CartProduct from "../../cart/CartProduct.tsx";
 import CartCost from "../../cart/CartCost.tsx";
 import { useNavigate } from "react-router-dom";
 import { formatCurrency } from "../../utils/format.ts";
+import { useCart } from "../../hooks/useCart.ts";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
   const orderItems = useSelector((state: any) => state.oneOrder.items);
   const [rush, setRush] = React.useState<boolean>(false);
   const navigate = useNavigate();
+  const { getCartItems } = useCart();
+  React.useEffect(() => {
+    getCartItems();
+  }, []);
   React.useEffect(() => {
     const isRush = localStorage.getItem("rush");
     if (isRush) setRush(JSON.parse(isRush));

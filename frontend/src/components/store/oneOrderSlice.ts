@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItem } from "../types/cart";
 import { OneOrder } from "../types/oneOrder";
 import { DeliveryInformation } from "../types/deliveryInfo";
+import { placeOrder } from "./thunk/orderThunk.ts";
 
 const initialState: OneOrder = {
   orderId: "",
@@ -17,6 +18,8 @@ const initialState: OneOrder = {
     instructions: "",
   },
   status: "pending",
+  loading: false,
+  error: null,
 };
 
 const oneOrderSlice = createSlice({
@@ -59,6 +62,21 @@ const oneOrderSlice = createSlice({
       const { info } = action.payload;
       state.deliveryInfo = info;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(placeOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(placeOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "completed";
+      })
+      .addCase(placeOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

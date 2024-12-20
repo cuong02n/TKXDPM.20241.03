@@ -1,5 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient.ts";
+import { CartItem } from "../../types/cart.ts";
+const sampleProducts: CartItem[] = [
+  {
+    id: "1",
+    name: "CD 1",
+    price: 120000,
+    imageUrl: "",
+    quantity: 10,
+    description: "temp",
+    category: "book",
+  },
+];
 
 export const fetchCart = createAsyncThunk(
   "cart/fetchCart",
@@ -33,10 +45,34 @@ export const addCartItem = createAsyncThunk(
       const response = await apiClient.post(`/cart/add-to-cart`, null, {
         params,
       });
-      console.log("ADD TO CART ", response);
+      // console.log("ADD TO CART ", response);
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error adding to cart");
+    }
+  }
+);
+
+export const getCart = createAsyncThunk(
+  "cart/getCart",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get(`/cart`);
+      console.log("GET CART ", response.data);
+      const products = response.data.map((each) => {
+        return {
+          id: each.product.id,
+          name: each.product.name,
+          price: each.product.price,
+          imageUrl: each.product.mediaUrls[0],
+          quantity: each.quantity,
+          description: each.product.description,
+          category: each.product.category,
+        };
+      });
+      return products;
+    } catch (err) {
+      return rejectWithValue(err.response?.data || "Error getting cart");
     }
   }
 );
