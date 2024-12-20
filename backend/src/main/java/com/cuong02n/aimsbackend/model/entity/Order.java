@@ -20,7 +20,7 @@ public class Order extends BaseEntity {
     @Setter
     User user;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
     @Setter
     @Getter
     List<OrderProduct> orderProducts;
