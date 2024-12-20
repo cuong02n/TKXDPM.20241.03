@@ -59,16 +59,18 @@ export const fetchProducts = createAsyncThunk(
 );
 
 export const getProductWithId = createAsyncThunk(
-  "product/:id",
+  "product/getProductWithId",
   async (id: string, { rejectWithValue }) => {
     try {
       const res = await apiClient.get(`/product?productId=${id}`);
-      if (res.data.data && res.data.data.error === 0) {
+      if (res.data.data && res.data.error === 0) {
         let product: Product = {
           imageUrl: res.data.data.mediaUrls[0],
           ...res.data.data,
         };
         return product;
+      } else {
+        return rejectWithValue(`could not get product with id ${id}`);
       }
     } catch (_) {
       return rejectWithValue(`could not get product with id ${id}`);

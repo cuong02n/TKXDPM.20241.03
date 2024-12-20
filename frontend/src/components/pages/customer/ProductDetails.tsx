@@ -10,19 +10,38 @@ import { Product } from "../../types";
 
 const ProductDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isError, setIsError] = React.useState(false);
   const { id } = useParams();
-  const { items, loading, error } = useSelector(
+  const { items }: { items: Product[] } = useSelector(
     (state: RootState) => state.product,
   );
-
+  let cachedProduct = items.find((prod) => prod.id === Number.parseInt(id));
   React.useEffect(() => {
-    dispatch(getProductWithId(id));
-  }, [dispatch]);
+    if (!cachedProduct || !items) {
+      dispatch(getProductWithId(id))
+        .unwrap()
+        .then((data) => {
+          cachedProduct = data;
+          setIsError(false);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsError(true);
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+      setIsError(false);
+    }
+  }, [dispatch, id]);
 
-  return !loading ? (
-    !error ? (
+  return !isLoading ? (
+    !isError ? (
       <div className="container mx-auto py-10">
-        <ProductDetailCard product={items[0]} />
+        <ProductDetailCard
+          product={cachedProduct ? cachedProduct : items[items.length - 1]}
+        />
       </div>
     ) : (
       <div className="flex flex-col items-center justify-center h-[360px]">
