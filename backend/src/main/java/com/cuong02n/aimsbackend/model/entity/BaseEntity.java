@@ -18,14 +18,12 @@ public class BaseEntity {
     @CreationTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "createdTime", updatable = false)
-    @Expose
     @Nullable
     Timestamp createdTime;
 
     @UpdateTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "updatedTime")
-    @Expose
     @Nullable
     Timestamp updatedTime;
 

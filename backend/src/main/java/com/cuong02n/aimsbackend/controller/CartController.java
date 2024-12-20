@@ -1,11 +1,13 @@
 package com.cuong02n.aimsbackend.controller;
 
 
+import com.cuong02n.aimsbackend.model.dto.response.ProductCartDto;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.service.CartService;
 import com.cuong02n.aimsbackend.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +15,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
 public class CartController {
-    final UserService userService;
-    final HttpServletRequest request;
-    final CartService cartService;
+    private final HttpServletRequest request;
+    private final CartService cartService;
+    private final ModelMapper modelMapper;
 
     @GetMapping()
     public ResponseEntity<?> getUserCart() {
-        return ResponseEntity.ok(userService.getUserCart((User) request.getAttribute("user")));
+        return ResponseEntity.ok(
+                cartService.getUserCart((User) request.getAttribute("user"))
+                        .stream()
+                        .map(p -> modelMapper.map(p, ProductCartDto.class))
+                        .toList()
+        );
     }
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestBody Long productId, @RequestBody int quantity) {
+    public ResponseEntity<?> addToCart(@RequestParam Long productId, @RequestParam int quantity) {
         cartService.addToCart((User) request.getAttribute("user"), productId, quantity);
         return ResponseEntity.ok().build();
     }
