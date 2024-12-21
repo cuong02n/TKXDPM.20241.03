@@ -1,12 +1,16 @@
-import { Image, Plus } from "lucide-react";
+import { Image, Plus, Heart } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Product } from "../types/product.ts";
 import { formatCurrency } from "../utils/format.ts";
 import QuantitySetter from "../common/product-cart/QuantitySetter.tsx";
 import { useCart } from "../hooks/useCart.ts";
+import { AppDispatch } from "../store/store";
+import { useDispatch } from "react-redux";
+import { addFavorite } from "../store/thunk/favoritesThunk.ts";
 
 const ProductCard = ({ product }: { product: Product }) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [number, setNumber] = React.useState<number>(1);
   const { addItemToCart, cartItems } = useCart();
   const { id, quantity, ...productWithoutStore } = product;
@@ -28,7 +32,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         "You can't add more than the available quantity.\nCurrently in cart: " +
           currInCart.quantity +
           "\nAvailable: " +
-          product.quantity
+          product.quantity,
       );
       return;
     }
@@ -39,11 +43,21 @@ const ProductCard = ({ product }: { product: Product }) => {
     });
     setNumber(1);
   };
+
+  const handleAddToFavorite = (id: number) => {
+    dispatch(addFavorite(id))
+      .unwrap()
+      .then(() => {
+        alert("Product added to favorite list");
+      })
+      .catch((err: string) => {});
+  };
+
   return (
     <div className="border p-4 rounded-2xl shadow hover:shadow-lg">
       <div className="flex justify-between">
         <div className="flex items-center gap-4">
-          <div className="w-32 h-32 rounded-[20px] overflow-hidden">
+          <div className="w-32 h-32 rounded-[20px] overflow-hidden relative">
             {product.imageUrl ? (
               <img
                 src={product.imageUrl}
@@ -53,6 +67,13 @@ const ProductCard = ({ product }: { product: Product }) => {
             ) : (
               <Image className="h-full w-full text-zinc-400 bg-slate-200" />
             )}
+            <button
+              onClick={() => handleAddToFavorite(Number.parseInt(product.id))}
+              aria-label="Toggle Favorite"
+              className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            >
+              <Heart className="w-6 h-6 text-gray-400" />
+            </button>
           </div>
           <div className="flex flex-col justify-between py-2 h-full">
             <h2 className="text-lg font-bold">{product.name}</h2>
@@ -79,7 +100,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             onClick={handleAddtoCart}
             aria-label="Add to Cart"
             className="flex items-center justify-center bg-sky-600 text-white px-4 py-2 rounded-lg hover:bg-sky-700 active:bg-sky-800 
-             transition-colors duration-300 space-x-2 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-50"
+           transition-colors duration-300 space-x-2 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-50"
           >
             <Plus className="w-5 h-5" />
             <span>Cart</span>

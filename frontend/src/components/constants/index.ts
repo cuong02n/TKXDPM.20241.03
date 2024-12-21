@@ -5,7 +5,7 @@ export const API_BASE_URL = "https://api.example.com";
 export const ORDER_STATUSES = ["pending", "completed", "cancelled"] as const;
 
 // Các loại sản phẩm (có thể dùng trong filter, sort)
-export const PRODUCT_CATEGORIES = ["DVD", "book", "CD"];
+export const PRODUCT_CATEGORIES = ["DVD", "BOOK", "CD"];
 
 export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
