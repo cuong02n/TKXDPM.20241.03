@@ -24,7 +24,6 @@ public class Order extends BaseEntity {
     @Setter
     @Getter
     List<OrderProduct> orderProducts;
-    boolean isPaid = false;
 
     private String address;
 

@@ -9,7 +9,6 @@ import java.util.List;
 public class OrderDto {
     Long orderId;
     List<OrderProduct> orderProductDtos;
-    boolean isPaid = false;
 
     private String address;
 
