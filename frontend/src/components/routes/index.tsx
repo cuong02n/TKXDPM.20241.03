@@ -11,6 +11,7 @@ import Profile from "../pages/customer/Profile.tsx";
 import PaymentResult from "../pages/customer/PaymentResult.tsx";
 import DeliveryPage from "../pages/customer/DeliveryPage.tsx";
 import PaymentPage from "../pages/customer/PaymentPage.tsx";
+import FavoriteProductPage from "../../components/pages/customer/FavoriteProductsPage.tsx";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="/delivery-info" element={<DeliveryPage />} />
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/favorite" element={<FavoriteProductPage />} />
     </Routes>
   );
 };

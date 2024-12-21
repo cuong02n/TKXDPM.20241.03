@@ -1,29 +1,44 @@
 // src/redux/wishlist/wishlistSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Product } from "../types/product";
+import { fetchFavorites } from "./thunk/favoritesThunk.ts";
 
 interface WishlistState {
-  items: { id: string; name: string; price: number }[]; // Ví dụ với các thuộc tính đơn giản
+  items: Product[];
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: WishlistState = {
   items: [],
+  error: null,
+  loading: false,
 };
 
-const wishlistSlice = createSlice({
-  name: "wishlist",
+const favoriteProducts = createSlice({
+  name: "favorite",
   initialState,
   reducers: {
-    addToWishlist: (
-      state,
-      action: PayloadAction<{ id: string; name: string; price: number }>
-    ) => {
-      state.items.push(action.payload);
+    setFavorites: (state, action: PayloadAction<Product[]>) => {
+      state.items = action.payload;
     },
-    removeFromWishlist: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchFavorites.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFavorites.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchFavorites.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
   },
 });
 
-export const { addToWishlist, removeFromWishlist } = wishlistSlice.actions;
-export default wishlistSlice.reducer;
+export const { setFavorites } = favoriteProducts.actions;
+export default favoriteProducts.reducer;

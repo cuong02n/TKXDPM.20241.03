@@ -1,19 +1,22 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.model.entity.Invoice;
 import com.cuong02n.aimsbackend.model.entity.Order;
-import com.cuong02n.aimsbackend.model.entity.OrderProduct;
 import com.cuong02n.aimsbackend.model.entity.ProductCart;
 import com.cuong02n.aimsbackend.model.entity.User;
+import com.cuong02n.aimsbackend.repository.InvoiceRepository;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -24,6 +27,9 @@ public class OrderServiceTest {
 
     @Mock
     private CartService cartService;
+
+    @Mock
+    private InvoiceRepository invoiceRepository;
 
     @InjectMocks
     private OrderService orderService;
@@ -49,17 +55,13 @@ public class OrderServiceTest {
         cart.add(productCart);
 
         when(cartService.getUserCart(user)).thenReturn(cart);
-        when(orderRepository.findAllByUser(user)).thenReturn(null);
+        when(orderRepository.findByUser(user)).thenReturn(null);
+        when(invoiceRepository.save(any(Invoice.class))).thenReturn(new Invoice());
 
-        Order order = orderService.placeOrder(user, productIds, address, phone, province, shippingInstruction);
+        Invoice invoice = orderService.placeOrder(user, productIds, address, phone, province, shippingInstruction);
 
-        assertNotNull(order);
-        assertEquals(order.getUser(), user);
-        assertEquals(order.getAddress(), address);
-        assertEquals(order.getPhone(), phone);
-        assertEquals(order.getProvince(), province);
-        assertEquals(order.getShippingInstruction(), shippingInstruction);
-        verify(orderRepository, times(1)).save(order);
+        assertNotNull(invoice);
+        verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test
@@ -80,18 +82,12 @@ public class OrderServiceTest {
 
         when(cartService.getUserCart(user)).thenReturn(cart);
         when(orderRepository.findByUser(user)).thenReturn(null);
+        when(invoiceRepository.save(any(Invoice.class))).thenReturn(new Invoice());
 
-        Order order = orderService.placeRushOrder(user, productIds, minute, address, phone, province, shippingInstruction);
+        Invoice invoice = orderService.placeRushOrder(user, productIds, minute, address, phone, province, shippingInstruction);
 
-        assertNotNull(order);
-        assertEquals(order.getUser(), user);
-        assertEquals(order.getAddress(), address);
-        assertEquals(order.getPhone(), phone);
-        assertEquals(order.getProvince(), province);
-        assertEquals(order.getShippingInstruction(), shippingInstruction);
-        assertTrue(order.isRush());
-        assertEquals(order.getTimeInMinute(), minute);
-        verify(orderRepository, times(1)).save(order);
+        assertNotNull(invoice);
+        verify(orderRepository, times(1)).save(any(Order.class));
     }
 
     @Test

@@ -53,7 +53,7 @@ public class OrderController {
             @RequestBody PlaceRushOrderRequest request
     ) {
 
-        orderService.placeRushOrder(
+        var invoice = orderService.placeRushOrder(
                 (User) httpServletRequest.getAttribute("user"),
                 request.getProductIds(),
                 request.getTimeInMinute(),
@@ -62,7 +62,7 @@ public class OrderController {
                 request.getProvince(),
                 request.getShippingInstruction()
         );
-        return BaseResponse.okMessage("Place Rush Order successfully");
+        return BaseResponse.ok(modelMapper.map(invoice, InvoiceDto.class));
     }
 
     @PostMapping("/pay-order")
