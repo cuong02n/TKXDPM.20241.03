@@ -40,12 +40,13 @@ public class JwtFilter extends OncePerRequestFilter {
 //            filterChain.doFilter(request, response);
 //            return;
 //        }
+        boolean errOccur = false;
         try {
             String jwt = authHeader.substring(7);
             String email = jwtService.extractUsername(jwt);
             UserDetails userDetails = null;
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                logger.info("Email: {}",email);
+                logger.info("Email: {}", email);
                 userDetails = userService.loadUserByUsername(email);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -58,12 +59,15 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             request.setAttribute("email", email);
             request.setAttribute("user", userDetails);
-            filterChain.doFilter(request, response);
         } catch (Exception e) {
+            errOccur = true;
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write(BaseResponse.error("You are not authenticated: "+e.getMessage()).toString());
+            response.getWriter().write(BaseResponse.error("You are not authenticated: " + e.getMessage()).toString());
         }
+        if (!errOccur)
+            filterChain.doFilter(request, response);
+
     }
 
     @Override

@@ -13,6 +13,7 @@ public class ProductDto{
     private String description;
     private int available;
     private int price;
+    private double weight;
     private HashMap<String, String> additionalData;
     private Product.ProductCategory category;
     private List<String> mediaUrls;
