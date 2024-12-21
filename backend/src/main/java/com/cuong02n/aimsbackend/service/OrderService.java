@@ -1,10 +1,8 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
-import com.cuong02n.aimsbackend.model.entity.Order;
-import com.cuong02n.aimsbackend.model.entity.OrderProduct;
-import com.cuong02n.aimsbackend.model.entity.ProductCart;
-import com.cuong02n.aimsbackend.model.entity.User;
+import com.cuong02n.aimsbackend.model.entity.*;
+import com.cuong02n.aimsbackend.repository.InvoiceRepository;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +17,9 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CartService cartService;
+    private final InvoiceRepository invoiceRepository;
 
-    public Order placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
+    public Invoice placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
         checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
 
@@ -29,17 +28,17 @@ public class OrderService {
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction);
     }
 
-    public Order placeRushOrder(User user, HashSet<Long> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
+    public Invoice placeRushOrder(User user, HashSet<Long> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
         checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
         checkOrderNotPaidExist(user);
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
     }
 
-    private Order createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
+    private Invoice createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, 0);
     }
 
-    private Order createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
+    private Invoice createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
         List<ProductCart> cart = cartService.getUserCart(user);
         Order order = new Order();
 
@@ -63,7 +62,6 @@ public class OrderService {
             }
         }
         order.setOrderProducts(orderProducts);
-        order.setPaid(false);
         order.setAddress(address);
         order.setPhone(phone);
         order.setProvince(province);
@@ -72,7 +70,29 @@ public class OrderService {
         order.setTimeInMinute(timeInMinute);
 
         orderRepository.save(order);
-        return order;
+        return invoiceRepository.save(createInvoice(order));
+    }
+
+    private Invoice createInvoice(Order order) {
+
+        int shippingFee = calculateShippingFee(order);
+        int totalAmountWithoutVAT = order.getOrderProducts().stream().mapToInt(o -> o.getProduct().getPrice() * o.getQuantity()).sum();
+        int totalAmountIncludeVAT = (int) (1.1 * totalAmountWithoutVAT);
+        int finalTotalAmount = shippingFee+totalAmountIncludeVAT;
+
+        Invoice invoice = new Invoice();
+        invoice.setOrder(order);
+        invoice.setPaid(false);
+        invoice.setShippingFee(shippingFee);
+        invoice.setTotalAmountWithoutVAT(totalAmountWithoutVAT);
+        invoice.setTotalAmountIncludeVAT(totalAmountIncludeVAT);
+        invoice.setTotalAmountIncludeShippingFee(finalTotalAmount);
+        return invoice;
+    }
+
+    private int calculateShippingFee(Order order) {
+        //TODO
+        return 1000;
     }
 
     public List<Order> getOrder(User user) {
@@ -80,7 +100,7 @@ public class OrderService {
     }
 
     private void checkOrderNotPaidExist(User user) {
-        Order notPaidOrder = orderRepository.findByUserAndIsPaidFalse(user);
+        Order notPaidOrder = orderRepository.findByUser(user);
         if (notPaidOrder != null) {
             throw new GeneralException("There is a order you have not paid yet: " + notPaidOrder.getOrderId());
         }

@@ -3,6 +3,7 @@ package com.cuong02n.aimsbackend.controller;
 import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderRequest;
 import com.cuong02n.aimsbackend.model.dto.request.PlaceRushOrderRequest;
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
+import com.cuong02n.aimsbackend.model.dto.response.InvoiceDto;
 import com.cuong02n.aimsbackend.model.dto.response.OrderDto;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.service.OrderService;
@@ -35,7 +36,7 @@ public class OrderController {
     public ResponseEntity<?> placeOrder(
             @RequestBody PlaceOrderRequest request
     ) {
-        orderService.placeOrder(
+        var invoice = orderService.placeOrder(
                 (User) httpServletRequest.getAttribute("user"),
                 request.getProductIds(),
                 request.getAddress(),
@@ -44,7 +45,7 @@ public class OrderController {
                 request.getShippingInstruction()
         );
 
-        return BaseResponse.okMessage("Place Order successfully");
+        return BaseResponse.ok(modelMapper.map(invoice, InvoiceDto.class));
     }
 
     @PostMapping("/place-rush-order")
