@@ -66,6 +66,9 @@ const oneOrderSlice = createSlice({
       const { info } = action.payload;
       state.deliveryInfo = info;
     },
+    setInitialOrder: (state) => {
+      state = initialState;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -113,5 +116,6 @@ export const {
   deleteOrderProduct,
   updateOrderProduct,
   setDeliveryInfo,
+  setInitialOrder,
 } = oneOrderSlice.actions;
 export default oneOrderSlice.reducer;

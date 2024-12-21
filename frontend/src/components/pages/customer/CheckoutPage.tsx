@@ -76,7 +76,7 @@ const CheckoutPage: React.FC = () => {
       <div>
         <InvoiceSummary
           subtotal={invoice.totalWithoutVAT}
-          VAT={invoice.totalWithVAT - invoice.totalWithoutVAT}
+          withVAT={invoice.totalWithVAT}
           shippingFee={invoice.shippingFee}
           total={invoice.total}
         />

@@ -48,7 +48,9 @@ const DeliveryPage = () => {
           onClick={handlePlaceOrder}
           className="w-48 mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-gradient-to-r from-blue-900 to-blue-800 transition-colors duration-300 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="text-xl drop-shadow-md">Place order</span>
+          <span className="text-xl drop-shadow-md">
+            {rush ? "Place rush order" : "Place order"}
+          </span>
         </button>
       </div>
     </div>
