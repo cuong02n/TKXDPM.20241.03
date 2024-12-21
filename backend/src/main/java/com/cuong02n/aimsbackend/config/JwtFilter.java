@@ -1,5 +1,6 @@
 package com.cuong02n.aimsbackend.config;
 
+import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.service.JwtService;
 import com.cuong02n.aimsbackend.service.UserService;
 import jakarta.servlet.FilterChain;
@@ -35,15 +36,16 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws IOException, ServletException {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+//        if (authHeader == null) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
         try {
             String jwt = authHeader.substring(7);
             String email = jwtService.extractUsername(jwt);
             UserDetails userDetails = null;
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                logger.info("Email: {}",email);
                 userDetails = userService.loadUserByUsername(email);
                 if (jwtService.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
@@ -56,13 +58,12 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             request.setAttribute("email", email);
             request.setAttribute("user", userDetails);
+            filterChain.doFilter(request, response);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write(e.getMessage());
-            return;
+            response.getWriter().write(BaseResponse.error("You are not authenticated").toString());
         }
-        filterChain.doFilter(request, response);
     }
 
     @Override
