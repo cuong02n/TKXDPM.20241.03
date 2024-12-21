@@ -7,6 +7,7 @@ import productReducer from "../store/productSlice.ts";
 import orderReducer from "../store/orderSlice.ts";
 import oneOrderReducer from "../store/oneOrderSlice.ts";
 import deliveryInfoReducer from "../store/deliveryInfoSlice.ts";
+import payReducer from "../store/paySlice.ts";
 import { thunk } from "redux-thunk";
 
 const store = configureStore({
@@ -18,6 +19,7 @@ const store = configureStore({
     order: orderReducer,
     oneOrder: oneOrderReducer,
     deliveryInfo: deliveryInfoReducer,
+    pay : payReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
 });

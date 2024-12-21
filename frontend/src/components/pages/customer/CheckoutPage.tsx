@@ -37,7 +37,15 @@ const CheckoutPage: React.FC = () => {
     //     totalAmount,
     //   })
     // );
-    navigate("/payment", { state: { total } });
+
+    const orderInfo = `
+      Name: ${deliveryInfo.name}, 
+      Phone: ${deliveryInfo.phone}, 
+      VAT: ${invoice.VAT},
+      Shipping fee: ${invoice.shippingFee}, 
+      Total: ${total},
+    `;
+    navigate("/payment", { state: { total , orderInfo } });
   };
 
   return (
