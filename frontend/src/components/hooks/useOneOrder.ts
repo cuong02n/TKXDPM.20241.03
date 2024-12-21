@@ -8,12 +8,20 @@ import {
 } from "../store/oneOrderSlice.ts";
 import { CartItem } from "../types/cart";
 import { DeliveryInformation } from "../types/deliveryInfo.ts";
-import { placeOrder } from "../store/thunk/orderThunk.ts";
+import {
+  getAllOrders,
+  placeOrder,
+  placeRushOrder,
+} from "../store/thunk/orderThunk.ts";
 
 export const useOneOrder = () => {
   const dispatch = useDispatch<AppDispatch>();
   const orderProducts = useSelector((state: RootState) => state.oneOrder.items);
   const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
+
+  const getMyOrders = () => {
+    dispatch(getAllOrders());
+  };
 
   const placeOrderNormal = () => {
     const data = {
@@ -24,6 +32,18 @@ export const useOneOrder = () => {
       shippingInstruction: deliveryInfo.instructions,
     };
     dispatch(placeOrder(data));
+  };
+
+  const placeOrderRush = () => {
+    const data = {
+      productIds: orderProducts.map((item) => Number(item.id)),
+      address: deliveryInfo.address,
+      phone: deliveryInfo.phone,
+      province: deliveryInfo.province,
+      shippingInstruction: deliveryInfo.instructions,
+      timeInMinutes: 120,
+    };
+    dispatch(placeRushOrder(data));
   };
 
   const addProductToOrder = (item: CartItem) => {
@@ -46,5 +66,7 @@ export const useOneOrder = () => {
     updateProductInOrder,
     setDelivery,
     placeOrderNormal,
+    placeOrderRush,
+    getMyOrders,
   };
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { Invoice } from "../../types/invoice.ts";
@@ -6,11 +6,19 @@ import InvoiceProduct from "../../invoice/InvoiceProduct.tsx";
 import InvoiceSummary from "../../invoice/InvoiceSummary.tsx";
 import InvoiceDelivery from "../../invoice/InvoiceDelivery.tsx";
 import { useNavigate } from "react-router-dom";
+import { useOneOrder } from "../../hooks/useOneOrder.ts";
 
 const CheckoutPage: React.FC = () => {
   const order = useSelector((state: RootState) => state.oneOrder);
   const deliveryInfo = useSelector((state: RootState) => state.deliveryInfo);
+  const [rush, setRush] = useState(() => {
+    const isRush = localStorage.getItem("rush");
+    if (isRush) return JSON.parse(isRush);
+    return false;
+  });
+  const { getMyOrders } = useOneOrder();
   const navigate = useNavigate();
+
   const invoice: Invoice = {
     deliveryInfo: {
       address: "123 ABC",
@@ -25,9 +33,32 @@ const CheckoutPage: React.FC = () => {
     VAT: 10000,
     total: 100000,
   };
-  const total = invoice.order.totalAmount + invoice.VAT + invoice.shippingFee;
   const subtotal = invoice.order.totalAmount;
+  invoice.VAT = subtotal * 0.01;
+  const weight = 0.3;
 
+  invoice.shippingFee = (() => {
+    let fees = 0;
+    if (
+      deliveryInfo.province === "Hà Nội" ||
+      deliveryInfo.province === "Hồ Chí Minh"
+    ) {
+      fees += 22000;
+      if (weight > 3.0) fees += Math.floor((weight - 3.0) / 0.5) * 2500;
+    } else {
+      fees += 30000;
+      if (weight > 0.5) fees += Math.floor((weight - 0.5) / 0.5) * 2500;
+    }
+    const numberOfRush = rush
+      ? order.items.reduce((acc, item) => acc + item.quantity, 0)
+      : 0;
+    fees += numberOfRush * 10000;
+    if (subtotal > 100000) {
+      fees = Math.max(0, fees - 25000);
+    }
+    return fees;
+  })();
+  const total = invoice.order.totalAmount + invoice.VAT + invoice.shippingFee;
   const handlePlaceOrder = () => {
     // const userId = "user01"; // Bạn có thể lấy `userId` từ state hoặc context nếu cần
     // dispatch(

@@ -2,7 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartItem } from "../types/cart";
 import { OneOrder } from "../types/oneOrder";
 import { DeliveryInformation } from "../types/deliveryInfo";
-import { placeOrder } from "./thunk/orderThunk.ts";
+import {
+  getAllOrders,
+  placeOrder,
+  placeRushOrder,
+} from "./thunk/orderThunk.ts";
 
 const initialState: OneOrder = {
   orderId: "",
@@ -71,9 +75,33 @@ const oneOrderSlice = createSlice({
       })
       .addCase(placeOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.status = "completed";
+        state.status = "pending";
       })
       .addCase(placeOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(placeRushOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(placeRushOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "pending";
+      })
+      .addCase(placeRushOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getAllOrders.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.items = action.payload;
+      })
+      .addCase(getAllOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
