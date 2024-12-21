@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "../types/product";
 import { fetchProducts } from "./thunk/productThunk.ts";
+import { getProductWithId } from "./thunk/productThunk.ts";
 
 interface ProductState {
   items: Product[];
@@ -26,7 +27,7 @@ const productSlice = createSlice({
     },
     removeProduct: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(
-        (product) => product.id !== action.payload
+        (product) => product.id !== action.payload,
       );
     },
   },
