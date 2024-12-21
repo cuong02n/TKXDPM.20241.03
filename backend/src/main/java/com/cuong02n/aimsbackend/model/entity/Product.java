@@ -20,6 +20,7 @@ public class Product extends BaseEntity {
     private String description;
     private int available;
     private int price;
+    private double weight;
     @Convert(converter = ProductHashMapConverter.class)
     @Column(columnDefinition = "json")
     private HashMap<String, String> additionalData;

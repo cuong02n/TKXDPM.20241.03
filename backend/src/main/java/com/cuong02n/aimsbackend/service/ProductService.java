@@ -116,6 +116,8 @@ public class ProductService {
         }
         FavoriteProductUser favor = new FavoriteProductUser();
         favor.setKey(new FavoriteProductUser.WishListKey(user.getEmail(), productId));
+        favor.setUser(user);
+        favor.setProduct(productRepository.findById(productId).orElseThrow());
         wishListRepository.save(favor);
     }
 
