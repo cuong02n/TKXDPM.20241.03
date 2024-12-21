@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import apiClient from "../../../api/apiClient.ts";
 import { Product } from "../../types/product.ts";
+import { ProductDetail } from "../../types/productDetails";
 
 const sampleProducts: Product[] = [
   {
@@ -55,5 +56,22 @@ export const fetchProducts = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data || "Error fetching products");
     }
-  }
+  },
+);
+
+export const getProductWithId = createAsyncThunk(
+  "product/getProductWithId",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const res = await apiClient.get(`/product?productId=${id}`);
+      if (res.data.data && res.data.error === 0) {
+        let product: ProductDetail = res.data.data;
+        return product;
+      } else {
+        return rejectWithValue(`could not get product with id ${id}`);
+      }
+    } catch (_) {
+      return rejectWithValue(`could not get product with id ${id}`);
+    }
+  },
 );

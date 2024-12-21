@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    Order findByUserAndIsPaidFalse(User user);
+    Order findByUser(User user);
     List<Order> findAllByUser(User user);
 }
