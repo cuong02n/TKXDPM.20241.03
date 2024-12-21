@@ -19,46 +19,38 @@ const CheckoutPage: React.FC = () => {
   const { getMyOrders } = useOneOrder();
   const navigate = useNavigate();
 
-  const invoice: Invoice = {
-    deliveryInfo: {
-      address: "123 ABC",
-      province: "HCM",
-      name: "Vietnam",
-      phone: "123",
-      instructions: "Please call me before delivery",
-    },
-    id: "1",
-    order: order,
-    shippingFee: 1000,
-    VAT: 10000,
-    total: 100000,
-  };
-  const subtotal = invoice.order.totalAmount;
-  invoice.VAT = subtotal * 0.01;
-  const weight = 0.3;
+  const invoice = useSelector((state: RootState) => state.invoice);
+  useEffect(() => {
+    console.log(invoice);
+  }, []);
 
-  invoice.shippingFee = (() => {
-    let fees = 0;
-    if (
-      deliveryInfo.province === "Hà Nội" ||
-      deliveryInfo.province === "Hồ Chí Minh"
-    ) {
-      fees += 22000;
-      if (weight > 3.0) fees += Math.floor((weight - 3.0) / 0.5) * 2500;
-    } else {
-      fees += 30000;
-      if (weight > 0.5) fees += Math.floor((weight - 0.5) / 0.5) * 2500;
-    }
-    const numberOfRush = rush
-      ? order.items.reduce((acc, item) => acc + item.quantity, 0)
-      : 0;
-    fees += numberOfRush * 10000;
-    if (subtotal > 100000) {
-      fees = Math.max(0, fees - 25000);
-    }
-    return fees;
-  })();
-  const total = invoice.order.totalAmount + invoice.VAT + invoice.shippingFee;
+  const total = invoice.total;
+  // const subtotal = invoice.order.totalAmount;
+  // invoice.VAT = subtotal * 0.01;
+  // const weight = 0.3;
+
+  // invoice.shippingFee = (() => {
+  //   let fees = 0;
+  //   if (
+  //     deliveryInfo.province === "Hà Nội" ||
+  //     deliveryInfo.province === "Hồ Chí Minh"
+  //   ) {
+  //     fees += 22000;
+  //     if (weight > 3.0) fees += Math.floor((weight - 3.0) / 0.5) * 2500;
+  //   } else {
+  //     fees += 30000;
+  //     if (weight > 0.5) fees += Math.floor((weight - 0.5) / 0.5) * 2500;
+  //   }
+  //   const numberOfRush = rush
+  //     ? order.items.reduce((acc, item) => acc + item.quantity, 0)
+  //     : 0;
+  //   fees += numberOfRush * 10000;
+  //   if (subtotal > 100000) {
+  //     fees = Math.max(0, fees - 25000);
+  //   }
+  //   return fees;
+  // })();
+
   const handlePlaceOrder = () => {
     // const userId = "user01"; // Bạn có thể lấy `userId` từ state hoặc context nếu cần
     // dispatch(
@@ -76,17 +68,17 @@ const CheckoutPage: React.FC = () => {
       <h2 className="text-2xl font-bold mb-5">Invoice</h2>
       <div></div>
       <div>
-        {invoice.order.items.map((item, index) => (
+        {order.items.map((item, index) => (
           <InvoiceProduct key={index} product={item} />
         ))}
         <hr className="border-t-2 border-dashed border-zinc-500 my-4" />
       </div>
       <div>
         <InvoiceSummary
-          subtotal={subtotal}
-          VAT={invoice.VAT}
+          subtotal={invoice.totalWithoutVAT}
+          VAT={invoice.totalWithVAT - invoice.totalWithoutVAT}
           shippingFee={invoice.shippingFee}
-          total={total}
+          total={invoice.total}
         />
       </div>
       <hr className="border-t-2 border-dashed border-zinc-500 my-4" />

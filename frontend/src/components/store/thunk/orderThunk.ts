@@ -49,8 +49,8 @@ export const placeOrder = createAsyncThunk(
   async (data: PlaceOrderProps, { rejectWithValue }) => {
     try {
       const response = await apiClient.post("/order/place-order", data);
-      console.log("PLACE ORDER RESPONSE", response.data);
-      return response.data;
+      console.log("PLACE ORDER RESPONSE", response.data.data);
+      return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Error placing order");
     }

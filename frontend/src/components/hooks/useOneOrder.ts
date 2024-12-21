@@ -13,6 +13,9 @@ import {
   placeOrder,
   placeRushOrder,
 } from "../store/thunk/orderThunk.ts";
+import { setInvoiceInfo } from "../store/invoiceSlice.ts";
+import apiClient from "../../api/apiClient.ts";
+import { toast } from "react-toastify";
 
 export const useOneOrder = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,7 +26,7 @@ export const useOneOrder = () => {
     dispatch(getAllOrders());
   };
 
-  const placeOrderNormal = () => {
+  const placeOrderNormal = async () => {
     const data = {
       productIds: orderProducts.map((item) => Number(item.id)),
       address: deliveryInfo.address,
@@ -31,7 +34,21 @@ export const useOneOrder = () => {
       province: deliveryInfo.province,
       shippingInstruction: deliveryInfo.instructions,
     };
-    dispatch(placeOrder(data));
+    try {
+      const response = await apiClient.post("/order/place-order", data);
+      console.log("PLACE ORDER RESPONSE", response.data.data);
+      const inp = response.data.data;
+      const info = {
+        shippingFee: inp.shippingFee,
+        totalWithoutVAT: inp.totalWithoutVAT,
+        totalWithVAT: inp.totalWithVAT,
+        total: inp.total,
+        orderId: inp.orderId,
+      };
+      dispatch(setInvoiceInfo(info));
+    } catch (error) {
+      toast.error(error.response?.data || "Error placing order");
+    }
   };
 
   const placeOrderRush = () => {
