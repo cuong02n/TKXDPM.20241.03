@@ -15,12 +15,14 @@ import java.util.List;
 public class User extends BaseEntity implements UserDetails {
     @Id
     @Getter
+    @Setter
     private String email;
     @Getter
     private String name;
     private String password;
     @Getter
     @Enumerated(value = EnumType.STRING)
+    @Setter
     private Role role;
     @Getter
     private boolean active;
