@@ -4,8 +4,10 @@ import { OneOrder } from "./oneOrder";
 export interface Invoice {
   id: string;
   order: OneOrder;
+  orderId: number;
   deliveryInfo: DeliveryInformation;
-  total: number;
-  VAT: number;
   shippingFee: number;
+  totalWithoutVAT: number;
+  totalWithVAT: number;
+  total: number;
 }

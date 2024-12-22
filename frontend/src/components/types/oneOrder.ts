@@ -9,4 +9,12 @@ export interface OneOrder {
   shippingFee: number;
   deliveryInfo: DeliveryInformation;
   status: "pending" | "completed" | "cancelled";
+  loading?: boolean;
+  error?: string | null;
+}
+
+export interface OrderState {
+  items: OneOrder[];
+  loading: boolean;
+  error: string | null;
 }

@@ -11,8 +11,8 @@ const CartCost = () => {
   );
   return (
     <div>
-      {cartItems.map((item: any) => (
-        <div className="flex justify-between mx-4">
+      {cartItems.map((item: any, index) => (
+        <div key={index} className="flex justify-between mx-4">
           <p>{item.name}</p>
           <p>{formatCurrency(item.price * item.quantity)}</p>
         </div>

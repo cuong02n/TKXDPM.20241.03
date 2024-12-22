@@ -3,16 +3,16 @@ import { formatCurrency } from "../utils/format.ts";
 
 interface InvoiceSummaryProps {
   subtotal: number;
-  VAT: number;
   shippingFee: number;
   total: number;
+  withVAT: number;
 }
 
 const InvoiceSummary = ({
   subtotal,
-  VAT,
   shippingFee,
   total,
+  withVAT,
 }: InvoiceSummaryProps) => {
   return (
     <div>
@@ -22,7 +22,7 @@ const InvoiceSummary = ({
       </div>
       <div className="flex justify-between text-lg">
         <p>Subtotal with VAT:</p>
-        <p>{formatCurrency(VAT + subtotal)}</p>
+        <p>{formatCurrency(withVAT)}</p>
       </div>
       <div className="flex justify-between text-lg">
         <p>Shipping fee:</p>
