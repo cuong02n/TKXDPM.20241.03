@@ -5,7 +5,7 @@ RUN mkdir -p /app
 WORKDIR $HOME
 ADD . $HOME
 RUN chmod a+x ./mvnw
-RUN ./mvnw -f $HOME/pom.xml clean package
+RUN ./mvnw clean package spring-boot:repackage -Dmaven.test.skip=true
 RUN cp -r /usr/app/target/*.jar /app/runner.jar
 EXPOSE 8080
 CMD [ "java", "-jar", "/app/runner.jar" ] 
