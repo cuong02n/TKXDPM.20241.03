@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,17 +14,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
+@CrossOrigin
 @RequestMapping("/api/vnpay")
-@RestController
+@Controller
 @RequiredArgsConstructor
 public class VNPayController {
     private final VNPayService vnPayService;
-    private final HttpServletRequest request;
-
     @GetMapping("")
-    public ModelAndView home() {
-        return new ModelAndView("index");
+    public String home(){
+        return "index";
     }
 
     @PostMapping("/submitOrder")
@@ -44,12 +44,10 @@ public class VNPayController {
     public ResponseEntity<?>  payStatus() {
         int paymentStatus = vnPayService.orderReturn(request);
 
-        // Lấy các tham số từ request
         String orderInfo = request.getParameter("vnp_OrderInfo");
         String paymentTime = request.getParameter("vnp_PayDate");
         String transactionId = request.getParameter("vnp_TransactionNo");
-        String totalPrice = request.getParameter("vnp_Amount");
-
+        String totalPrice = request.getParameter("vnp_Amount").substring(0,request.getParameter("vnp_Amount").length()-2);
         // Định dạng lại thời gian thanh toán
         LocalDateTime paymentDateTime = LocalDateTime.parse(paymentTime, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String formattedPaymentTime = paymentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
