@@ -29,6 +29,7 @@ public class SecurityConfig {
             "/error",
             "/test",
             "/hello",
+            "/api/vnpay/vnpay-status",
 //            "/api/review"
 //            "**"
     };

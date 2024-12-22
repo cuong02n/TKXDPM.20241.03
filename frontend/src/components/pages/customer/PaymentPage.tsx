@@ -2,13 +2,32 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { formatCurrency } from "../../utils/format.ts";
 import PaymentMethod from "../../payment/PaymentMethod.tsx";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store.ts";
+import apiClient from "../../../api/apiClient.ts";
 const PaymentPage = () => {
   const location = useLocation();
-  const { total } = location.state || { total: 0 };
+  // const { total } = location.state || { total: 0 };
+  const invoice = useSelector((state: RootState) => state.invoice);
+  // const total = 100000;
+  const total = invoice.total;
+  const orderId = invoice.orderId;
   const [method, setMethod] = useState("vnpay");
   const paymentMethods = ["vnpay"];
 
-  const handlePayOrder = () => {};
+  const handlePayOrder = async () => {
+    try {
+      const res = await apiClient.post("/vnpay/submitOrder", null, {
+        params: {
+          amount: total,
+          orderInfo: orderId.toString(),
+        },
+      });
+      window.location.href = res.data;
+    } catch (err) {
+      console.log("ERROR GETTING PAYMENT URL", err);
+    }
+  };
 
   return (
     <div className="container mx-auto py-10 min-h-screen">

@@ -2,10 +2,14 @@ package com.cuong02n.aimsbackend.subsystem.vnpay;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -37,7 +41,7 @@ public class VNPayController {
     }
 
     @GetMapping("/vnpay-status")
-    public ModelAndView payStatus() {
+    public ResponseEntity<?>  payStatus() {
         int paymentStatus = vnPayService.orderReturn(request);
 
         // Lấy các tham số từ request
@@ -50,16 +54,32 @@ public class VNPayController {
         LocalDateTime paymentDateTime = LocalDateTime.parse(paymentTime, DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         String formattedPaymentTime = paymentDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        // Tạo đối tượng ModelAndView và chọn view để render
-        ModelAndView modelAndView = new ModelAndView(paymentStatus == 1 ? "ordersuccess" : "orderfail");
+//        // Tạo đối tượng ModelAndView và chọn view để render
+//        ModelAndView modelAndView = new ModelAndView(paymentStatus == 1 ? "ordersuccess" : "orderfail");
+//
+//        // Thêm dữ liệu vào ModelAndView
+//        modelAndView.addObject("orderId", orderInfo);
+//        modelAndView.addObject("totalPrice", totalPrice);
+//        modelAndView.addObject("paymentTime", formattedPaymentTime);
+//        modelAndView.addObject("transactionId", transactionId);
 
-        // Thêm dữ liệu vào ModelAndView
-        modelAndView.addObject("orderId", orderInfo);
-        modelAndView.addObject("totalPrice", totalPrice);
-        modelAndView.addObject("paymentTime", formattedPaymentTime);
-        modelAndView.addObject("transactionId", transactionId);
 
-        return modelAndView;
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+                .path(paymentStatus == 1 ? "/payment/success" : "/payment/failure")
+                .queryParam("orderId", orderInfo)
+                .queryParam("totalPrice", totalPrice)
+                .queryParam("paymentTime", formattedPaymentTime)
+                .queryParam("transactionId", transactionId)
+                .queryParam("status", paymentStatus);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(builder.toUriString()));
+
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .headers(headers)
+                .build();
+//
+//        return modelAndView;
     }
    /* public String getUserId(UserDetails userDetails){
 

@@ -57,6 +57,9 @@ const invoiceSlice = createSlice({
       state.total = total;
       state.orderId = orderId;
     },
+    setInitialInvoice: (state) => {
+      state = initialState;
+    },
   },
 });
 
