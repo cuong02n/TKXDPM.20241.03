@@ -100,10 +100,10 @@ public class OrderService {
     }
 
     private void checkOrderNotPaidExist(User user) {
-        Order notPaidOrder = orderRepository.findByUser(user);
-        if (notPaidOrder != null) {
-            throw new GeneralException("There is a order you have not paid yet: " + notPaidOrder.getOrderId());
-        }
+//        Order notPaidOrder = orderRepository.findByUser(user);
+//        if (notPaidOrder != null) {
+//            throw new GeneralException("There is a order you have not paid yet: " + notPaidOrder.getOrderId());
+//        }
     }
 
     private void checkPlaceOrderRequestInCart(List<ProductCart> productCarts, HashSet<Long> productIds) {

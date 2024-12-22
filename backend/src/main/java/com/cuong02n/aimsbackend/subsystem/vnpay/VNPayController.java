@@ -20,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 public class VNPayController {
     private final VNPayService vnPayService;
+    private final HttpServletRequest request;
     @GetMapping("")
     public String home(){
         return "index";
@@ -27,8 +28,7 @@ public class VNPayController {
 
     @PostMapping("/submitOrder")
     public ResponseEntity<String> submitOrder(@RequestParam("amount") Long orderTotal,
-                                              @RequestParam("orderInfo") String orderInfo,
-                                              HttpServletRequest request) {
+                                              @RequestParam("orderInfo") String orderInfo) {
         //  UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
         //   .getPrincipal();
         //    User user= userService.getById(getUserId(userDetails))
@@ -79,14 +79,4 @@ public class VNPayController {
 //
 //        return modelAndView;
     }
-   /* public String getUserId(UserDetails userDetails){
-
-        String userName = userDetails.getUsername();
-        Optional<User> user= userService.getByAccount(userName);
-        if (!user.isPresent()) {
-            return null;
-        }
-
-        return user.get().getId() ; */
-
 }
