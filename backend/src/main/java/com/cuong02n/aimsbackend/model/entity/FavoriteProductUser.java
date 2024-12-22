@@ -23,6 +23,7 @@ public class FavoriteProductUser extends BaseEntity {
     @Embeddable
     @AllArgsConstructor
     @NoArgsConstructor
+    @EqualsAndHashCode
     public static class WishListKey {
         @Column(name = "user_email")
         String userEmail;
