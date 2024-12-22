@@ -27,7 +27,7 @@ const AppRoutes = () => {
       <Route path="/checkout" element={<Checkout />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/payment/success" element={<PaymentSuccess />} />
-      <Route path="/payment/failed" element={<PaymentSuccess />} />
+      <Route path="/payment/failure" element={<PaymentSuccess />} />
       <Route path="/favorite" element={<FavoriteProductPage />} />
     </Routes>
   );
