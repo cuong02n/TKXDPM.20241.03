@@ -3,23 +3,26 @@ import ProductGrid from "../../product/ProductGrid.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store.ts";
 import { fetchProducts } from "../../store/thunk/productThunk.ts";
+import { fetchFavorites } from "../../store/thunk/favoritesThunk.ts";
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { items, loading, error } = useSelector(
-    (state: RootState) => state.product
+    (state: RootState) => state.product,
   );
+  const favorites = useSelector((state: RootState) => state.wishlist);
   const products = items;
   const [searchQuery, setSearchQuery] = React.useState("");
   const [filteredProducts, setFilteredProducts] = React.useState(items);
   useEffect(() => {
     dispatch(fetchProducts());
+    dispatch(fetchFavorites());
   }, [dispatch]);
   useEffect(() => {
     setFilteredProducts(
       items.filter((product) =>
-        product.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
     );
   }, [items, searchQuery]);
 
@@ -36,7 +39,10 @@ const Home = () => {
         placeholder="Search products..."
         className="mb-5 p-2 border border-gray-300 rounded-md w-full"
       />
-      <ProductGrid products={filteredProducts} />
+      <ProductGrid
+        products={filteredProducts}
+        favoriteProducts={favorites.items}
+      />
     </div>
   );
 };

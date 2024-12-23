@@ -8,8 +8,15 @@ import { useCart } from "../hooks/useCart.ts";
 import { AppDispatch } from "../store/store";
 import { useDispatch } from "react-redux";
 import { addFavorite } from "../store/thunk/favoritesThunk.ts";
+import { toast } from "react-toastify";
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({
+  product,
+  favorite,
+}: {
+  product: Product;
+  favorire: boolean;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [number, setNumber] = React.useState<number>(1);
   const { addItemToCart, cartItems } = useCart();
@@ -48,7 +55,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     dispatch(addFavorite(id))
       .unwrap()
       .then(() => {
-        alert("Product added to favorite list");
+        toast.success("Product added to favorite list");
       })
       .catch((err: string) => {});
   };
@@ -72,7 +79,11 @@ const ProductCard = ({ product }: { product: Product }) => {
               aria-label="Toggle Favorite"
               className="absolute top-2 right-2 p-1 bg-white rounded-full shadow hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-400"
             >
-              <Heart className="w-6 h-6 text-gray-400" />
+              {favorite ? (
+                <Heart className="w-6 h-6 text-gray-400" />
+              ) : (
+                <Heart className="w-6 h-6 text-red-600"></Heart>
+              )}
             </button>
           </div>
           <div className="flex flex-col justify-between py-2 h-full">
