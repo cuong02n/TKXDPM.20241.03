@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,15 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final InvoiceRepository invoiceRepository;
+    private static final int FREE_SHIPPING_THRESHOLD = 100000;
+    private static final int MAX_SHIPPING_DISCOUNT = 25000;
+    private static final int RUSH_SHIPPING_FEE = 10000;
+    private static final double INITIAL_WEIGHT_ROOT = 3.0;
+    private static final double INITIAL_WEIGHT_EXTRA = 0.5;
+    private static final int INITIAL_FEE_URBAN = 22000;
+    private static final int INITIAL_FEE_RURAL = 30000;
+    private static final int ADDITIONAL_FEE_PER_WEIGHT = 2500;
+    private static final Set<String> URBAN_PROVINCES = Set.of("Hà Nội", "Hồ Chí Minh");
 
     public Invoice placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
@@ -91,8 +101,51 @@ public class OrderService {
     }
 
     private int calculateShippingFee(Order order) {
-        //TODO
-        return 1000;
+        double maxWeight = 0;
+        int totalOrderValue = 0;
+        List<OrderProduct> orderProducts = order.getOrderProducts();
+        String province = order.getProvince();
+        boolean isRush = order.isRush();
+
+        for (OrderProduct op : orderProducts) {
+            Product product = op.getProduct();
+            int quantity = op.getQuantity();
+
+            maxWeight = Math.max(maxWeight, product.getWeight());
+            totalOrderValue += product.getPrice() * quantity;
+        }
+
+        int baseShippingFee = calculateBaseShippingFee(maxWeight, province);
+
+        if (isRush) {
+            return baseShippingFee + (RUSH_SHIPPING_FEE * orderProducts.size());
+        }
+
+        if (totalOrderValue >= FREE_SHIPPING_THRESHOLD) {
+            int discount = Math.min(baseShippingFee, MAX_SHIPPING_DISCOUNT);
+            return baseShippingFee - discount;
+        }
+
+        return baseShippingFee;
+    }
+    private int calculateBaseShippingFee(double weight,String province) {
+        boolean isUrbanArea = URBAN_PROVINCES.contains(province);
+
+        if (isUrbanArea) {
+            if (weight <= INITIAL_WEIGHT_ROOT) {
+                return INITIAL_FEE_URBAN;
+            }
+            double extraWeight = weight - INITIAL_WEIGHT_ROOT;
+            int additionalFee = (int) Math.ceil(extraWeight / INITIAL_WEIGHT_EXTRA) * ADDITIONAL_FEE_PER_WEIGHT;
+            return INITIAL_FEE_URBAN + additionalFee;
+        } else {
+            if (weight <= INITIAL_WEIGHT_ROOT) {
+                return INITIAL_FEE_RURAL;
+            }
+            double extraWeight = weight - INITIAL_WEIGHT_ROOT;
+            int additionalFee = (int) Math.ceil(extraWeight / INITIAL_WEIGHT_EXTRA) * ADDITIONAL_FEE_PER_WEIGHT;
+            return INITIAL_FEE_RURAL + additionalFee;
+        }
     }
 
     public List<Order> getOrder(User user) {

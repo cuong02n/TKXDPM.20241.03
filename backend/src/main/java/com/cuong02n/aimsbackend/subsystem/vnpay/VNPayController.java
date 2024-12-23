@@ -41,7 +41,7 @@ public class VNPayController {
     }
 
     @GetMapping("/vnpay-status")
-    public ResponseEntity<?>  payStatus() {
+    public ResponseEntity<?>  payStatus(HttpServletRequest request) {
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
