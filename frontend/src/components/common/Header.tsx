@@ -1,17 +1,25 @@
 // components/layout/Header.tsx
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link để tạo các liên kết
+import { Link, useNavigate } from "react-router-dom"; // Import Link để tạo các liên kết
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store.ts"; // Import RootState của bạn từ Redux store
+import { ShoppingBag } from "lucide-react";
 
 const Header = () => {
   // Lấy thông tin người dùng từ Redux store
   const user = useSelector((state: RootState) => state.auth.user);
+  const navigate = useNavigate();
 
   return (
     <header className="bg-blue-500 text-white p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">AIMS Store</h1>
+        <div
+          className="flex gap-3 cursor-pointer"
+          onClick={() => navigate("/")}
+        >
+          <ShoppingBag className="w-8 h-8" />
+          <h1 className="text-2xl font-bold">AIMS Store</h1>
+        </div>
         <nav>
           <ul className="flex space-x-4">
             <li>
