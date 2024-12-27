@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store.ts";
 import { setInitialOrder } from "../../store/oneOrderSlice.ts";
 import { setInvoiceInfo } from "../../store/invoiceSlice.ts";
+import CancelOrder from "../../cancel-order/CancelOrder.tsx";
 
 type Props = {};
 
@@ -108,6 +109,9 @@ const PaymentSuccess = (props: Props) => {
             </div>
           </div>
         )}
+      </div>
+      <div className="w-full flex justify-center mt-8">
+        <CancelOrder />
       </div>
     </div>
   );
