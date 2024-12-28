@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.config;
 
 import com.cuong02n.aimsbackend.model.dto.response.OrderDto;
+import com.cuong02n.aimsbackend.model.dto.response.OrderProductDto;
 import com.cuong02n.aimsbackend.model.entity.Order;
 import com.cuong02n.aimsbackend.model.entity.OrderProduct;
 import jakarta.annotation.PostConstruct;
@@ -15,9 +16,10 @@ public class MapperConfig {
 
     @PostConstruct
     public void addOrderMapper() {
-        modelMapper
-                .typeMap(Order.class, OrderDto.class)
-                .addMapping(Order::getOrderProducts,OrderDto::setOrderProductDtos);
-        // TODO
+        modelMapper.getConfiguration().setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+//        modelMapper.typeMap(Order.class, OrderDto.class).addMappings(map -> {
+//            map.map(Order::getOrderProducts, OrderDto::setOrderProductDtos); // Ánh xạ danh sách
+//        });
+//        modelMapper.typeMap(OrderProduct.class, OrderProductDto.class);
     }
 }

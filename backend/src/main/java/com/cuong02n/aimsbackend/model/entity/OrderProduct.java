@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderProduct {
+public class OrderProduct extends BaseEntity{
     @EmbeddedId
     private OrderProductKey key;
 

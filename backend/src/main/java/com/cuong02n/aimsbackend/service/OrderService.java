@@ -4,6 +4,8 @@ import com.cuong02n.aimsbackend.exception.GeneralException;
 import com.cuong02n.aimsbackend.model.entity.*;
 import com.cuong02n.aimsbackend.repository.InvoiceRepository;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
+import jakarta.servlet.ServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OrderService {
 
-    private final OrderRepository orderRepository;
-    private final CartService cartService;
-    private final InvoiceRepository invoiceRepository;
     private static final int FREE_SHIPPING_THRESHOLD = 100000;
     private static final int MAX_SHIPPING_DISCOUNT = 25000;
     private static final int RUSH_SHIPPING_FEE = 10000;
@@ -28,6 +27,10 @@ public class OrderService {
     private static final int INITIAL_FEE_RURAL = 30000;
     private static final int ADDITIONAL_FEE_PER_WEIGHT = 2500;
     private static final Set<String> URBAN_PROVINCES = Set.of("Hà Nội", "Hồ Chí Minh");
+    private final OrderRepository orderRepository;
+    private final CartService cartService;
+    private final InvoiceRepository invoiceRepository;
+    private final ServletRequest httpServletRequest;
 
     public Invoice placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
@@ -42,6 +45,27 @@ public class OrderService {
         checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
         checkOrderNotPaidExist(user);
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
+    }
+
+    @Transactional
+    public void deleteOrder(long orderId) {
+        // check user is owner of this order
+        if (orderRepository.findAllByUserAndOrderId((User) httpServletRequest.getAttribute("user"), orderId).isEmpty()) {
+            throw new GeneralException("You not have permission of modifying this order or it may not exists");
+        }
+
+        // check invoice is paid
+        if (isInvoicePaid(orderId)) {
+            throw new GeneralException("The invoice is paid, you cannot delete this order");
+        }
+        // delete invoice
+        invoiceRepository.deleteById(orderId);
+        orderRepository.deleteById(orderId);
+    }
+
+    private boolean isInvoicePaid(long orderId) {
+        Invoice i = invoiceRepository.findById(orderId).orElseThrow();
+        return i.isPaid();
     }
 
     private Invoice createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
@@ -88,7 +112,7 @@ public class OrderService {
         int shippingFee = calculateShippingFee(order);
         int totalAmountWithoutVAT = order.getOrderProducts().stream().mapToInt(o -> o.getProduct().getPrice() * o.getQuantity()).sum();
         int totalAmountIncludeVAT = (int) (1.1 * totalAmountWithoutVAT);
-        int finalTotalAmount = shippingFee+totalAmountIncludeVAT;
+        int finalTotalAmount = shippingFee + totalAmountIncludeVAT;
 
         Invoice invoice = new Invoice();
         invoice.setOrder(order);
@@ -128,7 +152,8 @@ public class OrderService {
 
         return baseShippingFee;
     }
-    private int calculateBaseShippingFee(double weight,String province) {
+
+    private int calculateBaseShippingFee(double weight, String province) {
         boolean isUrbanArea = URBAN_PROVINCES.contains(province);
 
         if (isUrbanArea) {

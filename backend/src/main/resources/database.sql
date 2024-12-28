@@ -34,25 +34,28 @@ CREATE TABLE IF NOT EXISTS `favorite_product_user` (
 -- Dumping data for table aims.favorite_product_user: ~2 rows (approximately)
 DELETE FROM `favorite_product_user`;
 INSERT INTO `favorite_product_user` (`created_time`, `updated_time`, `product_id`, `user_email`) VALUES
+                                                                                                     ('2024-12-19 23:50:17.000000', '2024-12-19 23:50:17.000000', 1, 'cuong02n@gmail.com'),
                                                                                                      ('2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 1, 'john.doe@example.com'),
-                                                                                                     ('2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 2, 'alice.smith@example.com');
+                                                                                                     ('2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 2, 'alice.smith@example.com'),
+                                                                                                     ('2024-12-21 23:07:29.240857', '2024-12-21 23:07:29.240857', 2, 'cuong02n@gmail.com'),
+                                                                                                     ('2024-12-21 23:10:43.320134', '2024-12-21 23:10:43.320134', 3, 'cuong02n@gmail.com');
 
 -- Dumping structure for table aims.invoice
 CREATE TABLE IF NOT EXISTS `invoice` (
                                          `order_id` bigint NOT NULL,
                                          `created_time` datetime(6) DEFAULT NULL,
     `updated_time` datetime(6) DEFAULT NULL,
+    `is_paid` bit(1) NOT NULL,
     `shipping_fee` bigint NOT NULL,
-    `total_amount` bigint NOT NULL,
+    `total_amount_include_shipping_fee` bigint NOT NULL,
+    `total_amount_includevat` bigint NOT NULL,
+    `total_amount_withoutvat` bigint NOT NULL,
     PRIMARY KEY (`order_id`),
     CONSTRAINT `FKr27vrfyll0shs80upv1rmctie` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.invoice: ~2 rows (approximately)
+-- Dumping data for table aims.invoice: ~0 rows (approximately)
 DELETE FROM `invoice`;
-INSERT INTO `invoice` (`order_id`, `created_time`, `updated_time`, `shipping_fee`, `total_amount`) VALUES
-                                                                                                       (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 5000, 35000),
-                                                                                                       (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 7000, 47000);
 
 -- Dumping structure for table aims.order
 CREATE TABLE IF NOT EXISTS `order` (
@@ -60,23 +63,22 @@ CREATE TABLE IF NOT EXISTS `order` (
                                        `created_time` datetime(6) DEFAULT NULL,
     `updated_time` datetime(6) DEFAULT NULL,
     `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-    `is_paid` bit(1) NOT NULL,
     `is_rush` bit(1) NOT NULL,
     `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `province` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `shipping_instruction` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `time_in_minute` int NOT NULL,
-    `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `user_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     PRIMARY KEY (`order_id`),
-    KEY `FKcpl0mjoeqhxvgeeeq5piwpd3i` (`user_id`),
-    CONSTRAINT `FKcpl0mjoeqhxvgeeeq5piwpd3i` FOREIGN KEY (`user_id`) REFERENCES `user` (`email`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    KEY `FKcpl0mjoeqhxvgeeeq5piwpd3i` (`user_email`) USING BTREE,
+    CONSTRAINT `FKcpl0mjoeqhxvgeeeq5piwpd3i` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.order: ~2 rows (approximately)
+-- Dumping data for table aims.order: ~3 rows (approximately)
 DELETE FROM `order`;
-INSERT INTO `order` (`order_id`, `created_time`, `updated_time`, `address`, `is_paid`, `is_rush`, `phone`, `province`, `shipping_instruction`, `time_in_minute`, `user_id`) VALUES
-                                                                                                                                                                                (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '123 Main St, City, Country', b'1', b'0', '123-456-7890', 'Province A', 'Leave at door', 30, 'john.doe@example.com'),
-                                                                                                                                                                                (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '456 Side St, Town, Country', b'0', b'1', '098-765-4321', 'Province B', 'Call upon arrival', 45, 'alice.smith@example.com');
+INSERT INTO `order` (`order_id`, `created_time`, `updated_time`, `address`, `is_rush`, `phone`, `province`, `shipping_instruction`, `time_in_minute`, `user_email`) VALUES
+                                                                                                                                                                        (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '123 Main St, City, Country', b'0', '123-456-7890', 'Province A', 'Leave at door', 30, 'john.doe@example.com'),
+                                                                                                                                                                        (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '456 Side St, Town, Country', b'1', '098-765-4321', 'Province B', 'Call upon arrival', 45, 'alice.smith@example.com');
 
 -- Dumping structure for table aims.order_product
 CREATE TABLE IF NOT EXISTS `order_product` (
@@ -91,9 +93,6 @@ CREATE TABLE IF NOT EXISTS `order_product` (
 
 -- Dumping data for table aims.order_product: ~2 rows (approximately)
 DELETE FROM `order_product`;
-INSERT INTO `order_product` (`quantity`, `order_id`, `product_id`) VALUES
-                                                                       (2, 1, 1),
-                                                                       (1, 2, 2);
 
 -- Dumping structure for table aims.product
 CREATE TABLE IF NOT EXISTS `product` (
@@ -106,15 +105,16 @@ CREATE TABLE IF NOT EXISTS `product` (
     `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `price` int NOT NULL,
+    `weight` double NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table aims.product: ~3 rows (approximately)
 DELETE FROM `product`;
-INSERT INTO `product` (`id`, `created_time`, `updated_time`, `additional_data`, `available`, `category`, `description`, `name`, `price`) VALUES
-                                                                                                                                             (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "M", "color": "red"}', 100, 'BOOK', 'A thrilling mystery novel', 'Mystery Book', 15000),
-                                                                                                                                             (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "L", "color": "blue"}', 50, 'CD', 'Pop music album', 'Pop Hits 2024', 20000),
-                                                                                                                                             (3, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "XL", "color": "black"}', 200, 'DVD', 'Action movie DVD', 'Action Movie', 25000);
+INSERT INTO `product` (`id`, `created_time`, `updated_time`, `additional_data`, `available`, `category`, `description`, `name`, `price`, `weight`) VALUES
+                                                                                                                                                       (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "M", "color": "red"}', 100, 'BOOK', 'A thrilling mystery novel', 'Mystery Book', 15000, 0),
+                                                                                                                                                       (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "L", "color": "blue"}', 50, 'CD', 'Pop music album', 'Pop Hits 2024', 20000, 0),
+                                                                                                                                                       (3, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "XL", "color": "black"}', 200, 'DVD', 'Action movie DVD', 'Action Movie', 25000, 0);
 
 -- Dumping structure for table aims.product_cart
 CREATE TABLE IF NOT EXISTS `product_cart` (
@@ -129,11 +129,15 @@ CREATE TABLE IF NOT EXISTS `product_cart` (
     CONSTRAINT `FKibe7bwwc2pyukh9pm7mbrcp7y` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.product_cart: ~1 rows (approximately)
+-- Dumping data for table aims.product_cart: ~4 rows (approximately)
 DELETE FROM `product_cart`;
 INSERT INTO `product_cart` (`created_time`, `updated_time`, `quantity`, `product_id`, `user_email`) VALUES
                                                                                                         ('2024-12-19 23:34:50.000000', '2024-12-19 23:34:50.000000', 1, 1, 'cuong02n@gmail.com'),
-                                                                                                        ('2024-12-19 23:44:14.296964', '2024-12-19 23:44:14.296964', 2, 2, 'cuong02n@gmail.com');
+                                                                                                        ('2024-12-20 09:33:14.178395', '2024-12-20 09:33:14.178395', 1, 1, 'sveta311069@bankinnepal.com'),
+                                                                                                        ('2024-12-19 23:44:14.296964', '2024-12-19 23:44:14.296964', 2, 2, 'cuong02n@gmail.com'),
+                                                                                                        ('2024-12-20 09:42:24.955568', '2024-12-20 09:42:24.955568', 6, 2, 'sveta311069@bankinnepal.com'),
+                                                                                                        ('2024-12-21 23:07:40.579670', '2024-12-21 23:07:40.579670', 1, 3, 'cuong02n@gmail.com'),
+                                                                                                        ('2024-12-20 09:45:28.831874', '2024-12-20 09:45:28.831874', 2, 3, 'sveta311069@bankinnepal.com');
 
 -- Dumping structure for table aims.product_media_urls
 CREATE TABLE IF NOT EXISTS `product_media_urls` (
@@ -200,18 +204,15 @@ CREATE TABLE IF NOT EXISTS `transaction_info` (
                                                   `invoice_id` bigint NOT NULL,
                                                   `created_time` datetime(6) DEFAULT NULL,
     `updated_time` datetime(6) DEFAULT NULL,
-    `transaction_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-    `transaction_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `transaction_id` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+    `transaction_message` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
     `transaction_time` datetime(6) DEFAULT NULL,
     PRIMARY KEY (`invoice_id`),
     CONSTRAINT `FKq5i7p9l0qnjjfms1iy1d16aq` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`order_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.transaction_info: ~2 rows (approximately)
+-- Dumping data for table aims.transaction_info: ~0 rows (approximately)
 DELETE FROM `transaction_info`;
-INSERT INTO `transaction_info` (`invoice_id`, `created_time`, `updated_time`, `transaction_id`, `transaction_message`, `transaction_time`) VALUES
-                                                                                                                                               (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 'txn12345', 'Payment Successful', '2024-12-17 13:39:02.000000'),
-                                                                                                                                               (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', 'txn67890', 'Payment Failed', '2024-12-17 13:39:02.000000');
 
 -- Dumping structure for table aims.user
 CREATE TABLE IF NOT EXISTS `user` (
@@ -225,13 +226,15 @@ CREATE TABLE IF NOT EXISTS `user` (
     PRIMARY KEY (`email`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.user: ~4 rows (approximately)
+-- Dumping data for table aims.user: ~6 rows (approximately)
 DELETE FROM `user`;
 INSERT INTO `user` (`email`, `created_time`, `updated_time`, `active`, `name`, `password`, `role`) VALUES
                                                                                                        ('admin@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'Admin', 'adminpassword', 'ADMIN'),
                                                                                                        ('alice.smith@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'Alice Smith', 'alicepassword', 'PRODUCT_MANAGER'),
                                                                                                        ('cuong02n@gmail.com', '2024-12-19 18:41:49.390647', '2024-12-19 18:41:49.390647', b'1', 'nguyenmanhcuong', '$2a$10$oJ.swwXTYwLJk8msQfgNYOhvqG9Pgck0UrVvyK/QHPRNVAmlBuHyi', 'CUSTOMER'),
-                                                                                                       ('john.doe@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'John Doe', 'password123', 'CUSTOMER');
+                                                                                                       ('john.doe@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'John Doe', 'password123', 'CUSTOMER'),
+                                                                                                       ('matt25310@thaitudang.xyz', '2024-12-21 22:56:13.730397', '2024-12-21 22:56:13.730397', b'1', 'meoVch1', '$2a$10$6sRvwBJrttc7YmBiXD7ckeCNsSRlRZ7HuyTRCuntZoy/07abJWzI.', 'CUSTOMER'),
+                                                                                                       ('sveta311069@bankinnepal.com', '2024-12-20 09:27:40.037736', '2024-12-20 09:30:32.080777', b'1', 'meoVch1', '$2a$10$A6oii4o9ewmWSOkSENMAmertGz3AfWu3c7Ie2JwZPk9pu2eEjVCF.', 'CUSTOMER');
 
 -- Dumping structure for table aims.user_cart
 CREATE TABLE IF NOT EXISTS `user_cart` (
