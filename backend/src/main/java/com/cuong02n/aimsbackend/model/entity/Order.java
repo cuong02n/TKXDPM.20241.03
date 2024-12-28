@@ -16,7 +16,7 @@ public class Order extends BaseEntity {
     Long orderId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_email")
     @Setter
     User user;
 

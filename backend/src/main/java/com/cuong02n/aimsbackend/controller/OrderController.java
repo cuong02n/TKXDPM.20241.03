@@ -65,6 +65,12 @@ public class OrderController {
         return BaseResponse.ok(modelMapper.map(invoice, InvoiceDto.class));
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteOrder(@RequestParam long orderId) {
+        orderService.deleteOrder(orderId);
+        return BaseResponse.okMessage("Successfully delete order: " + orderId);
+    }
+
     @PostMapping("/pay-order")
     public ResponseEntity<?> payOrder() {
         return null;
