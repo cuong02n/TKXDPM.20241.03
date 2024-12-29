@@ -5,8 +5,8 @@ import { formatCurrency } from "../../utils/format.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store.ts";
 import { setInitialOrder } from "../../store/oneOrderSlice.ts";
-import { setInvoiceInfo } from "../../store/invoiceSlice.ts";
 import CancelOrder from "../../cancel-order/CancelOrder.tsx";
+import { setInitialInvoice } from "../../store/invoiceSlice.ts";
 
 type Props = {};
 
@@ -25,7 +25,7 @@ const PaymentSuccess = (props: Props) => {
     } else {
       console.log("Payment Failed");
     }
-    dispatch(setInvoiceInfo);
+    dispatch(setInitialInvoice);
   }, []);
   return (
     <div className="container mx-auto py-10 min-h-screen">
@@ -111,7 +111,7 @@ const PaymentSuccess = (props: Props) => {
         )}
       </div>
       <div className="w-full flex justify-center mt-8">
-        <CancelOrder />
+        <CancelOrder orderId={Number(orderId)} />
       </div>
     </div>
   );

@@ -2,10 +2,13 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { useOneOrder } from "../hooks/useOneOrder.ts";
-import { setInvoiceInfo } from "../store/invoiceSlice.ts";
+import { setInitialInvoice } from "../store/invoiceSlice.ts";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import apiClient from "../../api/apiClient.ts";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -20,19 +23,30 @@ const style = {
   borderRadius: 8,
 };
 
-const CancelOrder = () => {
+const CancelOrder = ({ orderId }: { orderId?: number }) => {
+  const navigate = useNavigate();
   const invoice = useSelector((state: RootState) => state.invoice);
   const { resetOrder } = useOneOrder();
   const dispatch = useDispatch<AppDispatch>();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handlePayOrder = async () => {
+  const handleDeleteOrder = async () => {
     try {
-      resetOrder();
-      dispatch(setInvoiceInfo);
+      const res = await apiClient.delete(
+        `/order/delete?orderId=${orderId ? orderId : invoice.orderId}`
+      );
+      if (res && res.status === 200) {
+        console.log("ORDER CANCELED", res);
+        toast.success("Order canceled successfully");
+        resetOrder();
+        dispatch(setInitialInvoice);
+        handleClose();
+        navigate("/");
+      }
     } catch (err) {
       console.log("ERROR CANCELING ORDER", err);
+      toast.error("Error canceling order");
     }
   };
 
@@ -65,7 +79,7 @@ const CancelOrder = () => {
           </Typography>
           <div className="flex justify-center">
             <button
-              onClick={handlePayOrder}
+              onClick={handleDeleteOrder}
               className="w-48 mt-4 bg-rose-600 text-white py-3 rounded-lg hover:bg-gradient-to-r from-rose-900 to-rose-800 transition-colors duration-300 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Confirm cancel
