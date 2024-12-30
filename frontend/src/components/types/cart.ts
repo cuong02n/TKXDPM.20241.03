@@ -8,6 +8,7 @@ export interface CartItem {
   imageUrl: string; // Thêm trường imageUrl
   description: string; // Thêm trường description
   category: string; // Thêm trường category
+  isRush: boolean; // Thêm trường isRush
 }
 
 export interface CartState {

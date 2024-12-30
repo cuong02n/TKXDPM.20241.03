@@ -2,13 +2,15 @@ import React from "react";
 import { useSelector } from "react-redux";
 import CartProduct from "../../cart/CartProduct.tsx";
 import CartCost from "../../cart/CartCost.tsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { formatCurrency } from "../../utils/format.ts";
 import { useCart } from "../../hooks/useCart.ts";
 
 const Cart = () => {
   const cartItems = useSelector((state: any) => state.cart.items);
   const orderItems = useSelector((state: any) => state.oneOrder.items);
+  const location = useLocation();
+  const error = location.state?.error;
   const [rush, setRush] = React.useState<boolean>(false);
   const navigate = useNavigate();
   const { getCartItems } = useCart();
@@ -32,6 +34,9 @@ const Cart = () => {
     cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
   );
   const handlePlaceOrder = () => {
+    const hasRushItem = orderItems.some((item) => item.isRush === true);
+    localStorage.setItem("rush", JSON.stringify(hasRushItem));
+    setRush(hasRushItem);
     navigate("/delivery-info", { state: { rush } });
   };
   const handleSetRush = () => {
@@ -47,7 +52,7 @@ const Cart = () => {
         <div className="flex">
           <div className="w-1/2">
             {cartItems.map((item: any) => (
-              <CartProduct key={item.id} product={item} />
+              <CartProduct key={item.id} product={item} error={error} />
             ))}
             <div className="mt-3 flex justify-center">
               <p>
@@ -59,7 +64,7 @@ const Cart = () => {
           <div className="flex-1 pl-24 ">
             <CartCost />
             <div className="flex justify-end gap-8">
-              <button
+              {/* <button
                 disabled={orderItems.length === 0}
                 onClick={handleSetRush}
                 className={`
@@ -72,7 +77,7 @@ const Cart = () => {
                 `}
               >
                 RUSH
-              </button>
+              </button> */}
 
               <button
                 disabled={orderItems.length === 0}

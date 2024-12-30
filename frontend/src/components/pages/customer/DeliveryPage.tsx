@@ -21,15 +21,21 @@ const DeliveryPage = () => {
     updateDelivery(field, value.toString());
     // setDeliveryInfo({ ...deliveryInfo, [field]: value });
   };
-  const handlePlaceOrder = () => {
+
+  const handlePlaceOrder = async () => {
     if (checkInfoValid.current()) {
       setDelivery(deliveryInfo);
-      if (rush) {
-        placeOrderRush();
+      // if (rush) {
+      //   placeOrderRush();
+      // } else {
+      const res = await placeOrderNormal();
+      console.log("PLACE ORDER RESPONSE DELIVERYPAFE", res);
+      if (!res?.error) {
+        navigate("/checkout");
       } else {
-        placeOrderNormal();
+        console.log(res?.error);
+        navigate("/cart", { state: { error: res?.error } });
       }
-      navigate("/checkout");
     } else {
       toast.error("Please fill in all required fields.");
     }
@@ -48,9 +54,7 @@ const DeliveryPage = () => {
           onClick={handlePlaceOrder}
           className="w-48 mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-gradient-to-r from-blue-900 to-blue-800 transition-colors duration-300 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="text-xl drop-shadow-md">
-            {rush ? "Place rush order" : "Place order"}
-          </span>
+          <span className="text-xl drop-shadow-md">Place order</span>
         </button>
       </div>
     </div>

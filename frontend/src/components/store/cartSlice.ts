@@ -32,6 +32,13 @@ const cartSlice = createSlice({
         item.quantity = quantity;
       }
     },
+    setRush: (state, action: PayloadAction<{ id: string }>) => {
+      const { id } = action.payload;
+      const item = state.items.find((item) => item.id === id);
+      if (item) {
+        item.isRush = !item.isRush;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -61,5 +68,6 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateCartItem } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCartItem, setRush } =
+  cartSlice.actions;
 export default cartSlice.reducer;

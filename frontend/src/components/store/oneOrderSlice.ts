@@ -67,7 +67,22 @@ const oneOrderSlice = createSlice({
       state.deliveryInfo = info;
     },
     setInitialOrder: (state) => {
-      state = initialState;
+      return initialState;
+    },
+    setRushItem: (state, action: PayloadAction<{ id: string }>) => {
+      const { id } = action.payload;
+      const item = state.items.find((item) => item.id === id);
+      if (item) {
+        item.isRush = !item.isRush;
+      }
+    },
+    setNormal: (state) => {
+      state.items.forEach((item) => {
+        item.isRush = false;
+      });
+    },
+    resetProvince: (state) => {
+      state.deliveryInfo.province = "";
     },
   },
   extraReducers: (builder) => {
@@ -117,5 +132,8 @@ export const {
   updateOrderProduct,
   setDeliveryInfo,
   setInitialOrder,
+  setRushItem,
+  setNormal,
+  resetProvince,
 } = oneOrderSlice.actions;
 export default oneOrderSlice.reducer;

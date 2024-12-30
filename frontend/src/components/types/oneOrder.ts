@@ -5,6 +5,7 @@ export interface OneOrder {
   orderId: string;
   userId: string;
   items: CartItem[];
+
   totalAmount: number;
   shippingFee: number;
   deliveryInfo: DeliveryInformation;

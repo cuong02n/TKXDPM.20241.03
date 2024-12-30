@@ -10,6 +10,7 @@ const sampleProducts: CartItem[] = [
     quantity: 10,
     description: "temp",
     category: "book",
+    isRush: false,
   },
 ];
 
@@ -68,6 +69,7 @@ export const getCart = createAsyncThunk(
           quantity: each.quantity,
           description: each.product.description,
           category: each.product.category,
+          isRush: false,
         };
       });
       return products;

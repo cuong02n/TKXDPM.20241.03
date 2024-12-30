@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { formatCurrency } from "../../utils/format.ts";
 import PaymentMethod from "../../payment/PaymentMethod.tsx";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store.ts";
 import apiClient from "../../../api/apiClient.ts";
+import { useOneOrder } from "../../hooks/useOneOrder.ts";
 const PaymentPage = () => {
   const location = useLocation();
   // const { total } = location.state || { total: 0 };
   const invoice = useSelector((state: RootState) => state.invoice);
+  const { resetOrder } = useOneOrder();
   // const total = 100000;
   const total = invoice.total;
   const orderId = invoice.orderId;
