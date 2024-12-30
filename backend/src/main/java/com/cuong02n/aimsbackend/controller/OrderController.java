@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.controller;
 
 import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderRequest;
+import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderV2Request;
 import com.cuong02n.aimsbackend.model.dto.request.PlaceRushOrderRequest;
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.model.dto.response.InvoiceDto;
@@ -47,6 +48,15 @@ public class OrderController {
 
         return BaseResponse.ok(modelMapper.map(invoice, InvoiceDto.class));
     }
+
+    @PostMapping("/place-order-v2")
+    public ResponseEntity<?> placeOrderV2(
+            @RequestBody PlaceOrderV2Request request
+    ) {
+        var invoice = orderService.placeOrderV2((User) httpServletRequest.getAttribute("user"), request);
+        return BaseResponse.ok(modelMapper.map(invoice, InvoiceDto.class));
+    }
+
 
     @PostMapping("/place-rush-order")
     public ResponseEntity<?> placeRushOrder(
