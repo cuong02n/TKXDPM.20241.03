@@ -7,6 +7,7 @@ import InvoiceSummary from "../../invoice/InvoiceSummary.tsx";
 import InvoiceDelivery from "../../invoice/InvoiceDelivery.tsx";
 import { useNavigate } from "react-router-dom";
 import { useOneOrder } from "../../hooks/useOneOrder.ts";
+import CancelOrder from "../../cancel-order/CancelOrder.tsx";
 
 const CheckoutPage: React.FC = () => {
   const order = useSelector((state: RootState) => state.oneOrder);
@@ -85,7 +86,8 @@ const CheckoutPage: React.FC = () => {
       <div>
         <InvoiceDelivery delivery={deliveryInfo} />
       </div>
-      <div className="flex justify-end gap-8">
+      <div className="flex justify-between gap-8">
+        <CancelOrder />
         <button
           onClick={handlePlaceOrder}
           className="w-48 mt-4 bg-blue-600 text-white py-3 rounded-lg hover:bg-gradient-to-r from-blue-900 to-blue-800 transition-colors duration-300 font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed"
