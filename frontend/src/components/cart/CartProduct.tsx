@@ -6,20 +6,40 @@ import QuantitySetter from "../common/product-cart/QuantitySetter.tsx";
 import { useCart } from "../hooks/useCart.ts";
 import { useOneOrder } from "../hooks/useOneOrder.ts";
 
-const CartProduct = ({ product }: { product: CartItem }) => {
+const CartProduct = ({
+  product,
+  error,
+}: {
+  product: CartItem;
+  error?: string;
+}) => {
   const [selected, setSelected] = useState<boolean>(false);
+  const [orderR, setR] = useState<boolean>(false);
   const { removeItemFromCart, updateItemInCart } = useCart();
+  const [showError, setShowError] = useState(false);
   const {
     addProductToOrder,
     deleteProductFromOrder,
     updateProductInOrder,
     orderProducts,
+    updateRushItem,
   } = useOneOrder();
   useEffect(() => {
-    if (!!orderProducts.find((item) => item.id === product.id)) {
-      setSelected(true);
+    if (error && error == product.id) {
+      setShowError(true);
+      const timer = setTimeout(() => {
+        setShowError(false);
+      }, 2000);
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [error, product.id]);
+  useEffect(() => {
+    const item = orderProducts.find((item) => item.id === product.id);
+    if (item) {
+      setSelected(true);
+      setR(item.isRush);
+    }
+  }, [orderProducts, product.id]);
   const handleSelected = () => {
     if (!selected) {
       addProductToOrder(product);
@@ -48,11 +68,15 @@ const CartProduct = ({ product }: { product: CartItem }) => {
       }
     }
   };
+  const handleSetRush = () => {
+    updateRushItem(product.id);
+    setR((prev) => !prev);
+  };
   return (
     <div
       className={`border rounded-2xl p-4 mb-2 flex justify-between cursor-pointer ${
-        selected && "border-2 border-blue-500 bg-blue-50"
-      }`}
+        selected && !showError && "border-2 border-blue-500 bg-blue-50"
+      } ${showError && "border-2 border-red-500 bg-red-50"}`}
       onClick={handleSelected}
     >
       <div className="flex gap-4">
@@ -93,6 +117,21 @@ const CartProduct = ({ product }: { product: CartItem }) => {
           </button>
         </div>
       </div>
+      {selected && (
+        <div
+          className={`border-2  self-center p-2 rounded-lg font-bold cursor-pointer ${
+            orderR
+              ? "border-orange-600 bg-yellow-100 text-orange-500"
+              : "border-zinc-500 bg-white text-zinc-500"
+          }`}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSetRush();
+          }}
+        >
+          Rush
+        </div>
+      )}
     </div>
   );
 };

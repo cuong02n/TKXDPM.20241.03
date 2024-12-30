@@ -3,6 +3,7 @@ import { AppDispatch, RootState } from "../store/store";
 import {
   addToCart,
   removeFromCart,
+  setRush,
   updateCartItem,
 } from "../store/cartSlice.ts";
 import { addCartItem, getCart } from "../store/thunk/cartThunk.ts";
@@ -28,6 +29,9 @@ export const useCart = () => {
   const updateItemInCart = (id: string, quantity: number) => {
     dispatch(updateCartItem({ id, quantity }));
   };
+  const updateRushItemCart = (id: string) => {
+    dispatch(setRush({ id }));
+  };
 
   return {
     cartItems,
@@ -35,5 +39,6 @@ export const useCart = () => {
     removeItemFromCart,
     updateItemInCart,
     getCartItems,
+    updateRushItemCart,
   };
 };

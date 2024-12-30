@@ -58,7 +58,7 @@ const invoiceSlice = createSlice({
       state.orderId = orderId;
     },
     setInitialInvoice: (state) => {
-      state = initialState;
+      return initialState;
     },
   },
 });

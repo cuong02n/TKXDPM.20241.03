@@ -8,4 +8,5 @@ export interface Product {
   category: ProductCategory; // Loại sản phẩm có thể là "book", "cd", hoặc "dvd"
   imageUrl: string;
   quantity: number;
+  isRush?: boolean;
 }

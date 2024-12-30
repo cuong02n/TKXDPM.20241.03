@@ -2,6 +2,8 @@ import React from "react";
 import { DeliveryInformation } from "../types/deliveryInfo";
 
 const InvoiceDelivery = ({ delivery }: { delivery: DeliveryInformation }) => {
+  const rush = localStorage.getItem("rush");
+  const isRush = rush ? JSON.parse(rush) : false;
   return (
     <div>
       <div className="flex">
@@ -24,7 +26,7 @@ const InvoiceDelivery = ({ delivery }: { delivery: DeliveryInformation }) => {
         <p className="w-40">Delivery instructions</p>
         <p>: {delivery.instructions}</p>
       </div>
-      {delivery.time && (
+      {delivery.time && isRush && (
         <div className="flex">
           <p className="w-40">Delivery time</p>
           <p>: {delivery.time}</p>

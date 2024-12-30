@@ -3,6 +3,7 @@ import { DeliveryInformation } from "../types/deliveryInfo.ts";
 import Select from "./Select.tsx";
 import { provinces } from "../constants/provinces.ts";
 import DeliveryDateTimePicker from "./DateTimePicker.tsx";
+import { toast } from "react-toastify";
 
 const DeliveryInfo = ({
   deliveryInfo,
@@ -16,7 +17,9 @@ const DeliveryInfo = ({
   checkInfo: React.MutableRefObject<() => boolean>;
 }) => {
   const [selectedProvince, setSelectedProvince] = React.useState(
-    deliveryInfo.province || null
+    deliveryInfo.province
+      ? { label: deliveryInfo.province, value: deliveryInfo.province }
+      : null
   );
 
   const [isValid, setIsValid] = React.useState({
@@ -25,6 +28,16 @@ const DeliveryInfo = ({
     province: true,
     address: true,
   });
+  React.useEffect(() => {
+    if (hasRush) {
+      updateInfo("province", "Hà Nội");
+      setSelectedProvince({ label: "Hà Nội", value: "Hà Nội" });
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (deliveryInfo.province === "") setSelectedProvince(null);
+  }, [deliveryInfo]);
 
   React.useEffect(() => {
     checkInfo.current = checkInfoValid;
@@ -49,6 +62,10 @@ const DeliveryInfo = ({
   const handleProvinceChange = (value) => {
     setSelectedProvince(value);
     updateInfo("province", value.value.name);
+    if (hasRush && value.value.name !== "Hà Nội") {
+      toast.error("Rush order is only available in Hà Nội!");
+      updateInfo("province", "");
+    }
     // console.log(value.value.name);
   };
   return (

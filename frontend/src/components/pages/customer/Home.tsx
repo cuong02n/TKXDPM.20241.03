@@ -3,9 +3,11 @@ import ProductGrid from "../../product/ProductGrid.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store.ts";
 import { fetchProducts } from "../../store/thunk/productThunk.ts";
+import { useOneOrder } from "../../hooks/useOneOrder.ts";
 
 const Home = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { resetOrder } = useOneOrder();
   const { items, loading, error } = useSelector(
     (state: RootState) => state.product
   );
@@ -22,6 +24,9 @@ const Home = () => {
       )
     );
   }, [items, searchQuery]);
+  useEffect(() => {
+    resetOrder();
+  }, []);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);

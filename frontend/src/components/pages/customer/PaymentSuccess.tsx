@@ -21,11 +21,11 @@ const PaymentSuccess = (props: Props) => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (status && +status === 1) {
-      dispatch(setInitialOrder);
+      dispatch(setInitialOrder());
     } else {
       console.log("Payment Failed");
     }
-    dispatch(setInitialInvoice);
+    dispatch(setInitialInvoice());
   }, []);
   return (
     <div className="container mx-auto py-10 min-h-screen">

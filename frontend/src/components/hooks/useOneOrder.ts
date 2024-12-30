@@ -3,8 +3,11 @@ import { AppDispatch, RootState } from "../store/store";
 import {
   addOrderProduct,
   deleteOrderProduct,
+  resetProvince,
   setDeliveryInfo,
   setInitialOrder,
+  setNormal,
+  setRushItem,
   updateOrderProduct,
 } from "../store/oneOrderSlice.ts";
 import { CartItem } from "../types/cart";
@@ -25,14 +28,20 @@ export const useOneOrder = () => {
 
   const placeOrderNormal = async () => {
     const data = {
-      productIds: orderProducts.map((item) => Number(item.id)),
+      listProductRush: orderProducts
+        .filter((item) => item.isRush)
+        .map((item) => Number(item.id)),
+      listProductNoRush: orderProducts
+        .filter((item) => !item.isRush)
+        .map((item) => Number(item.id)),
       address: deliveryInfo.address,
       phone: deliveryInfo.phone,
       province: deliveryInfo.province,
       shippingInstruction: deliveryInfo.instructions,
+      timeInMinutes: 120,
     };
     try {
-      const response = await apiClient.post("/order/place-order", data);
+      const response = await apiClient.post("/order/place-order-v2", data);
       console.log("PLACE ORDER RESPONSE", response.data.data);
       const inp = response.data.data;
       const info = {
@@ -45,6 +54,12 @@ export const useOneOrder = () => {
       dispatch(setInvoiceInfo(info));
     } catch (error) {
       toast.error(error.response?.data || "Error placing order");
+      const match = error.response?.data?.message.match(
+        /^This product currently not support rush: (\d+)$/
+      );
+      if (match) {
+        return { error: match[1] };
+      }
     }
   };
 
@@ -74,6 +89,18 @@ export const useOneOrder = () => {
     }
   };
 
+  const setNullProvince = () => {
+    dispatch(resetProvince());
+  };
+
+  const resetNoRush = () => {
+    dispatch(setNormal());
+  };
+
+  const updateRushItem = (id: string) => {
+    dispatch(setRushItem({ id }));
+  };
+
   const addProductToOrder = (item: CartItem) => {
     dispatch(addOrderProduct({ item }));
   };
@@ -100,5 +127,8 @@ export const useOneOrder = () => {
     placeOrderRush,
     getMyOrders,
     resetOrder,
+    updateRushItem,
+    resetNoRush,
+    setNullProvince,
   };
 };
