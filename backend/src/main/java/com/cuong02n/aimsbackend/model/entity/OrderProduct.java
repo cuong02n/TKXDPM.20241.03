@@ -24,6 +24,9 @@ public class OrderProduct extends BaseEntity{
     private Order order;
     @Getter
     int quantity;
+
+    private boolean isRush = false;
+
     @Embeddable
     @Data
     @AllArgsConstructor

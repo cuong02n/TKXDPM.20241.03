@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `favorite_product_user` (
     CONSTRAINT `FK5naqqahk6kxmm3cjynn24ounm` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.favorite_product_user: ~2 rows (approximately)
+-- Dumping data for table aims.favorite_product_user: ~5 rows (approximately)
 DELETE FROM `favorite_product_user`;
 INSERT INTO `favorite_product_user` (`created_time`, `updated_time`, `product_id`, `user_email`) VALUES
                                                                                                      ('2024-12-19 23:50:17.000000', '2024-12-19 23:50:17.000000', 1, 'cuong02n@gmail.com'),
@@ -72,9 +72,9 @@ CREATE TABLE IF NOT EXISTS `order` (
     PRIMARY KEY (`order_id`),
     KEY `FKcpl0mjoeqhxvgeeeq5piwpd3i` (`user_email`) USING BTREE,
     CONSTRAINT `FKcpl0mjoeqhxvgeeeq5piwpd3i` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`)
-    ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.order: ~3 rows (approximately)
+-- Dumping data for table aims.order: ~2 rows (approximately)
 DELETE FROM `order`;
 INSERT INTO `order` (`order_id`, `created_time`, `updated_time`, `address`, `is_rush`, `phone`, `province`, `shipping_instruction`, `time_in_minute`, `user_email`) VALUES
                                                                                                                                                                         (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '123 Main St, City, Country', b'0', '123-456-7890', 'Province A', 'Leave at door', 30, 'john.doe@example.com'),
@@ -85,13 +85,16 @@ CREATE TABLE IF NOT EXISTS `order_product` (
                                                `quantity` int NOT NULL,
                                                `order_id` bigint NOT NULL,
                                                `product_id` bigint NOT NULL,
-                                               PRIMARY KEY (`order_id`,`product_id`),
+                                               `created_time` datetime(6) DEFAULT NULL,
+    `updated_time` datetime(6) DEFAULT NULL,
+    `is_rush` bit(1) NOT NULL,
+    PRIMARY KEY (`order_id`,`product_id`),
     KEY `FKhnfgqyjx3i80qoymrssls3kno` (`product_id`),
     CONSTRAINT `FKhnfgqyjx3i80qoymrssls3kno` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
     CONSTRAINT `FKm6igrp4lwucj1me05axmv885c` FOREIGN KEY (`order_id`) REFERENCES `order` (`order_id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.order_product: ~2 rows (approximately)
+-- Dumping data for table aims.order_product: ~0 rows (approximately)
 DELETE FROM `order_product`;
 
 -- Dumping structure for table aims.product
@@ -106,15 +109,16 @@ CREATE TABLE IF NOT EXISTS `product` (
     `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
     `price` int NOT NULL,
     `weight` double NOT NULL,
+    `is_supported_rush` bit(1) NOT NULL,
     PRIMARY KEY (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Dumping data for table aims.product: ~3 rows (approximately)
 DELETE FROM `product`;
-INSERT INTO `product` (`id`, `created_time`, `updated_time`, `additional_data`, `available`, `category`, `description`, `name`, `price`, `weight`) VALUES
-                                                                                                                                                       (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "M", "color": "red"}', 100, 'BOOK', 'A thrilling mystery novel', 'Mystery Book', 15000, 0),
-                                                                                                                                                       (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "L", "color": "blue"}', 50, 'CD', 'Pop music album', 'Pop Hits 2024', 20000, 0),
-                                                                                                                                                       (3, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "XL", "color": "black"}', 200, 'DVD', 'Action movie DVD', 'Action Movie', 25000, 0);
+INSERT INTO `product` (`id`, `created_time`, `updated_time`, `additional_data`, `available`, `category`, `description`, `name`, `price`, `weight`, `is_supported_rush`) VALUES
+                                                                                                                                                                            (1, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "M", "color": "red"}', 100, 'BOOK', 'A thrilling mystery novel', 'Mystery Book', 15000, 0, b'0'),
+                                                                                                                                                                            (2, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "L", "color": "blue"}', 50, 'CD', 'Pop music album', 'Pop Hits 2024', 20000, 0, b'1'),
+                                                                                                                                                                            (3, '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', '{"size": "XL", "color": "black"}', 200, 'DVD', 'Action movie DVD', 'Action Movie', 25000, 0, b'0');
 
 -- Dumping structure for table aims.product_cart
 CREATE TABLE IF NOT EXISTS `product_cart` (
@@ -123,21 +127,25 @@ CREATE TABLE IF NOT EXISTS `product_cart` (
     `quantity` int NOT NULL,
     `product_id` bigint NOT NULL,
     `user_email` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+    `is_rush` int DEFAULT NULL,
     PRIMARY KEY (`product_id`,`user_email`),
     KEY `FKibe7bwwc2pyukh9pm7mbrcp7y` (`user_email`),
     CONSTRAINT `FKhpnrxdy3jhujameyod08ilvvw` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
     CONSTRAINT `FKibe7bwwc2pyukh9pm7mbrcp7y` FOREIGN KEY (`user_email`) REFERENCES `user` (`email`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dumping data for table aims.product_cart: ~4 rows (approximately)
+-- Dumping data for table aims.product_cart: ~8 rows (approximately)
 DELETE FROM `product_cart`;
-INSERT INTO `product_cart` (`created_time`, `updated_time`, `quantity`, `product_id`, `user_email`) VALUES
-                                                                                                        ('2024-12-19 23:34:50.000000', '2024-12-19 23:34:50.000000', 1, 1, 'cuong02n@gmail.com'),
-                                                                                                        ('2024-12-20 09:33:14.178395', '2024-12-20 09:33:14.178395', 1, 1, 'sveta311069@bankinnepal.com'),
-                                                                                                        ('2024-12-19 23:44:14.296964', '2024-12-19 23:44:14.296964', 2, 2, 'cuong02n@gmail.com'),
-                                                                                                        ('2024-12-20 09:42:24.955568', '2024-12-20 09:42:24.955568', 6, 2, 'sveta311069@bankinnepal.com'),
-                                                                                                        ('2024-12-21 23:07:40.579670', '2024-12-21 23:07:40.579670', 1, 3, 'cuong02n@gmail.com'),
-                                                                                                        ('2024-12-20 09:45:28.831874', '2024-12-20 09:45:28.831874', 2, 3, 'sveta311069@bankinnepal.com');
+INSERT INTO `product_cart` (`created_time`, `updated_time`, `quantity`, `product_id`, `user_email`, `is_rush`) VALUES
+                                                                                                                   ('2024-12-21 23:07:40.579670', '2024-12-21 23:07:40.579670', 1, 1, 'cuong02n@gmail.com', NULL),
+                                                                                                                   ('2024-12-30 17:03:07.409800', '2024-12-30 17:03:07.409800', 1, 1, 'guest@guest.com', NULL),
+                                                                                                                   ('2024-12-20 09:33:14.178395', '2024-12-20 09:33:14.178395', 1, 1, 'sveta311069@bankinnepal.com', NULL),
+                                                                                                                   ('2024-12-21 23:07:40.579670', '2024-12-21 23:07:40.579670', 1, 2, 'cuong02n@gmail.com', NULL),
+                                                                                                                   ('2024-12-30 16:17:24.002908', '2024-12-30 16:17:24.002908', 1, 2, 'guest@guest.com', NULL),
+                                                                                                                   ('2024-12-20 09:42:24.955568', '2024-12-20 09:42:24.955568', 6, 2, 'sveta311069@bankinnepal.com', NULL),
+                                                                                                                   ('2024-12-21 23:07:40.579670', '2024-12-21 23:07:40.579670', 1, 3, 'cuong02n@gmail.com', NULL),
+                                                                                                                   ('2024-12-30 16:17:30.725814', '2024-12-30 16:17:30.725814', 1, 3, 'guest@guest.com', NULL),
+                                                                                                                   ('2024-12-20 09:45:28.831874', '2024-12-20 09:45:28.831874', 2, 3, 'sveta311069@bankinnepal.com', NULL);
 
 -- Dumping structure for table aims.product_media_urls
 CREATE TABLE IF NOT EXISTS `product_media_urls` (
@@ -232,6 +240,7 @@ INSERT INTO `user` (`email`, `created_time`, `updated_time`, `active`, `name`, `
                                                                                                        ('admin@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'Admin', 'adminpassword', 'ADMIN'),
                                                                                                        ('alice.smith@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'Alice Smith', 'alicepassword', 'PRODUCT_MANAGER'),
                                                                                                        ('cuong02n@gmail.com', '2024-12-19 18:41:49.390647', '2024-12-19 18:41:49.390647', b'1', 'nguyenmanhcuong', '$2a$10$oJ.swwXTYwLJk8msQfgNYOhvqG9Pgck0UrVvyK/QHPRNVAmlBuHyi', 'CUSTOMER'),
+                                                                                                       ('guest@guest.com', '2024-12-30 16:10:20.000000', '2024-12-30 16:10:20.000000', b'1', 'Guest', 'a_very_strong_password', 'CUSTOMER'),
                                                                                                        ('john.doe@example.com', '2024-12-17 13:39:02.000000', '2024-12-17 13:39:02.000000', b'1', 'John Doe', 'password123', 'CUSTOMER'),
                                                                                                        ('matt25310@thaitudang.xyz', '2024-12-21 22:56:13.730397', '2024-12-21 22:56:13.730397', b'1', 'meoVch1', '$2a$10$6sRvwBJrttc7YmBiXD7ckeCNsSRlRZ7HuyTRCuntZoy/07abJWzI.', 'CUSTOMER'),
                                                                                                        ('sveta311069@bankinnepal.com', '2024-12-20 09:27:40.037736', '2024-12-20 09:30:32.080777', b'1', 'meoVch1', '$2a$10$A6oii4o9ewmWSOkSENMAmertGz3AfWu3c7Ie2JwZPk9pu2eEjVCF.', 'CUSTOMER');

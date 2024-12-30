@@ -1,18 +1,23 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderV2Request;
 import com.cuong02n.aimsbackend.model.entity.*;
 import com.cuong02n.aimsbackend.repository.InvoiceRepository;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
+import com.cuong02n.aimsbackend.repository.ProductCartRepository;
 import jakarta.servlet.ServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,10 +32,12 @@ public class OrderService {
     private static final int INITIAL_FEE_RURAL = 30000;
     private static final int ADDITIONAL_FEE_PER_WEIGHT = 2500;
     private static final Set<String> URBAN_PROVINCES = Set.of("Hà Nội", "Hồ Chí Minh");
+    private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final OrderRepository orderRepository;
     private final CartService cartService;
     private final InvoiceRepository invoiceRepository;
     private final ServletRequest httpServletRequest;
+    private final ProductCartRepository productCartRepository;
 
     public Invoice placeOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
 
@@ -41,10 +48,29 @@ public class OrderService {
         return createNewOrder(user, productIds, address, phone, province, shippingInstruction);
     }
 
+    @Transactional
+    public Invoice placeOrderV2(User user, PlaceOrderV2Request request) {
+        checkPlaceOrderRequestInCart(cartService.getUserCart(user), request.getListProductNoRush());
+        checkPlaceOrderRequestInCart(cartService.getUserCart(user), request.getListProductRush());
+        // check diffirent list btw no rush and rush;
+
+        return createNewOrder(
+                user,
+                request.getListProductNoRush(),
+                request.getListProductRush(),
+                request.getAddress(),
+                request.getPhone(),
+                request.getProvince(),
+                request.getShippingInstruction(),
+                request.getTimeInMinute()
+        );
+    }
+
+
     public Invoice placeRushOrder(User user, HashSet<Long> productIds, int minute, String address, String phone, String province, String shippingInstruction) {
         checkPlaceOrderRequestInCart(cartService.getUserCart(user), productIds);
         checkOrderNotPaidExist(user);
-        return createNewOrder(user, productIds, address, phone, province, shippingInstruction, minute);
+        return createNewOrder(user, null, productIds, address, phone, province, shippingInstruction, minute);
     }
 
     @Transactional
@@ -68,22 +94,42 @@ public class OrderService {
         return i.isPaid();
     }
 
+
     private Invoice createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction) {
-        return createNewOrder(user, productIds, address, phone, province, shippingInstruction, 0);
+        return createNewOrder(user, productIds, null, address, phone, province, shippingInstruction, 0);
     }
 
-    private Invoice createNewOrder(User user, HashSet<Long> productIds, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
+    protected Invoice createNewOrder(User user, HashSet<Long> productIdsNotRush, HashSet<Long> productIdsRush, String address, String phone, String province, String shippingInstruction, int timeInMinute) {
         List<ProductCart> cart = cartService.getUserCart(user);
+        OrderService.log.info("{}", cart.stream().map(c -> c.getKey().getProductId()).collect(Collectors.toSet()));
         Order order = new Order();
 
         order.setUser(user);
         List<OrderProduct> orderProducts = new ArrayList<>();
 
         for (ProductCart productCart : cart) {
-            if (productIds.contains(productCart.getKey().getProductId())) {
+            if (productIdsNotRush.contains(productCart.getKey().getProductId())) {
                 orderProducts.add(
                         OrderProduct
                                 .builder()
+                                .isRush(true)
+                                .product(productCart.getProduct())
+                                .order(order)
+                                .quantity(productCart.getQuantity())
+                                .key(new OrderProduct.OrderProductKey(
+                                        productCart.getKey().getProductId(),
+                                        order.getOrderId())
+                                )
+                                .build()
+                );
+            } else if (productIdsRush.contains(productCart.getKey().getProductId())) {
+                if(!productCart.getProduct().isSupportedRush()){
+                    throw new GeneralException("This product currently not support rush: "+productCart.getProduct().getId());
+                }
+                orderProducts.add(
+                        OrderProduct
+                                .builder()
+                                .isRush(false)
                                 .product(productCart.getProduct())
                                 .order(order)
                                 .quantity(productCart.getQuantity())
@@ -100,10 +146,15 @@ public class OrderService {
         order.setPhone(phone);
         order.setProvince(province);
         order.setShippingInstruction(shippingInstruction);
-        order.setRush(timeInMinute != 0);
+//        order.setRush(timeInMinute != 0);
         order.setTimeInMinute(timeInMinute);
 
         orderRepository.save(order);
+
+        ArrayList<Long> allProductIdsInOrder = new ArrayList<>();
+        allProductIdsInOrder.addAll(productIdsRush);
+        allProductIdsInOrder.addAll(productIdsNotRush);
+        productCartRepository.deleteAllByKey_UserEmailAndKey_ProductIdIn(user.getEmail(), allProductIdsInOrder);
         return invoiceRepository.save(createInvoice(order));
     }
 
@@ -122,35 +173,6 @@ public class OrderService {
         invoice.setTotalAmountIncludeVAT(totalAmountIncludeVAT);
         invoice.setTotalAmountIncludeShippingFee(finalTotalAmount);
         return invoice;
-    }
-
-    private int calculateShippingFee(Order order) {
-        double maxWeight = 0;
-        int totalOrderValue = 0;
-        List<OrderProduct> orderProducts = order.getOrderProducts();
-        String province = order.getProvince();
-        boolean isRush = order.isRush();
-
-        for (OrderProduct op : orderProducts) {
-            Product product = op.getProduct();
-            int quantity = op.getQuantity();
-
-            maxWeight = Math.max(maxWeight, product.getWeight());
-            totalOrderValue += product.getPrice() * quantity;
-        }
-
-        int baseShippingFee = calculateBaseShippingFee(maxWeight, province);
-
-        if (isRush) {
-            return baseShippingFee + (RUSH_SHIPPING_FEE * orderProducts.size());
-        }
-
-        if (totalOrderValue >= FREE_SHIPPING_THRESHOLD) {
-            int discount = Math.min(baseShippingFee, MAX_SHIPPING_DISCOUNT);
-            return baseShippingFee - discount;
-        }
-
-        return baseShippingFee;
     }
 
     private int calculateBaseShippingFee(double weight, String province) {
@@ -172,6 +194,37 @@ public class OrderService {
             return INITIAL_FEE_RURAL + additionalFee;
         }
     }
+
+    private int calculateShippingFee(Order order) {
+//        double maxWeight = 0;
+//        int totalOrderValue = 0;
+//        List<OrderProduct> orderProducts = order.getOrderProducts();
+//        String province = order.getProvince();
+//        boolean isRush = order.isRush();
+//
+//        for (OrderProduct op : orderProducts) {
+//            Product product = op.getProduct();
+//            int quantity = op.getQuantity();
+//
+//            maxWeight = Math.max(maxWeight, product.getWeight());
+//            totalOrderValue += product.getPrice() * quantity;
+//        }
+//
+//        int baseShippingFee = calculateBaseShippingFee(maxWeight, province);
+//
+//        if (isRush) {
+//            return baseShippingFee + (RUSH_SHIPPING_FEE * orderProducts.size());
+//        }
+//
+//        if (totalOrderValue >= FREE_SHIPPING_THRESHOLD) {
+//            int discount = Math.min(baseShippingFee, MAX_SHIPPING_DISCOUNT);
+//            return baseShippingFee - discount;
+//        }
+//
+//        return baseShippingFee;
+        return 0;
+    }
+
 
     public List<Order> getOrder(User user) {
         return orderRepository.findAllByUser(user);

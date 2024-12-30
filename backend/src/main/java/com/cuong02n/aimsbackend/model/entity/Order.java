@@ -32,6 +32,7 @@ public class Order extends BaseEntity {
     private String province;
     private String shippingInstruction;
 
+    // Temp
     boolean isRush = false;
     int timeInMinute = 120;
 }

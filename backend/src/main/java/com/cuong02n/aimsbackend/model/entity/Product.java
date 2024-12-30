@@ -28,6 +28,7 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
+    private boolean isSupportedRush = false;
 //    @OneToMany(mappedBy = "product")
 //    List<ProductCart> productCarts;
 
