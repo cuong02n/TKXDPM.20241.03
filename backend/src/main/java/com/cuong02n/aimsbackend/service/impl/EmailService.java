@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.service.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Service
-public class EmailService {
+public class EmailService implements IEmailService {
     final JavaMailSender mailSender;
 
     public void sendRegisterEmail(String email, String name, String otp) {

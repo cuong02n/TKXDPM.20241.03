@@ -7,7 +7,7 @@ import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.model.dto.response.InvoiceDto;
 import com.cuong02n.aimsbackend.model.dto.response.OrderDto;
 import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.service.impl.OrderService;
+import com.cuong02n.aimsbackend.service.IOrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/order")
 public class OrderController {
 
-    private final OrderService orderService;
+    private final IOrderService orderService;
     private final HttpServletRequest httpServletRequest;
     private final ModelMapper modelMapper;
 

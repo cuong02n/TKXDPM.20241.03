@@ -8,22 +8,25 @@ import com.cuong02n.aimsbackend.model.dto.response.LoginResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.repository.ProductCartRepository;
 import com.cuong02n.aimsbackend.repository.UserRepository;
+import com.cuong02n.aimsbackend.service.IEmailService;
+import com.cuong02n.aimsbackend.service.IJwtService;
+import com.cuong02n.aimsbackend.service.IOtpService;
+import com.cuong02n.aimsbackend.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+@Service
+public class UserService implements IUserService {
 
     final UserRepository userRepository;
-    final OtpService otpService;
-    final EmailService emailService;
-    final JwtService jwtService;
+    final IOtpService otpService;
+    final IEmailService emailService;
+    final IJwtService jwtService;
     final HttpServletRequest httpServletRequest;
     final PasswordEncoder passwordEncoder;
     final ProductCartRepository productCartRepository;

@@ -3,7 +3,7 @@ package com.cuong02n.aimsbackend.controller;
 
 import com.cuong02n.aimsbackend.model.dto.response.ProductCartDto;
 import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.service.impl.CartService;
+import com.cuong02n.aimsbackend.service.ICartService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class CartController {
     private final HttpServletRequest request;
-    private final CartService cartService;
+    private final ICartService cartService;
     private final ModelMapper modelMapper;
 
     @GetMapping()

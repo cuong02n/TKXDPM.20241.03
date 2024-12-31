@@ -5,7 +5,7 @@ import com.cuong02n.aimsbackend.model.dto.response.FavoriteProductUserDto;
 import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.service.impl.ProductService;
+import com.cuong02n.aimsbackend.service.IProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/product")
 public class ProductController {
 
-    private final ProductService productService;
+    private final IProductService productService;
     private final HttpServletRequest httpServletRequest;
     private final ModelMapper modelMapper;
 
@@ -32,7 +32,7 @@ public class ProductController {
     public ResponseEntity<?> getAllProduct() {
         return BaseResponse.ok(
                 productService.getAllProducts()
-                        .stream().map(p->modelMapper.map(p, Product.class))
+                        .stream().map(p -> modelMapper.map(p, Product.class))
                         .toList()
         );
     }
@@ -47,7 +47,7 @@ public class ProductController {
         return BaseResponse.ok(
                 productService.getWishList((User) httpServletRequest.getAttribute("user"))
                         .stream()
-                        .map(f->modelMapper.map(f, FavoriteProductUserDto.class))
+                        .map(f -> modelMapper.map(f, FavoriteProductUserDto.class))
                         .toList()
         );
     }

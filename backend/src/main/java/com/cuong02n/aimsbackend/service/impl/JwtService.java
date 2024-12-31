@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.model.entity.User;
+import com.cuong02n.aimsbackend.service.IJwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -19,15 +20,15 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtService implements IJwtService {
 
 //    @Value("${jwt.key}")
-    private String SECRET_KEY = "123AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    private final String SECRET_KEY = "123AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
     private final HttpServletRequest httpServletRequest;
     @Value("${jwt.expired-long}")
     public long expired;
 
-    private Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    private final Key key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }

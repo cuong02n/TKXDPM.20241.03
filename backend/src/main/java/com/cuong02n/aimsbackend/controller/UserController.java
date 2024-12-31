@@ -2,7 +2,7 @@ package com.cuong02n.aimsbackend.controller;
 
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
 import com.cuong02n.aimsbackend.model.dto.response.UserDto;
-import com.cuong02n.aimsbackend.service.impl.UserService;
+import com.cuong02n.aimsbackend.service.IUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
-    final UserService userService;
+    final IUserService userService;
     final HttpServletRequest request;
     final ModelMapper modelMapper;
 

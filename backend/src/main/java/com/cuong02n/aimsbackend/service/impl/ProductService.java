@@ -8,6 +8,8 @@ import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.repository.ProductRepository;
 import com.cuong02n.aimsbackend.repository.ReviewRepository;
 import com.cuong02n.aimsbackend.repository.WishListRepository;
+import com.cuong02n.aimsbackend.service.IMediaService;
+import com.cuong02n.aimsbackend.service.IProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +21,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductService implements IProductService {
     private final ReviewRepository reviewRepository;
     private final HttpServletRequest httpServletRequest;
     private final ProductRepository productRepository;
-    private final MediaService mediaService;
+    private final IMediaService mediaService;
     private final WishListRepository wishListRepository;
     @Value("${aims.review.max-content-length}")
     private int maxContentReview;

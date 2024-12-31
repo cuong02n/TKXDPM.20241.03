@@ -37,7 +37,7 @@ public class Product extends BaseEntity {
     List<String> mediaUrls;
 
     public enum ProductCategory {
-        CD, DVD, BOOK;
+        CD, DVD, BOOK
     }
 
 }
