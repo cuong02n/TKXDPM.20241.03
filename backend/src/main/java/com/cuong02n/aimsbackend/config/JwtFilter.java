@@ -1,8 +1,8 @@
 package com.cuong02n.aimsbackend.config;
 
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
-import com.cuong02n.aimsbackend.service.JwtService;
-import com.cuong02n.aimsbackend.service.UserService;
+import com.cuong02n.aimsbackend.service.IJwtService;
+import com.cuong02n.aimsbackend.service.IUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +30,8 @@ import static com.cuong02n.aimsbackend.config.SecurityConfig.WHITE_LIST;
 public class JwtFilter extends OncePerRequestFilter {
     public static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     final AntPathMatcher matcher = new AntPathMatcher();
-    final UserService userService;
-    final JwtService jwtService;
+    final IUserService userService;
+    final IJwtService jwtService;
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws IOException, ServletException {

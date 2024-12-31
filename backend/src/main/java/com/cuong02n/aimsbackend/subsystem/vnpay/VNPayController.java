@@ -1,7 +1,10 @@
 package com.cuong02n.aimsbackend.subsystem.vnpay;
 
+import com.cuong02n.aimsbackend.service.IEmailService;
+import com.cuong02n.aimsbackend.service.impl.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +24,9 @@ import java.time.format.DateTimeFormatter;
 public class VNPayController {
     private final VNPayService vnPayService;
     private final HttpServletRequest request;
+    private final IEmailService emailService;
+    @Value("${aims.frontend.base-url}")
+    private String frontEndBaseUrl;
     @GetMapping("")
     public String home(){
         return "index";
@@ -62,7 +68,7 @@ public class VNPayController {
 //        modelAndView.addObject("transactionId", transactionId);
 
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(frontEndBaseUrl)
                 .path(paymentStatus == 1 ? "/payment/success" : "/payment/failure")
                 .queryParam("orderId", orderInfo)
                 .queryParam("totalPrice", totalPrice)
@@ -72,6 +78,8 @@ public class VNPayController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(builder.toUriString()));
+
+        emailService.sendMail(null,null,null,true);
 
         return ResponseEntity.status(HttpStatus.FOUND)
                 .headers(headers)

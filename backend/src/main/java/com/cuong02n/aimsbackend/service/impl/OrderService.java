@@ -1,4 +1,4 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
 import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderV2Request;
@@ -6,6 +6,8 @@ import com.cuong02n.aimsbackend.model.entity.*;
 import com.cuong02n.aimsbackend.repository.InvoiceRepository;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
 import com.cuong02n.aimsbackend.repository.ProductCartRepository;
+import com.cuong02n.aimsbackend.service.ICartService;
+import com.cuong02n.aimsbackend.service.IOrderService;
 import jakarta.servlet.ServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class OrderService implements IOrderService {
 
     private static final int FREE_SHIPPING_THRESHOLD = 100000;
     private static final int MAX_SHIPPING_DISCOUNT = 25000;
@@ -34,7 +36,7 @@ public class OrderService {
     private static final Set<String> URBAN_PROVINCES = Set.of("Hà Nội", "Hồ Chí Minh");
     private static final Logger log = LoggerFactory.getLogger(OrderService.class);
     private final OrderRepository orderRepository;
-    private final CartService cartService;
+    private final ICartService cartService;
     private final InvoiceRepository invoiceRepository;
     private final ServletRequest httpServletRequest;
     private final ProductCartRepository productCartRepository;
@@ -240,7 +242,7 @@ public class OrderService {
     private void checkPlaceOrderRequestInCart(List<ProductCart> productCarts, HashSet<Long> productIds) {
         List<Long> productIdInCart = productCarts.stream().map(c -> c.getKey().getProductId()).toList();
         if (!new HashSet<>(productIdInCart).containsAll(productIds)) {
-            throw new GeneralException("Place Order request must be exist in cart: [" + productIdInCart + "] not contains [" + productIds + "]");
+            throw new GeneralException("Place Order request must be exist in cart: " + productIdInCart + " not contains " + productIds);
         }
     }
 }

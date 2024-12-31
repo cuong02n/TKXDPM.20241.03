@@ -1,13 +1,20 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
+import com.cuong02n.aimsbackend.exception.GeneralException;
+import com.cuong02n.aimsbackend.service.IEmailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Service
-public class EmailService {
+public class EmailService implements IEmailService {
     final JavaMailSender mailSender;
 
     public void sendRegisterEmail(String email, String name, String otp) {
@@ -24,5 +31,18 @@ public class EmailService {
         simpleMailMessage.setSubject("Bạn đã tạo thành công đơn hàng");
         simpleMailMessage.setText("Xin chào, bạn đã tạo thành công đơn hàng: mã đơn hàng: %s, hãy nhanh chóng thanh toán để đảm bảo còn đủ số lượng.".formatted(orderId));
         mailSender.send(simpleMailMessage);
+    }
+
+    public void sendMail(String email, String subject, String content, boolean isHtml) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.name());
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(content, isHtml);
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new GeneralException("Cannot send email ",e);
+        }
     }
 }

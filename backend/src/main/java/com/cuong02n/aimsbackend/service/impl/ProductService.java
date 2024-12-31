@@ -1,7 +1,6 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
-import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
 import com.cuong02n.aimsbackend.model.entity.FavoriteProductUser;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.Review;
@@ -9,9 +8,10 @@ import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.repository.ProductRepository;
 import com.cuong02n.aimsbackend.repository.ReviewRepository;
 import com.cuong02n.aimsbackend.repository.WishListRepository;
+import com.cuong02n.aimsbackend.service.IMediaService;
+import com.cuong02n.aimsbackend.service.IProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,11 +21,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductService implements IProductService {
     private final ReviewRepository reviewRepository;
     private final HttpServletRequest httpServletRequest;
     private final ProductRepository productRepository;
-    private final MediaService mediaService;
+    private final IMediaService mediaService;
     private final WishListRepository wishListRepository;
     @Value("${aims.review.max-content-length}")
     private int maxContentReview;

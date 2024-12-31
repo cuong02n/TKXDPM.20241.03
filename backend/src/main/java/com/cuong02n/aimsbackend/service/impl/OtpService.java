@@ -1,6 +1,7 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.AimsOtpException;
+import com.cuong02n.aimsbackend.service.IOtpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @EnableScheduling
-public class OtpService {
+public class OtpService implements IOtpService {
 
     public static final String OTP_CHAR = "QWERTYUIOPASDFGHJKLZXCVBNM0123456789";
     @Value("${aims.otp.register.length}")
