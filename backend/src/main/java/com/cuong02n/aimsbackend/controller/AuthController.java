@@ -3,7 +3,7 @@ package com.cuong02n.aimsbackend.controller;
 import com.cuong02n.aimsbackend.model.dto.request.LoginRequest;
 import com.cuong02n.aimsbackend.model.dto.request.RegisterRequest;
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
-import com.cuong02n.aimsbackend.service.UserService;
+import com.cuong02n.aimsbackend.service.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
 import com.cuong02n.aimsbackend.model.dto.request.PlaceOrderV2Request;
@@ -240,7 +240,7 @@ public class OrderService {
     private void checkPlaceOrderRequestInCart(List<ProductCart> productCarts, HashSet<Long> productIds) {
         List<Long> productIdInCart = productCarts.stream().map(c -> c.getKey().getProductId()).toList();
         if (!new HashSet<>(productIdInCart).containsAll(productIds)) {
-            throw new GeneralException("Place Order request must be exist in cart: [" + productIdInCart + "] not contains [" + productIds + "]");
+            throw new GeneralException("Place Order request must be exist in cart: " + productIdInCart + " not contains " + productIds);
         }
     }
 }

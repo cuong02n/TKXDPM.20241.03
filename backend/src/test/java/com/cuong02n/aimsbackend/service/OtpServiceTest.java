@@ -1,13 +1,12 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.AimsOtpException;
+import com.cuong02n.aimsbackend.service.impl.OtpService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.util.concurrent.ConcurrentHashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OtpServiceTest {

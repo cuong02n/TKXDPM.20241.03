@@ -1,5 +1,6 @@
 package com.cuong02n.aimsbackend.service;
 
+import com.cuong02n.aimsbackend.service.impl.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

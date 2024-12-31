@@ -1,6 +1,6 @@
 package com.cuong02n.aimsbackend.controller;
 
-import com.cuong02n.aimsbackend.service.ProductService;
+import com.cuong02n.aimsbackend.service.impl.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -5,6 +5,8 @@ import com.cuong02n.aimsbackend.model.entity.*;
 import com.cuong02n.aimsbackend.repository.ProductRepository;
 import com.cuong02n.aimsbackend.repository.ReviewRepository;
 import com.cuong02n.aimsbackend.repository.WishListRepository;
+import com.cuong02n.aimsbackend.service.impl.MediaService;
+import com.cuong02n.aimsbackend.service.impl.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -5,7 +5,7 @@ import com.cuong02n.aimsbackend.model.dto.response.FavoriteProductUserDto;
 import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.User;
-import com.cuong02n.aimsbackend.service.ProductService;
+import com.cuong02n.aimsbackend.service.impl.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

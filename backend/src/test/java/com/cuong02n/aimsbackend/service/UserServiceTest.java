@@ -1,12 +1,15 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
-import com.cuong02n.aimsbackend.exception.UserExistException;
 import com.cuong02n.aimsbackend.model.dto.request.LoginRequest;
 import com.cuong02n.aimsbackend.model.dto.request.RegisterRequest;
 import com.cuong02n.aimsbackend.model.dto.response.LoginResponse;
 import com.cuong02n.aimsbackend.model.entity.User;
 import com.cuong02n.aimsbackend.repository.UserRepository;
+import com.cuong02n.aimsbackend.service.impl.EmailService;
+import com.cuong02n.aimsbackend.service.impl.JwtService;
+import com.cuong02n.aimsbackend.service.impl.OtpService;
+import com.cuong02n.aimsbackend.service.impl.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

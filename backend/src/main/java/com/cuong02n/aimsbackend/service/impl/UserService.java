@@ -1,4 +1,4 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
 import com.cuong02n.aimsbackend.exception.UserExistException;

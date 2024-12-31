@@ -1,6 +1,7 @@
 package com.cuong02n.aimsbackend.service;
 
 import com.cuong02n.aimsbackend.model.entity.User;
+import com.cuong02n.aimsbackend.service.impl.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

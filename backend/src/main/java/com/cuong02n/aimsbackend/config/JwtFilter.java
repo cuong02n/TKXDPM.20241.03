@@ -1,8 +1,8 @@
 package com.cuong02n.aimsbackend.config;
 
 import com.cuong02n.aimsbackend.model.dto.response.BaseResponse;
-import com.cuong02n.aimsbackend.service.JwtService;
-import com.cuong02n.aimsbackend.service.UserService;
+import com.cuong02n.aimsbackend.service.impl.JwtService;
+import com.cuong02n.aimsbackend.service.impl.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

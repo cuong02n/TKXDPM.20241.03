@@ -1,7 +1,6 @@
-package com.cuong02n.aimsbackend.service;
+package com.cuong02n.aimsbackend.service.impl;
 
 import com.cuong02n.aimsbackend.exception.GeneralException;
-import com.cuong02n.aimsbackend.model.dto.response.ProductDto;
 import com.cuong02n.aimsbackend.model.entity.FavoriteProductUser;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.Review;
@@ -11,7 +10,6 @@ import com.cuong02n.aimsbackend.repository.ReviewRepository;
 import com.cuong02n.aimsbackend.repository.WishListRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
