@@ -198,35 +198,64 @@ public class OrderService implements IOrderService {
     }
 
     private int calculateShippingFee(Order order) {
-//        double maxWeight = 0;
-//        int totalOrderValue = 0;
-//        List<OrderProduct> orderProducts = order.getOrderProducts();
-//        String province = order.getProvince();
-//        boolean isRush = order.isRush();
-//
-//        for (OrderProduct op : orderProducts) {
-//            Product product = op.getProduct();
-//            int quantity = op.getQuantity();
-//
-//            maxWeight = Math.max(maxWeight, product.getWeight());
-//            totalOrderValue += product.getPrice() * quantity;
-//        }
-//
-//        int baseShippingFee = calculateBaseShippingFee(maxWeight, province);
-//
-//        if (isRush) {
-//            return baseShippingFee + (RUSH_SHIPPING_FEE * orderProducts.size());
-//        }
-//
-//        if (totalOrderValue >= FREE_SHIPPING_THRESHOLD) {
-//            int discount = Math.min(baseShippingFee, MAX_SHIPPING_DISCOUNT);
-//            return baseShippingFee - discount;
-//        }
-//
-//        return baseShippingFee;
-        return 0;
-    }
+        String province = order.getProvince();
+        if (order == null) {
+            throw new GeneralException("Order cannot be null");
+        }
+        if (order.getOrderProducts() == null) {
+            throw new GeneralException("Order products list cannot be null for order ID: " + order.getOrderId());
+        }
+        if (order.getOrderProducts().isEmpty()) {
+            throw new GeneralException("Order products list cannot be empty for order ID: " + order.getOrderId());
+        }
+        if (order.getProvince() == null || order.getProvince().trim().isEmpty()) {
+            throw new GeneralException("Shipping province cannot be empty for order ID: " + order.getOrderId());
+        }
+        List<OrderProduct> orderProducts = order.getOrderProducts();
+        for (OrderProduct orderProduct : orderProducts) {
+            if (orderProduct.getProduct() == null) {
+                throw new GeneralException("Product cannot be null in order ID: " + order.getOrderId());
+            }
 
+            if (orderProduct.getQuantity() <= 0) {
+                throw new GeneralException("Product quantity must be greater than 0 for product ID: "
+                        + orderProduct.getProduct().getId() + " in order ID: " + order.getOrderId());
+            }
+
+            if (orderProduct.getProduct().getWeight() <= 0) {
+                throw new GeneralException("Product weight must be greater than 0 for product ID: "
+                        + orderProduct.getProduct().getId() + " in order ID: " + order.getOrderId());
+            }
+        }
+        List<OrderProduct> rushProducts = orderProducts.stream()
+                .filter(op -> op.isRush())
+                .toList();
+
+        List<OrderProduct> normalProducts = orderProducts.stream()
+                .filter(op -> !op.isRush())
+                .toList();
+
+        int normalProductsValue = normalProducts.stream()
+                .mapToInt(op -> op.getProduct().getPrice() * op.getQuantity())
+                .sum();
+        double maxWeight = orderProducts.stream()
+                .mapToDouble(op -> op.getProduct().getWeight())
+                .max()
+                .orElse(0.0);
+        int baseShippingFee = calculateBaseShippingFee(maxWeight, province);
+        int rushShippingFee = rushProducts.size() * RUSH_SHIPPING_FEE;
+        int finalShippingFee = baseShippingFee + rushShippingFee;
+        if (normalProductsValue > FREE_SHIPPING_THRESHOLD) {
+            // If base shipping fee is less than 25,000 VND, make it free
+            // Otherwise, reduce it by 25,000 VND
+            if (baseShippingFee <= MAX_SHIPPING_DISCOUNT) {
+                finalShippingFee = rushShippingFee; // Only pay for rush shipping
+            } else {
+                finalShippingFee = (baseShippingFee - MAX_SHIPPING_DISCOUNT) + rushShippingFee;
+            }
+        }
+        return finalShippingFee;
+    }
 
     public List<Order> getOrder(User user) {
         return orderRepository.findAllByUser(user);
