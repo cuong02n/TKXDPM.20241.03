@@ -31,16 +31,36 @@ const Home = () => {
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
+  const [sortOrder, setSortOrder] = React.useState<"asc" | "desc" | null>(null);
+
+  const handleSort = () => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    setSortOrder(newOrder);
+
+    const sorted = [...filteredProducts].sort((a, b) => {
+      return newOrder === "asc" ? a.price - b.price : b.price - a.price;
+    });
+    setFilteredProducts(sorted);
+  };
+
   return (
     <div className="container mx-auto py-10 min-h-screen">
       <h1 className="text-3xl font-bold mb-5">Welcome to the Store</h1>
-      <input
-        type="text"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        placeholder="Search products..."
-        className="mb-5 p-2 border border-gray-300 rounded-md w-full"
-      />
+      <div className="flex gap-4 mb-5">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search products..."
+          className="mb-5 p-2 border border-gray-300 rounded-md w-full"
+        />
+        <button
+          onClick={handleSort}
+          className="border-2 border-zinc-200 bg-zinc-400 font-bold text-white rounded-md hover:bg-zinc-800 min-w-fit px-4 h-10"
+        >
+          Price {sortOrder === "asc" ? "↑" : "↓"}
+        </button>
+      </div>
       <ProductGrid products={filteredProducts} />
     </div>
   );
