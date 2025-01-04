@@ -30,6 +30,7 @@ public class SecurityConfig {
             "/test",
             "/hello",
 //            "/api/review"
+            "/api/product/all",
             "/api/vnpay",
             "/api/vnpay/submitOrder",
             "/api/vnpay/vnpay-status",

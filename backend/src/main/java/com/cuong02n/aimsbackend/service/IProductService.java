@@ -17,5 +17,5 @@ public interface IProductService {
 
     void addWishList(User user, long productId);
 
-    List<FavoriteProductUser> getWishList(User user);
+    List<FavoriteProductUser> getWishList(String useremail);
 }

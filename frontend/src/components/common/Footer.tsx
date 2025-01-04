@@ -37,21 +37,21 @@ function Footer() {
         {/* Thành viên */}
         <div className="item-text">
           <h2 className="text-2xl font-extrabold mb-5">Thành viên</h2>
-
-          <div className="text-lg font-semibold">
-            <p>Nguyễn Mạnh Cường 20215320</p>
-          </div>
           <div className="text-lg font-semibold">
             <p>Nguyễn Trung Chiến 20215320</p>
           </div>
           <div className="text-lg font-semibold">
+            <p>Nguyễn Mạnh Cường 20204524</p>
+          </div>
+
+          <div className="text-lg font-semibold">
             <p>Vũ Ngọc Anh 20215313</p>
           </div>
           <div className="text-lg font-semibold">
-            <p>Bùi Minh Hải Đắc 20215313</p>
+            <p>Bùi Minh Hải Đắc 20204525</p>
           </div>
           <div className="text-lg font-semibold">
-            <p>Trần Đức Chính 20215313</p>
+            <p>Trần Đức Chính 20210123</p>
           </div>
         </div>
 

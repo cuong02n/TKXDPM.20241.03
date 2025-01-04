@@ -132,7 +132,7 @@ const DeliveryInfo = ({
         toast.error("Address must not exceed 100 characters");
         return false;
       }
-      if (!/^[a-zA-Z0-9\/]+$/.test(addressStr)) {
+      if (!/^[a-zA-Z0-9\/ ]+$/.test(addressStr)) {
         toast.error("Address can only contain letters, numbers, and slashes");
         return false;
       }

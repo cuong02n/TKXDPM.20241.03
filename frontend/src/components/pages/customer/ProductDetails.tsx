@@ -39,8 +39,8 @@ const ProductDetail = () => {
 
   return !isLoading ? (
     !isError ? (
-      <div className="container mx-auto py-10">
-        <ProductDetailCard product={foundProduct} />
+      <div className="container mx-auto py-10 min-h-screen">
+        <ProductDetailCard product={foundProduct!} />
       </div>
     ) : (
       <div className="flex flex-col items-center justify-center h-[360px]">

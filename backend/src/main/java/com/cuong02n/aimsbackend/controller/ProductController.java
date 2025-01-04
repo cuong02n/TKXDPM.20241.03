@@ -45,7 +45,7 @@ public class ProductController {
     @GetMapping("/wish-list")
     public ResponseEntity<?> getWishList() {
         return BaseResponse.ok(
-                productService.getWishList((User) httpServletRequest.getAttribute("user"))
+                productService.getWishList(((User) httpServletRequest.getAttribute("user")).getEmail())
                         .stream()
                         .map(f -> modelMapper.map(f, FavoriteProductUserDto.class))
                         .toList()

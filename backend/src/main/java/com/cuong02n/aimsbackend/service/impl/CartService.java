@@ -22,7 +22,7 @@ public class CartService implements ICartService {
 
     public void addToCart(User user, long productId, int quantity) {
         //check exist
-        checkProductExistInCart(user, productId);
+        checkProductExistInCart(user.getEmail(), productId);
 
         ProductCart productCart = new ProductCart();
         productCart.setQuantity(quantity);
@@ -32,8 +32,8 @@ public class CartService implements ICartService {
         productCartRepository.save(productCart);
     }
 
-    private void checkProductExistInCart(User user, long productId) {
-        if (productCartRepository.existsByKey_UserEmailAndKey_ProductId(user.getEmail(), productId)) {
+    private void checkProductExistInCart(String useremail, long productId) {
+        if (productCartRepository.existsByKey_UserEmailAndKey_ProductId(useremail, productId)) {
             throw new GeneralException("This product: %d is already in the cart".formatted(productId));
         }
     }
