@@ -24,7 +24,6 @@ import java.time.format.DateTimeFormatter;
 public class VNPayController {
     private final VNPayService vnPayService;
     private final HttpServletRequest request;
-    private final IEmailService emailService;
     @Value("${aims.frontend.base-url}")
     private String frontEndBaseUrl;
     @GetMapping("")
@@ -79,7 +78,7 @@ public class VNPayController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(builder.toUriString()));
 
-        emailService.sendMail(null,null,null,true);
+//        emailService.sendMail(null,null,null,true);
 
         return ResponseEntity.status(HttpStatus.FOUND)
                 .headers(headers)

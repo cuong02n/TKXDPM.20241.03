@@ -19,7 +19,7 @@ const PaymentPage = () => {
 
   const handlePayOrder = async () => {
     try {
-      const res = await apiClient.post("/vnpay/submitOrder", null, {
+      const res = await apiClient.post(`/payment/${method}/create`, null, {
         params: {
           amount: total,
           orderInfo: orderId.toString(),
