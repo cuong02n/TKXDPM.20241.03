@@ -1,6 +1,8 @@
 package com.cuong02n.aimsbackend.model.dto.request;
 
 import com.cuong02n.aimsbackend.constant.Regex;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -23,5 +25,7 @@ public class PlaceOrderV2Request {
     String phone;
     String province;
     String shippingInstruction;
+    @NotNull(message = "Time in minute cannot be null")
+    @Min(value = 1, message = "Time in minute must be greater than 0")
     int timeInMinute;
 }
