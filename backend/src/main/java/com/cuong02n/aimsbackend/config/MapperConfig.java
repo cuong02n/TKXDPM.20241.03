@@ -7,7 +7,10 @@ import com.cuong02n.aimsbackend.model.entity.OrderProduct;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.sql.Timestamp;
 
 @Configuration
 @RequiredArgsConstructor
@@ -16,7 +19,10 @@ public class MapperConfig {
 
     @PostConstruct
     public void addOrderMapper() {
-        modelMapper.getConfiguration().setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE);
+        modelMapper.getConfiguration()
+                .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
+                .setSkipNullEnabled(true)
+                .setAmbiguityIgnored(true);
 //        modelMapper.typeMap(Order.class, OrderDto.class).addMappings(map -> {
 //            map.map(Order::getOrderProducts, OrderDto::setOrderProductDtos); // Ánh xạ danh sách
 //        });

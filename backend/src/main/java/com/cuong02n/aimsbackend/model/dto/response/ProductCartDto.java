@@ -7,6 +7,6 @@ import lombok.Data;
 @Data
 public class ProductCartDto {
     private ProductCart.ProductCartKey key;
-    private Product product;
+    private ProductDto product;
     private int quantity;
 }

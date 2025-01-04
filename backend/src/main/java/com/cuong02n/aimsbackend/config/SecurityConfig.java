@@ -33,6 +33,7 @@ public class SecurityConfig {
             "/api/vnpay",
             "/api/vnpay/submitOrder",
             "/api/vnpay/vnpay-status",
+            "/api/payment/vnpay/status",
             "/static/**"
 //            "**"
     };

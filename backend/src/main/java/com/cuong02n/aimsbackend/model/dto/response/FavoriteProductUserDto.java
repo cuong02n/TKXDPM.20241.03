@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Data
 public class FavoriteProductUserDto {
-    private Product product;
+    private ProductDto product;
     private FavoriteProductUser.WishListKey key;
     private Timestamp createdTime;
     private Timestamp updatedTime;

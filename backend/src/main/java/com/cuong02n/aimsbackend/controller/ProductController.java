@@ -32,7 +32,7 @@ public class ProductController {
     public ResponseEntity<?> getAllProduct() {
         return BaseResponse.ok(
                 productService.getAllProducts()
-                        .stream().map(p -> modelMapper.map(p, Product.class))
+                        .stream().map(p -> modelMapper.map(p, ProductDto.class))
                         .toList()
         );
     }

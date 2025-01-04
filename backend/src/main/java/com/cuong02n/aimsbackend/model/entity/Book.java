@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@DiscriminatorValue("BOOK")
 public class Book extends Product {
     @Column(nullable = false)
     private String authors;

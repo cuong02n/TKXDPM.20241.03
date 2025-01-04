@@ -1,5 +1,4 @@
 package com.cuong02n.aimsbackend.model.entity;
-
 import com.google.gson.annotations.Expose;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -19,12 +18,14 @@ public class BaseEntity {
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "createdTime", updatable = false)
     @Nullable
+    @Expose
     Timestamp createdTime;
 
     @UpdateTimestamp
     @Temporal(value = TemporalType.TIMESTAMP)
     @Column(name = "updatedTime")
     @Nullable
+    @Expose
     Timestamp updatedTime;
 
 }

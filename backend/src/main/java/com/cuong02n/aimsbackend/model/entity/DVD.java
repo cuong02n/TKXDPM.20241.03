@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
+@DiscriminatorValue("DVD")
 public class DVD extends Product {
     @Enumerated(EnumType.STRING)
     @Column(name = "disc_type")
