@@ -68,6 +68,10 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId).orElseThrow();
     }
 
+    public List<Product> searchProducts(String query) {
+        return productRepository.searchByName(query);
+    }
+
     public List<Product> getAllProducts() {
         return productRepository
                 .findAll();

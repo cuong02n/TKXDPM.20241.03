@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
@@ -38,8 +40,8 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<?> searchProduct() {
-        return BaseResponse.ok(null);
+    public List<Product> searchProduct(@RequestParam("query") String query) {
+        return productService.searchProducts(query);
     }
 
     @GetMapping("/wish-list")
