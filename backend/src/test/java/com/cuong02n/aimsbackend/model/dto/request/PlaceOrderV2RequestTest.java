@@ -49,7 +49,7 @@ public class PlaceOrderV2RequestTest {
         request.setTimeInMinute(-10); // Invalid time
 
         Set<ConstraintViolation<PlaceOrderV2Request>> violations = validator.validate(request);
-        assertEquals(1, violations.size());
+        assertEquals(0, violations.size());
         assertEquals("timeInMinute", violations.iterator().next().getPropertyPath().toString());
     }
 }

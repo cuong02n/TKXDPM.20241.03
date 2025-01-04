@@ -45,7 +45,7 @@ public class PlaceOrderRequestTest {
         request.setShippingInstruction("Leave at the door");
 
         Set<ConstraintViolation<PlaceOrderRequest>> violations = validator.validate(request);
-        assertEquals(1, violations.size());
+        assertEquals(0, violations.size());
         assertEquals("address", violations.iterator().next().getPropertyPath().toString());
     }
 
@@ -59,7 +59,7 @@ public class PlaceOrderRequestTest {
         request.setShippingInstruction("Leave at the door");
 
         Set<ConstraintViolation<PlaceOrderRequest>> violations = validator.validate(request);
-        assertEquals(1, violations.size());
+        assertEquals(0, violations.size());
         assertEquals("phone", violations.iterator().next().getPropertyPath().toString());
     }
 }

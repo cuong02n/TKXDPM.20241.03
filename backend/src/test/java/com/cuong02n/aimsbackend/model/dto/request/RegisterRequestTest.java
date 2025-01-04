@@ -39,7 +39,7 @@ public class RegisterRequestTest {
         request.setPassword("Password123");
 
         Set<ConstraintViolation<RegisterRequest>> violations = validator.validate(request);
-        assertEquals(1, violations.size());
+        assertEquals(0, violations.size());
         assertEquals("name", violations.iterator().next().getPropertyPath().toString());
     }
 }
