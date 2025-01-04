@@ -45,10 +45,113 @@ const DeliveryInfo = ({
 
   const checkInfoValid = () => {
     const { name, phone, province, address } = deliveryInfo;
-    const validName = name.trim().length > 0;
-    const validPhone = phone.trim().length > 0;
-    const validProvince = province.trim().length > 0;
-    const validAddress = address.trim().length > 0;
+    // Name validation: only letters, max 30 chars
+    const validateName = (name) => {
+      const nameStr = name.trim();
+      if (nameStr.length === 0) {
+        toast.error("Name is required");
+        return false;
+      }
+      if (nameStr.length > 30) {
+        toast.error("Name must not exceed 30 characters");
+        return false;
+      }
+      if (!/^[a-zA-Z]+$/.test(nameStr)) {
+        toast.error("Name can only contain letters (a-z, A-Z)");
+        return false;
+      }
+      return true;
+    };
+
+    // Phone validation: starts with 0, 10 digits, optional consistent separator
+    const validatePhone = (phone) => {
+      const phoneStr = phone.trim();
+      if (phoneStr.length === 0) {
+        toast.error("Phone number is required");
+        return false;
+      }
+
+      // Check if there are any separators
+      const hasDot = phoneStr.includes(".");
+      const hasHyphen = phoneStr.includes("-");
+      const hasSlash = phoneStr.includes("/");
+
+      // Ensure only one type of separator is used
+      const separatorCount = [hasDot, hasHyphen, hasSlash].filter(
+        Boolean
+      ).length;
+      if (separatorCount > 1) {
+        toast.error(
+          "Please use only one type of separator (. or - or /) in phone number"
+        );
+        return false;
+      }
+
+      // Remove separator if exists
+      const digitsOnly = phoneStr.replace(/[.\-\/]/g, "");
+
+      if (!digitsOnly.startsWith("0")) {
+        toast.error("Phone number must start with 0");
+        return false;
+      }
+
+      if (digitsOnly.length !== 10) {
+        toast.error("Phone number must have exactly 10 digits");
+        return false;
+      }
+
+      // If there's a separator, ensure it's properly interleaved with digits
+      if (separatorCount === 1) {
+        const separator = hasDot ? "." : hasHyphen ? "-" : "/";
+        const parts = phoneStr.split(separator);
+        // Check if all parts contain only digits
+        if (!parts.every((part) => /^\d+$/.test(part))) {
+          toast.error(
+            `Invalid phone format. Example: 012${separator}345${separator}6789`
+          );
+          return false;
+        }
+      } else if (!/^\d{10}$/.test(digitsOnly)) {
+        toast.error(
+          "Phone number can only contain digits and optional separators"
+        );
+        return false;
+      }
+
+      return true;
+    };
+
+    // Address validation: letters, digits, slashes, max 100 chars
+    const validateAddress = (address) => {
+      const addressStr = address.trim();
+      if (addressStr.length === 0) {
+        toast.error("Address is required");
+        return false;
+      }
+      if (addressStr.length > 100) {
+        toast.error("Address must not exceed 100 characters");
+        return false;
+      }
+      if (!/^[a-zA-Z0-9\/]+$/.test(addressStr)) {
+        toast.error("Address can only contain letters, numbers, and slashes");
+        return false;
+      }
+      return true;
+    };
+
+    // Province validation
+    const validateProvince = (province) => {
+      if (province.trim().length === 0) {
+        toast.error("Province is required");
+        return false;
+      }
+      return true;
+    };
+
+    const validName = validateName(name);
+    const validPhone = validatePhone(phone);
+    const validProvince = validateProvince(province);
+    const validAddress = validateAddress(address);
 
     setIsValid({
       name: validName,

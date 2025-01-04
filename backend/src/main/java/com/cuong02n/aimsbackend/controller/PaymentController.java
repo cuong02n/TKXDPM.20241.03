@@ -5,6 +5,7 @@ import com.cuong02n.aimsbackend.model.dto.response.PaymentResponse;
 import com.cuong02n.aimsbackend.model.entity.Order;
 import com.cuong02n.aimsbackend.repository.OrderRepository;
 import com.cuong02n.aimsbackend.service.IEmailService;
+import com.cuong02n.aimsbackend.service.IPaymentService;
 import com.cuong02n.aimsbackend.service.impl.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @RequestMapping("/api/payment")
 public class PaymentController {
-    private final PaymentService paymentService;
+    private final IPaymentService paymentService;
     private final OrderRepository orderRepository;
     private final IEmailService emailService;
     private String generatePaymentEmailContent(String customerName, String paymentResultUrl) {
@@ -78,7 +79,6 @@ public class PaymentController {
         </html>
         """.formatted(customerName, paymentResultUrl);
     }
-    private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
     @Value("${aims.frontend.base-url}")
     private String frontEndBaseUrl;
@@ -100,7 +100,6 @@ public class PaymentController {
             @PathVariable String provider,
             HttpServletRequest request
     ) {
-        logger.info("STATUS");
         PaymentResponse response = paymentService.processPaymentReturn(provider, request);
 
 
@@ -118,15 +117,14 @@ public class PaymentController {
                 .toUriString();
 
         if (response.getStatus() == PaymentStatus.SUCCESS) {
-            logger.info("Payment successful, attempting to send email");
+
             Order order = orderRepository.findById(Long.valueOf(response.getOrderId()))
                     .orElseThrow(() -> new RuntimeException("Order not found"));
             String userEmail = orderRepository.findUserEmailByOrderId(Long.parseLong(response.getOrderId()));
 
             String customerName = "Customer";
             String customerEmail = order.getUser().getEmail();
-            logger.info("Customer email: " + customerEmail);
-            logger.info("My found email: " + userEmail);
+
 
             String emailContent = generatePaymentEmailContent(customerName, paymentResultUrl);
             emailService.sendMail(

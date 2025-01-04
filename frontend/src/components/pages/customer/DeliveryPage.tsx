@@ -37,7 +37,7 @@ const DeliveryPage = () => {
         navigate("/cart", { state: { error: res?.error } });
       }
     } else {
-      toast.error("Please fill in all required fields.");
+      return;
     }
   };
   return (
