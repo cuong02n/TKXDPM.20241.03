@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Getter
     private String name;
     private String description;
     private int available;
