@@ -54,10 +54,10 @@ export const useOneOrder = () => {
       dispatch(setInvoiceInfo(info));
     } catch (error) {
       toast.error(error.response?.data || "Error placing order");
-      const match = error.response?.data?.message.match(
+      const match = error.response?.data?.message?.match(
         /^This product currently not support rush: (\d+)$/
       );
-      if (match) {
+      if (match !== null && match !== undefined) {
         return { error: match[1] };
       }
     }
