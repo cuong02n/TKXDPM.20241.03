@@ -3,7 +3,6 @@ package com.cuong02n.aimsbackend.service;
 import com.cuong02n.aimsbackend.model.entity.FavoriteProductUser;
 import com.cuong02n.aimsbackend.model.entity.Product;
 import com.cuong02n.aimsbackend.model.entity.User;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +17,5 @@ public interface IProductService {
 
     void addWishList(User user, long productId);
 
-    List<FavoriteProductUser> getWishList(User user);
-
-    List<Product> searchProducts(String query);
+    List<FavoriteProductUser> getWishList(String useremail);
 }

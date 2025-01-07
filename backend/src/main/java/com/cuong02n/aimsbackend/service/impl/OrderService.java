@@ -198,10 +198,10 @@ public class OrderService implements IOrderService {
     }
 
     private int calculateShippingFee(Order order) {
-        String province = order.getProvince();
         if (order == null) {
             throw new GeneralException("Order cannot be null");
         }
+        String province = order.getProvince();
         if (order.getOrderProducts() == null) {
             throw new GeneralException("Order products list cannot be null for order ID: " + order.getOrderId());
         }

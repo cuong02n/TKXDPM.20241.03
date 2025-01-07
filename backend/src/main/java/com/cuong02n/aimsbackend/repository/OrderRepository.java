@@ -3,6 +3,8 @@ package com.cuong02n.aimsbackend.repository;
 import com.cuong02n.aimsbackend.model.entity.Order;
 import com.cuong02n.aimsbackend.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -12,4 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByUser(User user);
 
     List<Order> findAllByUserAndOrderId(User user, long orderId);
+    @Query("SELECT o.user.email FROM Order o WHERE o.orderId = :orderId")
+    String findUserEmailByOrderId(@Param("orderId") Long orderId);
 }

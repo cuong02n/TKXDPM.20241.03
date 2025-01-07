@@ -125,7 +125,7 @@ public class ProductService implements IProductService {
         wishListRepository.save(favor);
     }
 
-    public List<FavoriteProductUser> getWishList(User user) {
-        return wishListRepository.findAllByKey_UserEmail(user.getEmail());
+    public List<FavoriteProductUser> getWishList(String useremail) {
+        return wishListRepository.findAllByKey_UserEmail(useremail);
     }
 }

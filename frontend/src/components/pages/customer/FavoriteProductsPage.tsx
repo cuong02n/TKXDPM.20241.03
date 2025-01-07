@@ -46,7 +46,7 @@ const FavoriteProductPage = () => {
   }, [dispatch]);
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row min-h-screen">
       <FavoriteProjectLeftBar
         selectedCategory={selectedCategory}
         onCategoryChange={setSelectedCategory}
