@@ -18,4 +18,6 @@ public interface IProductService {
     void addWishList(User user, long productId);
 
     List<FavoriteProductUser> getWishList(String useremail);
+
+    List<Product> searchProducts(String query);
 }
