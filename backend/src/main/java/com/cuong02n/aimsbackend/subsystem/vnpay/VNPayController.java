@@ -49,11 +49,13 @@ public class VNPayController {
         nameC.setSecure(false);
         nameC.setPath("/");
         nameC.setMaxAge(3600);
+        nameC.setDomain("aims.cuong02.com");
         httpServletResponse.addCookie(nameC);
         Cookie emailC = new Cookie("aims-user-email", user.getEmail());
         emailC.setHttpOnly(true);
         emailC.setSecure(false);
         emailC.setPath("/");
+        emailC.setDomain("aims.cuong02.com");
         emailC.setMaxAge(3600);
         httpServletResponse.addCookie(emailC);
         httpServletResponse.addHeader("Access-Control-Allow-Credentials","true");
