@@ -1,5 +1,6 @@
 package com.cuong02n.aimsbackend.subsystem.vnpay;
 
+import com.cuong02n.aimsbackend.model.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ public class VNPayService {
 
     private static final Logger log = LoggerFactory.getLogger(VNPayService.class);
 
-    public String createOrder(Long total, String orderInfor, String urlReturn) {
+    public String createOrder(User user, Long total, String orderInfor, String urlReturn) {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
@@ -98,14 +99,10 @@ public class VNPayService {
         fields.remove("vnp_SecureHashType");
         fields.remove("vnp_SecureHash");
         String signValue = VNPayConfig.hashAllFields(fields);
-        if (signValue.equals(vnp_SecureHash)) {
-            if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
-                return 1;
-            } else {
-                return 0;
-            }
+        if (signValue.equals(vnp_SecureHash) && "00".equals(request.getParameter("vnp_TransactionStatus"))) {
+            return 1;
         } else {
-            return -1;
+            return 0;
         }
     }
 }

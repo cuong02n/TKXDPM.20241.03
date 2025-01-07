@@ -8,4 +8,6 @@ public interface IEmailService {
     void sendOrderEmail(String email, String orderId);
 
     void sendMail(String email, String subject, String content, boolean isHtml);
+
+    void sendPaymentSuccessMail(String email, String name, String buttonUrl);
 }

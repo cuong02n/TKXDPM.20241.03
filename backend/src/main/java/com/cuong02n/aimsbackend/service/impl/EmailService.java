@@ -5,12 +5,16 @@ import com.cuong02n.aimsbackend.service.IEmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RequiredArgsConstructor
 @Service
@@ -42,7 +46,22 @@ public class EmailService implements IEmailService {
             helper.setText(content, isHtml);
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new GeneralException("Cannot send email ",e);
+            throw new GeneralException("Cannot send email ", e);
+        }
+    }
+
+    @Override
+    public void sendPaymentSuccessMail(String email, String name, String buttonUrl) {
+        try {
+            ClassPathResource resource = new ClassPathResource("templates/mail_payment_success.html");
+            Path path = resource.getFile().toPath();
+
+            String content = Files.readString(path);
+            content = content.replace("${customerName}", name);
+            content = content.replace("${paymentResultUrl}", buttonUrl);
+            sendMail(email, "The payment was proceed successfully", content, true);
+        } catch (IOException e) {
+            throw new GeneralException("Cannot send email.", e);
         }
     }
 }

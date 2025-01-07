@@ -28,10 +28,9 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/error",
             "/test",
-            "/hello",
 //            "/api/review"
-            "/api/vnpay",
-            "/api/vnpay/submitOrder",
+//            "/api/vnpay",
+//            "/api/vnpay/submitOrder",
             "/api/vnpay/vnpay-status",
             "/static/**"
 //            "**"
